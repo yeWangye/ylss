@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>医来伸手</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="css/app.css">
+	</head>
+	<style>
+		.headImgBox {
+			position: absolute;
+			z-index: 99;
+			width: 40px;
+			top: 30px;
+			height: 40px;
+			left: 30px;
+			border: 1px solid snow;
+			border-radius: 20px;
+			text-align: center;
+			overflow: hidden;
+		}
+		
+		.headImgBox img {
+			width: 40px;
+		}
+		
+		.more {
+			position: absolute;
+			z-index: 99;
+			width: 30px;
+			height: 30px;
+			right: 20px;
+			top: 30px;
+		}
+		
+		.more img {
+			width: 30px;
+		}
+		
+		.moduleBox {
+			width: 100%;
+		}
+		
+		.moduleList {
+			width: 100%;
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+		
+		.module {
+			width: 17%;
+			float: left;
+			margin: 4%;
+		}
+		
+		.imgBox {
+			width: 100%;
+			text-align: center;
+		}
+		
+		.imgBox p {
+			font-size: 12px;
+			color: #827d7d;
+		}
+		
+		.imgBox img {
+			width: 60%;
+		}
+		
+		#map {
+			width: 100%;
+			height: 100px;
+			border: 0;
+			transition: height 1s;
+			-moz-transition: height 1s;
+			/* Firefox 4 */
+			-webkit-transition: height 1s;
+			/* Safari and Chrome */
+			-o-transition: height 1s;
+			/* Opera */
+		}
+		
+		.zk {
+			position: absolute;
+			width: 50%;
+			left: 25%;
+			text-align: center;
+			transition: top 1s;
+			-moz-transition: top 1s;
+			/* Firefox 4 */
+			-webkit-transition: top 1s;
+			/* Safari and Chrome */
+			-o-transition: top 1s;
+			/* Opera */
+		}
+		
+		.zk img {
+			width: 50%;
+			max-width: 100px;
+		}
+	</style>
+	<header>
+		<div class="headImgBox">
+			<a href="login.html"><img src="images/common/tx.png" class="headImg" /></a>
+		</div>
+		<div class="more">
+			<a href=""><img src="images/common/icon_more2.png" alt="" /></a>
+		</div>
+	</header>
+
+	<body id="body">
+		<div id="slider" class="mui-slider">
+			<div class="mui-slider-group mui-slider-loop">					
+			</div>
+		</div>
+		<iframe id="map" src="map2.html">
+
+		</iframe>
+		<div class="zk">
+			<img src="images/ylss/zk.png" class="zkImg" />
+		</div>
+		<div class="moduleBox">
+			<ul class="moduleList">
+				<li class="module">
+					<div class="imgBox">
+						<a href="famous-_special.html">
+							<img src="images/ylss/zgmy.png" />
+							<p>中国名院</p>
+						</a>
+
+					</div>
+				</li>
+				<li class="module">
+					<div class="imgBox">
+						<a href="famous_docter.html">
+							<img src="images/ylss/zgmyy.png" />
+							<p>中国名医</p>
+						</a>
+
+					</div>
+				</li>
+				
+				<li class="module">
+					<div class="imgBox">
+						<img src="images/ylss/yssm.png" />
+						<p>医生上门</p>
+					</div>
+				</li>
+				<li class="module">
+					<div class="imgBox">
+						<img src="images/ylss/hssm.png" />
+						<p>护士上门</p>
+					</div>
+				</li>
+				<li class="module">
+					<div class="imgBox">
+						<img src="images/ylss/sysm.png" />
+						<p>送药上门</p>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			listAdver();
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+			if(localStorage.getItem("loginInfo")){
+					mui(".headImg")[0].src=JSON.parse(localStorage.getItem("loginInfo")).headImage;
+				}
+			var slider = mui("#slider");
+			var _flag = true;
+			var ww = window.innerWidth;
+			var wh = window.innerHeight;
+			mui(".zkImg")[0].addEventListener("tap", function(e) {
+				var sliderHeight = slider[0].clientHeight;
+				if(_flag) {
+					mui("#map")[0].style.height = wh - sliderHeight + "px";
+					mui(".zk")[0].style.top = wh - 100 + "px";
+					document.getElementById("map").contentWindow.setMap(wh - sliderHeight);
+
+					_flag = false;
+				} else {
+					mui("#map")[0].style.height = "100px";
+					mui(".zk")[0].style.top = sliderHeight + "px";
+					document.getElementById("map").contentWindow.setMap(100);
+					_flag = true;
+
+				}
+
+			})
+
+			function listAdver() {
+
+				mui.ajax("http://ylss.ss0120.com:8080/ylss/patient/listAdver.do", {
+					data: {},
+					dataType: 'json',
+					type: 'post',
+					timeout: 10000,
+					success: function(data) {
+						//							plus.nativeUI.closeWaiting();
+						if(data.code == "1") {
+							var info = data.info;
+							var dom = document.getElementsByClassName('mui-slider-group')[0];
+							var _html = "";
+
+							for(i = 0; i < info.length; i++) {
+
+								if(i == 0) {
+									_html = '<div class="mui-slider-item mui-slider-item-duplicate">' +
+										'<a href="' + info[info.length - 1].linkUrl + '">' +
+										'<img src="' + info[info.length - 1].image + '">' +
+										'</a>' +
+										'</div>' +
+										'<div class="mui-slider-item">' +
+										'<a href="' + info[i].linkUrl + '">' +
+										'<img src="' + info[i].image + '">' +
+										'</a>' +
+										'</div>';
+								} else if(i == info.length - 1) {
+									_html += '<div class="mui-slider-item">' +
+										'<a href="' + info[i].linkUrl + '">' +
+										'<img src="' + info[i].image + '">' +
+										'</a>' +
+										'</div>' +
+										'<div class="mui-slider-item mui-slider-item-duplicate">' +
+										'<a href="' + info[0].linkUrl + '">' +
+										'<img src="' + info[0].image + '">' +
+										'</a>' +
+										'</div>';
+								} else {
+									_html += '<div class="mui-slider-item">' +
+										'<a href="' + info[i].linkUrl + '">' +
+										'<img src="' + info[i].image + '">' +
+										'</a>' +
+										'</div>';
+								}
+
+							}
+							dom.innerHTML = _html;
+
+							slider.slider({
+								interval: 1000
+							});
+						}
+
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('网络异常，请稍后再试！');
+					}
+				})
+			}
+
+			
+			window.onload = function() {
+				
+
+
+				var sliderHeight = slider[0].clientHeight;
+				mui("#map")[0].style.height = "100px";
+				mui(".zk")[0].style.top = sliderHeight + "px";
+				document.getElementById("map").contentWindow.setMap(100);
+
+			};
+		</script>
+
+	</body>
+
+</html>

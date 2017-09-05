@@ -1,0 +1,257 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>中国名医</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="css/app.css">
+		<link rel="stylesheet" href="css/detail_common.css" />
+	</head>
+	<style type="text/css">
+		.hosImg {
+			width: 100px;
+			border: 1px solid #6cf;
+			border-radius: 50px;
+		}
+		
+		.doctorMsg div {
+			float: left;
+			margin:0 2%;
+			width: 28%;
+		}
+		
+		.renzheng {
+			clear: both;
+			float: left;
+			width: 100%;
+			height: 60px;
+			line-height: 60px;
+			border: 1px solid snow;
+		}
+		
+		.renzheng img {
+			width: 30px;
+			display: inline-block;
+			margin: 15px 0;
+			float: left;
+		}
+		
+		.renzheng span {
+			display: inline-block;
+			float: left;
+			margin-left: 10px;
+		}
+		
+		.instructionBox {
+			clear: both;
+		}
+	</style>
+
+	<body class="mui-ios mui-ios-9 mui-ios-9-1">
+		<header class="mui-bar mui-bar-nav" style="background: #6cf;">
+
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" href="famous_docter.html"></a>
+			<div>
+				<div id="segmentedControl" class="mui-segmented-control" style="position: relative;top: -44px;">
+					<a class="mui-control-item mui-active aIndex" href="#item1">
+						详情
+					</a>
+					<a class="mui-control-item aIndex evaluateBtn" href="#item2">
+						评价
+					</a>
+
+				</div>
+			</div>
+			<div>
+		</header>
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<!--数据列表-->
+				<ul class="mui-table-view mui-table-view-chevron">
+					<div class="mui-content">
+
+						<div id="item1" class="mui-control-content mui-active">
+
+							<img class="hosImg" />
+							<div class="doctorMsg">
+								<div class="fwcs">
+									<p>服务次数</p>
+									<p class="fucsItm"></p>
+								</div>
+								<div class="gznx">
+									<p>工作年限</p>
+									<p class="gznxItem"></p>
+								</div>
+								<div class="jl">
+									<p>距离</p>
+									<p class="jlItem"></p>
+								</div>
+							</div>
+							<div class="renzheng">
+								<img src="images/ylss/weijiwei.png" alt="" />
+								<span>国家卫计委认证</span>
+							</div>
+							<div class="instructionBox">
+								<h4>简介：</h4>
+								<p class="instruction">
+
+								</p>
+
+								<h4>擅长：</h4>
+								<p class="attendDisease"> </p>
+
+								<h4>用户评价</h4>
+								<div class="evaluate">
+
+								</div>
+							</div>
+
+							<div class="moreEvalution">
+								<button class="moreBtn">查看更多评价</button>
+							</div>
+						</div>
+						<div id="item2" class="mui-control-content">
+							<div style="padding: 10px 10px;">
+								<div id="segmentedControlSon" class="mui-segmented-control">
+									<a class="mui-control-item mui-active" href="#itemAll">
+										全部评价<span class="allEvaluation">0</span>
+									</a>
+									<a class="mui-control-item" href="#itemGood">
+										好评<span class="goodEvaluation">0</span>
+									</a>
+									<a class="mui-control-item" href="#itemCommon">
+										中评<span class="commonEvaluation">0</span>
+									</a>
+									<a class="mui-control-item" href="#itemBad">
+										差评<span class="badEvaluation">0</span>
+									</a>
+								</div>
+							</div>
+							<div class="mui-content">
+
+								<div class="systemEvaluateBox">
+
+								</div>
+								<div class="itemBox">
+									<div id="itemAll" class="mui-control-content mui-active">
+										<div class="evaluate">
+
+										</div>
+									</div>
+									<div id="itemGood" class="mui-control-content">
+										<div class="evaluate">
+
+										</div>
+									</div>
+									<div id="itemCommon" class="mui-control-content">
+										<div class="evaluate">
+
+										</div>
+									</div>
+									<div id="itemBad" class="mui-control-content">
+										<div class="evaluate">
+
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+				</ul>
+
+			</div>
+		</div>
+		<div class="bottomTabBar">
+			<img src="images/common/icon_phone.png" alt="" />
+			<button id="inlineOrder">预约挂号</button>
+			<button id="inlineAask">在线咨询</button>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript" src="js/doctor_detail.js"></script>
+		<script>
+			mui.init({
+				swipeBack: true, //启用右滑关闭功能
+				pullRefresh: {
+					container: '#pullrefresh',
+					down: {
+						callback: pulldownRefresh,
+						height: 50, //可选,默认50.触发下拉刷新拖动距离,
+						auto: true, //可选,默认false.首次加载自动下拉刷新一次
+						contentdown: "下拉可以刷新", //可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+						contentover: "释放立即刷新", //可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+						contentrefresh: "正在刷新...", //可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+					},
+					up: {
+						contentrefresh: '正在加载...',
+						callback: pullupRefresh,
+						auto: false
+					}
+				},
+				gestureConfig: {
+					tap: true, //默认为true
+					doubletap: true, //默认为false
+					longtap: true, //默认为false
+					swipe: true, //默认为true
+					drag: true, //默认为true
+					hold: false, //默认为false，不监听
+					release: false //默认为false，不监听
+				}
+			});
+
+			//监听更多评论点击事件
+			mui(".moreBtn")[0].addEventListener("tap", function() {
+				mui("#item2")[0].setAttribute("class", "mui-control-content mui-active");
+				mui("#item1")[0].setAttribute("class", "mui-control-content");
+				mui(".aIndex")[0].setAttribute("class", "mui-control-item aIndex");
+				mui(".aIndex")[1].setAttribute("class", "mui-control-item aIndex evaluateBtn mui-active");
+				mui('#pullrefresh').pullRefresh().scrollTo(0, 0, 100);
+			})
+			mui(".evaluateBtn ")[0].addEventListener("tap", function() {
+				mui('#pullrefresh').pullRefresh().scrollTo(0, 0, 100);
+				pullupRefresh();
+			})
+			if(!localStorage.getItem("url") || window.location.search != "") {
+				var url = window.location.search;
+				var doctorId = url.substring(url.lastIndexOf('=') + 1, url.length);
+				localStorage.setItem("url", url);
+				localStorage.setItem("hoId", doctorId);
+
+			} else {
+				var url = localStorage.getItem("url");
+				var doctorId = url.substring(url.lastIndexOf('=') + 1, url.length);
+			}
+			/*//全部评价
+			setEvaluate("all", 8, 1);
+			//好评
+			setEvaluate("good", 4, 1);
+			//中评
+			setEvaluate("common", 8, 1);
+			//差评
+			setEvaluate("bad", 8, 1);*/
+
+			//进入聊天界面
+			mui("#inlineAask")[0].addEventListener("tap", function() {
+				window.location.href = "single-chat.html?fromWhere=doctor_detail.html";
+			})
+			//进入预约挂号页面
+			mui("#inlineOrder")[0].addEventListener("tap", function() {
+				/*mui.openWindow({
+					url: 'single-chat.html',
+					id:'single-chat'
+				})*/
+				window.location.href = "registration.html?fromWhere=doctor_detail.html";
+			})
+		</script>
+
+	</body>
+
+</html>

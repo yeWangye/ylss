@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+	<style>
+		body {
+			background: snow;
+			font-size: 15px;
+		}
+		
+		ul {
+			list-style: none;
+			padding: 5px;
+		}
+		
+		li {
+			margin: 0;
+			padding: 0;
+			border: 1px solid #6cf;
+			border-radius: 5px;
+			padding: 5px;
+			margin-top: 2px;
+		}
+	</style>
+
+	<body>
+		<ul class="keshiBox">
+
+		</ul>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			var hoId = localStorage.getItem("hoId");
+			if(localStorage.getItem("loginInfo")) {
+				var loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+
+			} else {
+				loginInfo = {
+					clientId: "1172",
+					sessionKey: "11",
+					phoneNo: "15201251945"
+				}
+			}
+			console.log(loginInfo);
+			mui.ajax("http://ylss.ss0120.com:8080/ylss/patient/listHospDepart.do", {
+				data: {
+					sessionKey: loginInfo.sessionKey,
+					patientId: loginInfo.clientId,
+					phoneNo: loginInfo.phoneNo,
+					page: 1,
+					rows: 2,
+					hoId: hoId,
+				},
+				dataType: 'json',
+				type: 'post',
+				timeout: 10000,
+				success: function(data) {
+					
+					if(data.code == "1") {
+						var info = data.info;
+						var keshiBox = mui(".keshiBox")[0];
+						for(i = 0; i < info.length; i++) {
+							keshiBox.innerHTML += '<li data-keshi="' + info[i].keShi + '"  data-appointFee="' + info[i].appointFee + '">' +
+								'科室 : ' + info[i].keShi + '<br>' +
+								'挂号费： ' + info[i].appointFee +
+								'</li>';
+						}
+					}else if(data.code == "2"){
+						mui.toast(data.msg);
+						window.history.go(-1);
+					}
+
+				},
+				error: function(xhr, type, errorThrown) {
+					mui.toast('网络异常，请稍后再试！');
+				}
+			});
+			mui("ul")[0].addEventListener("tap", function(e) {
+				var hosName = localStorage.getItem("chatname");
+				var _obj_keshi = {
+					keshi: e.target.getAttribute("data-keshi"),
+					appointFee: e.target.getAttribute("data-appointFee"),
+					hosName: hosName
+				}
+				localStorage.setItem("_obj_keshi", JSON.stringify(_obj_keshi));
+
+				window.location.href = "registration.html";
+			})
+		</script>
+	</body>
+
+</html>

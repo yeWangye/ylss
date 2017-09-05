@@ -1,0 +1,171 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/mui.picker.css" rel="stylesheet">
+		<link href="css/mui.poppicker.css" rel="stylesheet">
+		<link href="css/dtpicker.css" rel="stylesheet">
+
+		<script src="js/mui.min.js"></script>
+
+		<script src="js/mui.picker.js"></script>
+		<script src="js/mui.poppicker.js"></script>
+		<script src="js/mui.dtpicker.js" type="text/javascript" charset="utf-8"></script>
+
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+	<style>
+		.detail {
+			border: 3px solid transparent;
+			-moz-border-image: url(images/common/order.png) 92 5 round;
+			/* Old Firefox */
+			-webkit-border-image: url(images/common/order.png) 92 5 round;
+			/* Safari and Chrome */
+			-o-border-image: url(images/common/order.png) 92 5 round;
+			/* Opera */
+			border-image: url(images/common/order.png) 92 5 round;
+		}
+		
+		.detail p {
+			font-weight: 600;
+			font-size: 12px;
+		}
+		
+		body {
+			font-size: 15px;
+		}
+	</style>
+
+	<body>
+		<header class="mui-bar mui-bar-nav color_snow" style="background-color: #6cf;">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" href="hospital_detail.html"></a>
+			<h2 class="mui-title color_snow" style="color:snow;"><b>预约挂号</b></h2>
+
+		</header>
+		<div class="mui-content">
+			<form class="mui-input-group">
+				<div class="mui-input-row">
+					<label>预约医院</label>
+					<p style="display: inline-block;float: right;margin-right:10px;" class="hosName"></p>
+				</div>
+				<div class="mui-input-row keshiBox">
+					<label>预约科室</label>
+					<p style="display: inline-block;float: right;margin-right:10px;" class="keshi"></p>
+				</div>
+
+				<div class="mui-input-row">
+					<label style="font-family: 'Helvetica Neue',Helvetica,sans-serif;line-height: 1.1;float: left;width: 35%;padding: 11px 15px;">就诊时间</label>
+					<button id="showDate" class="mui-btn mui-btn-block" style="width: 65%;height: 100%;margin: 0;padding: 0;border: 0; background-color: #fff;color: red;"></button>
+					<input type="hidden" value="" id="entryDate" />
+					<p class="showDateText"></p>
+					<span class="mui-navigate-right"></span>
+				</div>
+				<div class="mui-input-row">
+					<label>就诊地址</label>
+
+					<p class="adress"></p>
+
+				</div>
+				<div class="detail" style="padding:10px">
+					<p class="patientName"></p>
+					<p class="sex">性别：</p>
+					<p class="phoneNumber">手机号码：</p>
+					<p class="id"></p>
+
+				</div>
+				<div class="order" style="padding:11px 15px;">
+					<p style="color:black" class="appointFee">挂号费:</p>
+				</div>
+			</form>
+		</div>
+		<script type="text/javascript">
+			(function($, doc) {
+				$.init();
+				if(localStorage.getItem("loginInfo")) {
+					var loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+
+				} else {
+					loginInfo = {
+						clientId: "1172",
+						sessionKey: "11",
+						phoneNo: "15201251945"
+					}
+				}
+				mui(".keshiBox")[0].addEventListener("tap", function() {
+					window.location.href = "listHospDepart.html";
+
+				})
+				var hosName = localStorage.getItem("chatname");
+				var hosAddress = localStorage.getItem("hosAddress");
+
+				var appointFee = localStorage.getItem("appointFee");
+				var showDate = doc.getElementById('showDate');
+
+				$(".adress")[0].innerText = hosAddress;
+				$(".hosName")[0].innerHTML = hosName;
+				if(localStorage.getItem("_obj_keshi") && hosName == JSON.parse(localStorage.getItem("_obj_keshi")).hosName) {
+					var _obj_keshi = JSON.parse(localStorage.getItem("_obj_keshi"));
+
+					var keshi = _obj_keshi.keshi,
+						appointFee = _obj_keshi.appointFee;
+					console.log(keshi);
+
+					$(".keshi")[0].innerText = keshi;
+					$(".appointFee")[0].innerHTML = "挂号费 : " + "<span style='color:red;'>" + '¥ ' + appointFee + "</span>";
+
+				} else {
+					$(".keshi")[0].innerText = "";
+					$(".appointFee")[0].innerHTML = "挂号费 :" + "<span style='color:red;'>¥ 0.00</span>";
+
+				}
+
+				showDate.addEventListener('tap', function(event) {
+					var dtPicker = new mui.DtPicker({
+						type: "date"
+					});
+					dtPicker.show(function(selectItems) {
+						showDate.innerHTML = selectItems.y.text + "-" + selectItems.m.text + "-" + selectItems.d.text;
+						document.getElementById('entryDate').value = selectItems.y.text + "-" + selectItems.m.text + "-" + selectItems.d.text;
+
+					})
+				})
+				$.ajax("http://ylss.ss0120.com:8080/ylss/patient/appointAddress.do", {
+					data: {
+						sessionKey: loginInfo.sessionKey,
+						patientId: loginInfo.clientId,
+						phoneNo: loginInfo.phoneNo,
+						pageNo: 1,
+						pageSize: 2,
+
+					},
+					dataType: 'json',
+					type: 'post',
+					timeout: 10000,
+					success: function(data) {
+						console.log(data);
+						if(data.code == "1") {
+							var info = data.info;
+							for(i = 0; i < info.length; i++) {
+
+								mui(".sex")[0].innerHTML = info[i].sex == "man" ? "性别： 男" : "性别： 女";
+								mui(".phoneNumber")[0].innerHTML = "联系电话： " + info[i].contactPhone;
+								mui(".id")[0].innerHTML = "身份证号： " + info[i].idCard;
+								mui(".patientName")[0].innerHTML = "就诊人： " + info[i].patientName;
+
+							}
+						}
+
+					},
+					error: function(xhr, type, errorThrown) {
+						$.toast('网络异常，请稍后再试！');
+					}
+				});
+			})(mui, document);
+		</script>
+	</body>
+
+</html>

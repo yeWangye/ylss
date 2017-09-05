@@ -1,0 +1,222 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+	<style>
+		.mui-search .mui-placeholder {
+			margin-top: 15px;
+		}
+		
+		#hospitalList {
+			list-style: none;
+			font-size: 12PX;
+			padding-left: 10px;
+		}
+		
+		#hospitalList li {
+			padding-top: 5px;
+		}
+		
+		.detail {
+			display: inline-block;
+			float: left;
+			margin-left: 30px;
+		}
+		
+		.hospitalType {
+			background-color: #ffcc33;
+			color: snow;
+			text-align: center;
+		}
+		
+		.distanceBox {
+			float: right;
+			margin-right: 30px;
+			text-align: right;
+		}
+		
+		.hospitalImg {
+			display: inline-block;
+			float: left;
+			height: 80px;
+			width: 80px;
+			border: 1px solid snow;
+			border-radius: 40px;
+			overflow: hidden;
+		}
+		
+		.hospitalImg img {
+			width: 80px;
+			height: 80px;
+		}
+		
+		.hospitalName {
+			font-weight: 800;
+		}
+		
+		#keyword {
+			background-color: snow;
+			width: 80%;
+			margin-top: 15px;
+		}
+		
+		#hospitalList a {
+			display: inline-block;
+			width: 100%;
+			border-top: 1px solid darkgray;
+		}
+		
+		.subject {
+			border: 1px solid darkgray;
+			border-radius: 3px;
+			color: darkgray;
+			margin-top: 5px;
+			text-align: center;
+		}
+	</style>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=h7FmYfal3X1emsR59G29XPXbACQGhyw4"></script>
+
+	<body>
+		<div id="allmap"></div>
+
+		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" href="index.html"></a>
+
+			<h1 class="mui-title" style="line-height: 64px;color: snow;">中国名院</h1>
+		</header>
+		<div class="mui-content" style="padding-top: 64px;">
+
+			<form action="" class="input-kw-form" style="display: inline;">
+				<div class="mui-input-row mui-search" style="background: #999;">
+					<input type="search" autocomplete="off" name="baike-search" placeholder="请输入关键词" class="mui-input-clear" id="keyword" style="">
+					<button style="width: 15%;margin-top: 15px;background-color: #999;color: #6cf;">取消</button>
+
+				</div>
+
+			</form>
+
+			<p>全国知名医院，系统默认推荐3个，如需查看更多，请搜索医院名称、科室名称或疾病名称</p>
+			<ul id="hospitalList">
+
+			</ul>
+
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript">
+			(function($, doc) {
+				$.init();
+				getLocation(getData);
+				var keyWord = doc.getElementById("keyword");
+				keyWord.addEventListener('keypress', function(e) {
+					var keycode = e.keyCode;
+					var searchName = keyWord.value;
+
+					if(keycode == '13') {
+						var searchCondition = keyWord.value;
+						e.preventDefault();
+						doc.getElementById('hospitalList').innerHTML = "";
+
+						//请求搜索接口  
+						getLocation(getData, searchCondition);
+					}
+				})
+
+				function getLocation(callback, searchCondition) {
+					// 百度地图API功能
+					var map = new BMap.Map("allmap");
+					var point = new BMap.Point();
+					map.centerAndZoom(point, 12);
+
+					var geolocation = new BMap.Geolocation();
+					geolocation.getCurrentPosition(function(r) {
+						if(this.getStatus() == BMAP_STATUS_SUCCESS) {
+							var mk = new BMap.Marker(r.point);
+							map.addOverlay(mk);
+							map.panTo(r.point);
+
+							callback(r.point.lat, r.point.lng, searchCondition);
+							console.log(r.point.lat + "纬度" + r.point.lng)
+						} else {
+							alert('failed' + this.getStatus());
+						}
+					}, {
+						enableHighAccuracy: true
+					})
+					/*navigator.geolocation.getCurrentPosition(showPosition);
+
+					function showPosition(position) {
+						getData(position.coords.latitude, position.coords.longitude,showPosition);
+					}*/
+				}
+
+				function getData(x, y, searchCondition) {
+
+					if(localStorage.getItem("loginInfo")) {
+						var loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+
+					} else {
+						loginInfo = {
+							clientId: "1172",
+							sessionKey: "11",
+							phoneNo: "15201251945"
+						}
+					}
+
+					//					plus.nativeUI.showWaiting("查询...");
+					doc.getElementById('hospitalList').innerHTML = "";
+					$.ajax("http://ylss.ss0120.com:8080/ylss/patient/getFamousSpecial.do", {
+						data: {
+							clientId: loginInfo.clientId,
+							phoneNo: loginInfo.phoneNo,
+							sessionKey: loginInfo.sessionKey,
+							longitude: x,
+							latitude: y,
+							pageNo: "1",
+							pageSize: "3",
+							searchCondition: searchCondition ? searchCondition : "",
+
+						},
+						dataType: 'json',
+						type: 'post',
+						timeout: 10000,
+						success: function(data) {
+							//							plus.nativeUI.closeWaiting();
+							if(data.code == "1") {
+
+								var hosInfo = data.hospInfo;
+								if(hosInfo.length == 0) {
+									doc.getElementById('hospitalList').innerHTML = '<li>搜索结果为空</li> '
+								}
+								for(i = 0; i < hosInfo.length; i++) {
+
+									doc.getElementById('hospitalList').innerHTML += '<a href="hospital_detail.html?hoId=' + hosInfo[i].hoId + '"><li style="clear: both;"> ' +
+										'<div class = "hospitalImg"><img src="' + hosInfo[i].hospitalImage + '" /></div>' +
+										'<div class = "detail" >' +
+										'<div class="hospitalName">' + hosInfo[i].hospital + '</div>' +
+										'<div class = "hospitalType" >' + '专科医院' + '</div>' +
+										'<div class = "subject" ></div></div>' +
+										'<div class = "distanceBox">' +
+										'<span class="mui-icon mui-icon-location"></span>' +
+										'<p class = "distance" > ' + Math.round(hosInfo[i].length / 1000) + "km" + '</p>' +
+										'</div> </li></a>';
+									hosInfo[i].specials == null ? mui(".subject")[i].innerText = "无" : mui(".subject")[i].innerText = hosInfo[i].specials.split(";")[0];
+								}
+							}
+
+						},
+						error: function(xhr, type, errorThrown) {
+							$.toast('网络异常，请稍后再试！');
+						}
+					})
+
+				}
+			})(mui, document);
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/mui.picker.css" rel="stylesheet">
+		<link href="css/mui.poppicker.css" rel="stylesheet">
+		<link href="css/dtpicker.css" rel="stylesheet">
+
+		<script src="js/mui.min.js"></script>
+
+		<script src="js/mui.picker.js"></script>
+		<script src="js/mui.poppicker.js"></script>
+		<script src="js/city.data.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/city.data-3.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/mui.dtpicker.js" type="text/javascript" charset="utf-8"></script>
+
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav color_snow">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left " style="color: black;font-size: large;">返回</a>
+			<h2 class="mui-title color_snow"><b>个人信息</b></h2>
+			<a class="mui-icon mui-icon-right-nav mui-pull-right" style="color: black;font-size: large;" id="save">保存</a>
+		</header>
+		<div class="mui-content">
+			<form class="mui-input-group">
+				<div class="mui-input-row">
+					<label>姓名</label>
+					<input type="text" class="mui-input-clear" placeholder="请输入内容">
+				</div>
+				<div class="mui-input-row">
+					<label>性别</label>
+					<select name="sex" id="sex">
+						<option value="0">男</option>
+						<option value="1">女</option>
+					</select>
+
+				</div>
+				<div class="mui-input-row">
+					<label>年龄</label>
+					<input type="number" class="mui-input-clear" id="age">
+				</div>
+				<div class="mui-input-row">
+					<label>婚姻状况</label>
+					<select name="hunfou" id="hunfou">
+
+					</select>
+
+				</div>
+				<div class="mui-input-row">
+					<label>学历</label>
+					<select name="education" id="education">
+
+					</select>
+
+				</div>
+				<div class="mui-input-row">
+					<label>专业</label>
+					<select name="subject" id="subject">
+
+					</select>
+
+				</div>
+				<div class="mui-input-row">
+					<label>身高(cm)</label>
+					<input type="number" class="mui-input-clear" id="height">
+				</div>
+				<div class="mui-input-row">
+					<label>体重(kg)</label>
+					<input type="number" class="mui-input-clear" id="weight">
+				</div>
+
+				<div class="mui-input-row">
+					<label>招聘渠道</label>
+					<select name="comeTo" id="comeTo">
+
+					</select>
+				</div>
+				
+				<div class="mui-input-row">
+					<label style="font-family: 'Helvetica Neue',Helvetica,sans-serif;line-height: 1.1;float: left;width: 35%;padding: 11px 15px;">入职日期</label>
+					<button id="showDate" class="mui-btn mui-btn-block" style="width: 65%;height: 100%;margin: 0;padding: 0;border: 0; background-color: #fff;"></button>
+					<input type="hidden" value="" id="entryDate"/>
+					<p class="showDateText"></p>
+					<span class="mui-navigate-right"></span>
+				</div>
+				<div class="mui-input-row">
+					<label>区域</label>
+					<button id="showCityPicker3" class="mui-btn mui-btn-block" type="button" style="width: 65%;height: 100%;margin: 0;padding: 0;border: 0;"></button>
+					<p></p>
+					<span class="mui-navigate-right"></span>
+				</div>
+				<input type="hidden" name="province" id="province" />
+				<input type="hidden" name="city" id="city" />
+				<input type="hidden" name="area" id="area" />
+			</form>
+		</div>
+		<script type="text/javascript" src="js/app-picker.js"></script>
+		<script type="text/javascript" src="js/getData.js"></script>
+		
+	</body>
+
+</html>

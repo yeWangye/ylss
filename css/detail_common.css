@@ -1,0 +1,166 @@
+	.mui-bar-nav~.mui-content {
+			padding-top: 64px;
+		}
+		
+		.mui-card .mui-control-content {
+			padding: 10px;
+		}
+		
+		.mui-bar .mui-segmented-control {
+			top: 0;
+			width: auto;
+			margin: 0;
+		}
+		
+		#segmentedControl {
+			border: 0;
+			text-align: center;
+			width: 100%;
+		}
+		
+		#segmentedControl .aIndex {
+			display: inline-block;
+			width: 50px;
+		}
+		
+		.mui-segmented-control .mui-control-item {
+			border-left: 0;
+		}
+		
+		.mui-segmented-control .mui-control-item.mui-active {
+			background-color: #6cf;
+		}
+		
+		.mui-segmented-control .mui-control-item.mui-active {
+			border-left: 0px;
+		}
+		
+		
+		
+		#item1 {
+			overflow: inherit;
+			text-align: center;
+		}
+		
+		.instructionBox {
+			margin-left: 2%;
+			text-align: left;
+		}
+		
+		.userHead {
+			width: 40px;
+			height: 40px;
+			border: 1px solid snow;
+			border-radius: 20px;
+			overflow: hidden;
+			float: left;
+			margin-top: 20px;
+		}
+		
+		.userInfo {
+			margin-left: 50px;
+			text-align: left;
+		}
+		
+		.evaluate {
+			margin-bottom: 60px;
+		}
+		
+		.userHead .userHeadImg {
+			width: 40px;
+			height: 40px;
+		}
+		
+		.starBox {
+			list-style: none;
+			padding: 0;
+			float: left;
+			margin: 0;
+		}
+		
+		.starBox li {
+			float: left;
+		}
+		
+		.starBox img {
+			width: 25px;
+		}
+		
+		.userEvaluate {
+			clear: both;
+		}
+		
+		.userName {
+			font-size: 15px;
+			font-weight: 800;
+			color: black;
+		}
+		
+		.userEvaluate {
+			color: black;
+		}
+		
+		.userEvaluateBox {
+			position: relative
+		}
+		
+		.evaluateDate {
+			position: absolute;
+			top: 0;
+			left: 180px;
+			width: 150px;
+			text-align: left;
+		}
+		
+		.userEvaluateBox {
+			margin-top: 5px;
+			border-top: 1px solid darkgray;
+		}
+		
+		.systemEvaluateBox .systemEvaluateItem {
+			margin: 0 10px;
+			padding: 10px 10px 0 10px;
+			border: 1px solid darkgray;
+			border-radius: 20px;
+			float: left;
+		}
+		
+		.itemBox {
+			clear: both;
+		}
+		
+		.bottomTabBar {
+			position: fixed;
+			bottom: 0;
+			background: snow;
+			width: 100%;
+			height: 60px;
+			z-index: 10;
+			text-align: center;
+		}
+		
+		.bottomTabBar img {
+			max-width: 15%;
+			
+   			 min-width: 60px;
+    		max-height: 60px;
+
+		}
+		
+		.bottomTabBar button {
+			height: 40px;
+			width: 25%;
+			border: 1px solid #6cf;
+			background: #6cf;
+			margin: 10px 20px;
+		}
+		
+		.moreEvalution button {
+			height: 40px;
+			width: 150px;
+			border: 1px solid #6cf;
+			border-radius: 20px;
+			background: snow;
+			margin-bottom: 80px;
+			color: #999;
+		}

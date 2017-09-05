@@ -1,0 +1,85 @@
+/*公共部分开始*/
+
+.color_snow {
+	color: snow;
+}
+
+
+/*公共部分结束*/
+
+
+/*主页开始*/
+
+nav {
+	background: url("../images/tabbar/bg.png");
+}
+
+.myself-bar-head {
+	height: 100px;
+}
+
+#tabbar-home {
+	margin-top: 44px;
+}
+
+.banner {
+	text-align: center;
+	background: url(../images/zhuye/beiji1.png) center center;
+	background-size: contain;
+	height: 70px;
+}
+
+
+/*主页结束*/
+
+
+/*添加页面开始*/
+
+
+/*添加页面结束*/
+
+
+/*我的页面开始*/
+
+#tabbar-myself {
+	padding-top: 104px;
+}
+
+#tabbar-myself header {
+	background: url("../images/wode/header_bg.png") no-repeat;
+	background-size: cover;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+}
+
+#tabbar-myself header #info {
+	margin: 10px;
+	color: snow;
+}
+
+#tabbar-myself header .touxiang {
+	width: 60px;
+	height: 60px;
+	border: solid 1px snow;
+	margin: 20px;
+	border-radius: 30px;
+	overflow: hidden;
+	float: left;
+}
+
+#tabbar-myself header .xinxi {
+	margin: 20px 0;
+	height: 60px;
+}
+
+#tabbar-myself .icon {
+	width: 24px;
+	vertical-align: middle;
+}
+
+#tabbar-myself .mui-title {
+	text-align: right;
+}
+
+/*我的页面结束*/
