@@ -146,17 +146,17 @@
 		<script>
 			(function($, doc) {
 				$.init();
-//				localStorage.removeItem("loginInfo");
-				if(localStorage.getItem("loginInfo")){
+				//				localStorage.removeItem("loginInfo");
+				if(localStorage.getItem("loginInfo")) {
 					mui.toast("已经登陆成功！");
 
-					window.location.href="index.html";
+					window.location.href = "index.html";
 				}
 				var loginButton = doc.getElementById('login');
 				var accountBox = doc.getElementById('account');
 				var passwordBox = doc.getElementById('password');
 				var getCodeBtn = doc.getElementById("getCodeBtn");
-//获取验证码
+				//获取验证码
 				function getCode(phoneNo) {
 					mui.ajax("http://192.168.0.166:8080/ylss/user/getUserCode.do", {
 						data: {
@@ -170,9 +170,8 @@
 
 							if(data.code == "1") {
 								mui.toast(data.msg);
-							}
-							else{
-								mui.toast("同一手机号短信验证码发送超出5条");
+							} else {
+								mui.toast("同一手机号单日短信验证码发送超出5条");
 							}
 
 						},
@@ -181,7 +180,7 @@
 						}
 					})
 				}
-//设置定时器
+				//设置定时器
 				function setInter() {
 					var i = 60;
 					getCodeBtn.innerHTML = i + "s";
@@ -196,120 +195,120 @@
 						}
 					}, 1000)
 				}
-				$.plusReady(function() {
+				/*$.plusReady(function() {
 					plus.screen.lockOrientation("portrait-primary");
 					var self = plus.webview.currentWebview();
-					var loginFlag = localStorage.getItem("loginFlag");
-console.log('loginFlag:193 '+loginFlag);
-					var mainPage = $.preload({
-						"id": 'main',
-						"url": 'main.html'
-					});
-					console.log("lastPhone:198 "+localStorage.getItem("lastPhone"));
-					if(localStorage.getItem("lastPhone")){
-					console.log("lastPhone:200 "+localStorage.getItem("lastPhone"));
-						
-						accountBox.value=localStorage.getItem("lastPhone");
-					}
-					if(loginFlag=='true'){
-						setInter();
-						getCode(accountBox.value);
-						localStorage.setItem("loginFlag",false)
-					}
-					var toMain = function() {
-						$.fire(mainPage, 'show', null);
-						setTimeout(function() {
-							$.openWindow({
-								id: 'main',
-								show: {
-									aniShow: 'pop-in'
-								},
-								waiting: {
-									autoShow: false
-								}
-							});
-						}, 0);
-					};
-					// 是否为电话号码
-					function isMobile(value) {
-						var validateReg = /0?(13|14|15|18)[0-9]{9}/;
-						return validateReg.test(value);
-					}
-					//检查 "登录状态/锁屏状态" 结束
-
-					passwordBox.addEventListener('input', function() {
-						var password = passwordBox.value;
-
-						if(accountBox.value.length != 11) {
-							mui.trigger(mui(".mui-icon-clear")[0], 'tap');
-						}
-
-						if(password.length == 4) {
-							loginButton.setAttribute("class", "mui-btn mui-btn-block mui-btn-primary");
-							loginButton.removeAttribute("disabled");
-						} else {
-							loginButton.setAttribute("class", "mui-btn mui-btn-block mui-btn-default")
-							loginButton.setAttribute("disabled", "disabled");
-							
-
-						}
-
-					})
-					passwordBox.addEventListener('focus', function() {
-						if(accountBox.value.length != 11) {
-							mui.trigger(mui(".mui-icon-clear")[0], 'tap');
-							mui.toast("请获取验证码！");
-						}
-					})
-					loginButton.addEventListener('tap', function(event) {
-						var loginInfo = {
-							account: accountBox.value,
-							password: passwordBox.value
-						};
-						app.login(loginInfo);
-					});
-
-					getCodeBtn.addEventListener('tap', function(event) {
-						var lastPhone=localStorage.getItem("lastPhone");
-						var phone = accountBox.value;
-						if(!isMobile(phone)) {
-							mui.toast("电话号码格式不正确");
-							return;
-						} else if(loginFlag=='true'&&lastPhone==phone) {
-							getCode(phone);
-							setInter();
-							localStorage.setItem("lastPhone", phone);
-							console.log("lastPhone:275 "+lastPhone);
-						} else {
-							localStorage.setItem("lastPhone", phone);
-							window.location.href="create_code.html";
-							console.log("lastPhone:279 "+lastPhone);
-						}
-					});
-
-					$.enterfocus('#login-form input', function() {
-						$.trigger(loginButton, 'tap');
-					});
-
-					//
-					window.addEventListener('resize', function() {
-						oauthArea.style.display = document.body.clientHeight > 400 ? 'block' : 'none';
-					}, false);
-					//
-					var backButtonPress = 0;
-					$.back = function(event) {
-						backButtonPress++;
-						if(backButtonPress > 1) {
-							plus.runtime.quit();
-						} else {
-							plus.nativeUI.toast('再按一次退出应用');
-						}
-						setTimeout(function() {
-							backButtonPress = 0;
-						}, 1000);
-						return false;
-					};
+					
+				});*/
+				var loginFlag = localStorage.getItem("loginFlag");
+				console.log('loginFlag:193 ' + loginFlag);
+				var mainPage = $.preload({
+					"id": 'main',
+					"url": 'main.html'
 				});
+				console.log("lastPhone:198 " + localStorage.getItem("lastPhone"));
+				if(localStorage.getItem("lastPhone")) {
+					console.log("lastPhone:200 " + localStorage.getItem("lastPhone"));
+
+					accountBox.value = localStorage.getItem("lastPhone");
+				}
+				if(loginFlag == 'true') {
+					setInter();
+					getCode(accountBox.value);
+					localStorage.setItem("loginFlag", false)
+				}
+				var toMain = function() {
+					$.fire(mainPage, 'show', null);
+					setTimeout(function() {
+						$.openWindow({
+							id: 'main',
+							show: {
+								aniShow: 'pop-in'
+							},
+							waiting: {
+								autoShow: false
+							}
+						});
+					}, 0);
+				};
+				// 是否为电话号码
+				function isMobile(value) {
+					var validateReg = /0?(13|14|15|18)[0-9]{9}/;
+					return validateReg.test(value);
+				}
+				//检查 "登录状态/锁屏状态" 结束
+
+				passwordBox.addEventListener('input', function() {
+					var password = passwordBox.value;
+
+					if(accountBox.value.length != 11) {
+						mui.trigger(mui(".mui-icon-clear")[0], 'tap');
+					}
+
+					if(password.length == 4) {
+						loginButton.setAttribute("class", "mui-btn mui-btn-block mui-btn-primary");
+						loginButton.removeAttribute("disabled");
+					} else {
+						loginButton.setAttribute("class", "mui-btn mui-btn-block mui-btn-default")
+						loginButton.setAttribute("disabled", "disabled");
+
+					}
+
+				})
+				passwordBox.addEventListener('focus', function() {
+					if(accountBox.value.length != 11) {
+						mui.trigger(mui(".mui-icon-clear")[0], 'tap');
+						mui.toast("请获取验证码！");
+					}
+				})
+				loginButton.addEventListener('tap', function(event) {
+					var loginInfo = {
+						account: accountBox.value,
+						password: passwordBox.value
+					};
+					app.login(loginInfo);
+				});
+
+				getCodeBtn.addEventListener('tap', function(event) {
+					var lastPhone = localStorage.getItem("lastPhone");
+					var phone = accountBox.value;
+					if(!isMobile(phone)) {
+						mui.toast("电话号码格式不正确");
+						return;
+					} else if(loginFlag == 'true' && lastPhone == phone) {
+						getCode(phone);
+						setInter();
+						localStorage.setItem("lastPhone", phone);
+						console.log("lastPhone:275 " + lastPhone);
+					} else {
+						localStorage.setItem("lastPhone", phone);
+						window.location.href = "create_code.html";
+						console.log("lastPhone:279 " + lastPhone);
+					}
+				});
+
+				$.enterfocus('#login-form input', function() {
+					$.trigger(loginButton, 'tap');
+				});
+
+				//
+				window.addEventListener('resize', function() {
+					oauthArea.style.display = document.body.clientHeight > 400 ? 'block' : 'none';
+				}, false);
+				//
+				var backButtonPress = 0;
+				$.back = function(event) {
+					backButtonPress++;
+					if(backButtonPress > 1) {
+						plus.runtime.quit();
+					} else {
+						plus.nativeUI.toast('再按一次退出应用');
+					}
+					setTimeout(function() {
+						backButtonPress = 0;
+					}, 1000);
+					return false;
+				};
 			}(mui, document));
 		</script>
 	</body>

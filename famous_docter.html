@@ -127,8 +127,11 @@
 				})
 
 				function getLocation(callback, searchCondition) {
+					var longitude=localStorage.getItem("longitude");
+					var latitude=localStorage.getItem("latitude");
+					callback(latitude, longitude, searchCondition);
 					// 百度地图API功能
-					var map = new BMap.Map("allmap");
+					/*var map = new BMap.Map("allmap");
 					var point = new BMap.Point();
 					map.centerAndZoom(point, 12);
 
@@ -139,16 +142,14 @@
 							map.addOverlay(mk);
 							map.panTo(r.point);
 
-							callback(r.point.lat, r.point.lng, searchCondition);
-							localStorage.setItem("longitude", r.point.lng);
-							localStorage.setItem("latitude", r.point.lat);
-
+							
+							
 						} else {
 							alert('failed' + this.getStatus());
 						}
 					}, {
 						enableHighAccuracy: true
-					})
+					})*/
 					/*navigator.geolocation.getCurrentPosition(showPosition);
 
 					function showPosition(position) {
@@ -156,10 +157,10 @@
 					}*/
 				}
 
-				function getData(x, y, searchCondition) {
+				function getData(latitude, longitude, searchCondition) {
 					if(localStorage.getItem("loginInfo")) {
 						var loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
-
+console.log(loginInfo);
 					} else {
 						loginInfo = {
 							clientId: "1172",
@@ -174,8 +175,8 @@
 							clientId: loginInfo.clientId,
 							phoneNo: loginInfo.phoneNo,
 							sessionKey: loginInfo.sessionKey,
-							longitude: x,
-							latitude: y,
+							longitude: longitude,
+							latitude: latitude,
 							pageNo: "1",
 							pageSize: "3",
 							searchCondition: searchCondition ? searchCondition : "",
@@ -202,9 +203,10 @@
 										'<div class = "subject" ></div></div>' +
 										'<div class = "distanceBox">' +
 										'<span class="mui-icon mui-icon-location"></span>' +
-										'<p class = "distance" > ' + Math.round(hosInfo[i].length / 1000) + "km" + '</p>' +
+										'<p class = "distance" ></p>' +
 										'</div> </li></a>';
 									hosInfo[i].specials == null ? mui(".subject")[i].innerText = "无" : mui(".subject")[i].innerText = hosInfo[i].specials.split(";")[0];
+									Math.round(hosInfo[i].length) == "0" ? mui(".distance")[i].innerText = "<1km" : mui(".distance")[i].innerText = Math.round(hosInfo[i].length)+"km";
 								}
 							}
 

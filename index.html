@@ -109,7 +109,7 @@
 	</style>
 	<header>
 		<div class="headImgBox">
-			<a href="login.html"><img src="images/common/tx.png" class="headImg" /></a>
+			<a href="login.html"><img src="" class="headImg" /></a>
 		</div>
 		<div class="more">
 			<a href=""><img src="images/common/icon_more2.png" alt="" /></a>
@@ -118,7 +118,7 @@
 
 	<body id="body">
 		<div id="slider" class="mui-slider">
-			<div class="mui-slider-group mui-slider-loop">					
+			<div class="mui-slider-group mui-slider-loop">
 			</div>
 		</div>
 		<iframe id="map" src="map2.html">
@@ -147,7 +147,7 @@
 
 					</div>
 				</li>
-				
+
 				<li class="module">
 					<div class="imgBox">
 						<img src="images/ylss/yssm.png" />
@@ -174,9 +174,10 @@
 			mui.init({
 				swipeBack: true //启用右滑关闭功能
 			});
-			if(localStorage.getItem("loginInfo")){
-					mui(".headImg")[0].src=JSON.parse(localStorage.getItem("loginInfo")).headImage;
-				}
+			if(localStorage.getItem("loginInfo")) {
+				var headImg = JSON.parse(localStorage.getItem("loginInfo")).headImage;
+				mui(".headImg")[0].src = headImg == "" ? "images/common/tx.png" : headImg;
+			}
 			var slider = mui("#slider");
 			var _flag = true;
 			var ww = window.innerWidth;
@@ -260,10 +261,7 @@
 				})
 			}
 
-			
 			window.onload = function() {
-				
-
 
 				var sliderHeight = slider[0].clientHeight;
 				mui("#map")[0].style.height = "100px";
