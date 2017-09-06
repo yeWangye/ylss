@@ -26,13 +26,14 @@ function getDoctorDetail() {
 		success: function(data) {
 			var doctInfo = data.doctInfo;
 			var einfo = data.info.evalList;
-			console.log(JSON.stringify(data));
+
 
 			mui(".hosImg")[0].src = doctInfo.headImage;
 			mui(".instruction")[0].innerText += doctInfo.introduction;
 			mui(".fucsItm")[0].innerText = doctInfo.serviceTime + "次";
 			mui(".gznxItem")[0].innerText = doctInfo.workAge + "年";
-			mui(".jlItem")[0].innerText = doctInfo.length + "km";
+			
+			mui(".jlItem")[0].innerText = Math.round(doctInfo.length) == "0" ? "<1km" : Math.round(doctInfo.length) + "km";
 
 			mui(".hosImg")[0].src = doctInfo.headImage;
 

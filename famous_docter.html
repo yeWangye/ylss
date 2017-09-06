@@ -160,7 +160,7 @@
 				function getData(latitude, longitude, searchCondition) {
 					if(localStorage.getItem("loginInfo")) {
 						var loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
-console.log(loginInfo);
+
 					} else {
 						loginInfo = {
 							clientId: "1172",
@@ -168,7 +168,7 @@ console.log(loginInfo);
 							phoneNo: "15201251945"
 						}
 					}
-					//					plus.nativeUI.showWaiting("查询...");
+
 					doc.getElementById('hospitalList').innerHTML = "";
 					$.ajax("http://ylss.ss0120.com:8080/ylss/patient/getFamousDoctor.do", {
 						data: {

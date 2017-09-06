@@ -201,14 +201,14 @@
 					
 				});*/
 				var loginFlag = localStorage.getItem("loginFlag");
-				console.log('loginFlag:193 ' + loginFlag);
+
 				var mainPage = $.preload({
 					"id": 'main',
 					"url": 'main.html'
 				});
-				console.log("lastPhone:198 " + localStorage.getItem("lastPhone"));
+
 				if(localStorage.getItem("lastPhone")) {
-					console.log("lastPhone:200 " + localStorage.getItem("lastPhone"));
+
 
 					accountBox.value = localStorage.getItem("lastPhone");
 				}
@@ -279,11 +279,11 @@
 						getCode(phone);
 						setInter();
 						localStorage.setItem("lastPhone", phone);
-						console.log("lastPhone:275 " + lastPhone);
+
 					} else {
 						localStorage.setItem("lastPhone", phone);
 						window.location.href = "create_code.html";
-						console.log("lastPhone:279 " + lastPhone);
+
 					}
 				});
 
