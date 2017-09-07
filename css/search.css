@@ -1,0 +1,70 @@
+.mui-search .mui-placeholder {
+	margin-top: 15px;
+}
+
+#hospitalList {
+	list-style: none;
+	font-size: 12PX;
+	padding-left: 0;
+}
+
+#hospitalList li {
+	padding-top: 5px;
+}
+
+.detail {
+	display: inline-block;
+	float: left;
+	margin-left: 10%;
+	max-width:50%;
+}
+
+.hospitalType {
+	background-color: #ffcc33;
+	color: snow;
+	text-align: center;
+}
+
+.distanceBox {
+	float: right;
+	margin-right: 5%;
+	text-align: right;
+	width:10%;
+}
+
+.hospitalImg {
+	display: inline-block;
+	float: left;
+	width: 25%;
+	border: 1px solid snow;
+	/*border-radius: 40px;*/
+	overflow: hidden;
+}
+
+.hospitalImg img {
+	width: 100%;
+}
+
+.hospitalName {
+	font-weight: 800;
+}
+
+#keyword {
+	background-color: snow;
+	width: 80%;
+	margin-top: 15px;
+}
+
+#hospitalList a {
+	display: inline-block;
+	width: 100%;
+	border-top: 1px solid darkgray;
+}
+
+.subject {
+	border: 1px solid darkgray;
+	border-radius: 3px;
+	color: darkgray;
+	margin-top: 5px;
+	text-align: center;
+}

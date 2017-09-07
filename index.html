@@ -150,14 +150,20 @@
 
 				<li class="module">
 					<div class="imgBox">
-						<img src="images/ylss/yssm.png" />
-						<p>医生上门</p>
+						<a href="roomService_doctor.html">
+							<img src="images/ylss/yssm.png" />
+							<p>医生上门</p>
+						</a>
+
 					</div>
 				</li>
 				<li class="module">
 					<div class="imgBox">
-						<img src="images/ylss/hssm.png" />
-						<p>护士上门</p>
+						<a href="roomService_nurse.html">
+							<img src="images/ylss/hssm.png" />
+							<p>护士上门</p>
+						</a>
+
 					</div>
 				</li>
 				<li class="module">
@@ -170,18 +176,29 @@
 		</div>
 		<script src="js/mui.min.js"></script>
 		<script type="text/javascript" charset="utf-8">
-			listAdver();
-			mui.init({
-				swipeBack: true //启用右滑关闭功能
-			});
-			if(localStorage.getItem("loginInfo")) {
-				var headImg = JSON.parse(localStorage.getItem("loginInfo")).headImage;
-				mui(".headImg")[0].src = headImg == "" ? "images/common/tx.png" : headImg;
-			}
 			var slider = mui("#slider");
 			var _flag = true;
 			var ww = window.innerWidth;
 			var wh = window.innerHeight;
+			listAdver();
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+
+			function isLogin() {
+				if(localStorage.getItem("loginInfo")) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+			if(isLogin()) {
+				var headImg = JSON.parse(localStorage.getItem("loginInfo")).headImage;
+				mui(".headImg")[0].src = headImg == "" ? "images/common/tx.png" : headImg;
+			} else {
+				window.location.href = "login.html";
+			}
+
 			mui(".zkImg")[0].addEventListener("tap", function(e) {
 				var sliderHeight = slider[0].clientHeight;
 				if(_flag) {

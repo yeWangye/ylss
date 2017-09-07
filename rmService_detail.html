@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>中国名医</title>
+		<title>中国名院</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -12,54 +12,16 @@
 		<link rel="stylesheet" href="css/mui.min.css">
 		<!--App自定义的css-->
 		<link rel="stylesheet" type="text/css" href="css/app.css">
-		<link rel="stylesheet" href="css/detail_common.css" />
+		<link rel="stylesheet" href="css/hospital_detail.css" />
 	</head>
-	<style type="text/css">
-		.hosImg {
-			width: 100px;
-			border: 1px solid #6cf;
-			border-radius: 50px;
-		}
-		
-		.doctorMsg div {
-			float: left;
-			margin:0 2%;
-			width: 28%;
-		}
-		
-		.renzheng {
-			clear: both;
-			float: left;
-			width: 100%;
-			height: 60px;
-			line-height: 60px;
-			border: 1px solid snow;
-		}
-		
-		.renzheng img {
-			width: 30px;
-			display: inline-block;
-			margin: 15px 0;
-			float: left;
-		}
-		
-		.renzheng span {
-			display: inline-block;
-			float: left;
-			margin-left: 10px;
-		}
-		
-		.instructionBox {
-			clear: both;
-		}
-	</style>
 
 	<body class="mui-ios mui-ios-9 mui-ios-9-1">
 		<header class="mui-bar mui-bar-nav" style="background: #6cf;">
-			<a class="mui-icon mui-icon-left-nav mui-pull-left" onclick="window.history.go(-1);"></a>
+
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" href="famous-_special.html"></a>
 			<div>
 				<div id="segmentedControl" class="mui-segmented-control" style="position: relative;top: -44px;">
-					<a class="mui-control-item mui-active aIndex" href="#item1">
+					<a class="mui-control-item mui-active aInde detailBtn" href="#item1">
 						详情
 					</a>
 					<a class="mui-control-item aIndex evaluateBtn" href="#item2">
@@ -78,39 +40,27 @@
 
 						<div id="item1" class="mui-control-content mui-active">
 
-							<img class="hosImg" />
-							<div class="doctorMsg">
-								<div class="fwcs">
-									<p>服务次数</p>
-									<p class="fucsItm"></p>
-								</div>
-								<div class="gznx">
-									<p>工作年限</p>
-									<p class="gznxItem"></p>
-								</div>
-								<div class="jl">
-									<p>距离</p>
-									<p class="jlItem"></p>
-								</div>
-							</div>
-							<div class="renzheng">
-								<img src="images/ylss/weijiwei.png" alt="" />
-								<span>国家卫计委认证</span>
-							</div>
+							<img alt="" class="hosImg" />
 							<div class="instructionBox">
-								<h4>简介：</h4>
-								<p class="instruction">
-
-								</p>
-
-								<h4>擅长：</h4>
+								<h4>医院简介</h4>
+									<p class="instruction">
+						
+									</p>	
+					
+									<h4>主推疾病</h4>
 								<p class="attendDisease"> </p>
+								<h4>基本信息</h4>
+								<div class="commonInfo">
+									<p class="hosName">名称：</p>
+									<p class="hosAddress">地址：</p>
+									<p class="hosPhone">电话：</p>
+								</div>
 
 								<h4>用户评价</h4>
 								<div class="evaluate">
 
 								</div>
-							</div>
+							</div> 
 
 							<div class="moreEvalution">
 								<button class="moreBtn">查看更多评价</button>
@@ -175,7 +125,7 @@
 			<button id="inlineAask">在线咨询</button>
 		</div>
 		<script src="js/mui.min.js"></script>
-		<script type="text/javascript" src="js/doctor_detail.js"></script>
+		<script type="text/javascript" src="js/hospital_detail.js"></script>
 		<script>
 			mui.init({
 				swipeBack: true, //启用右滑关闭功能
@@ -212,21 +162,25 @@
 				mui("#item1")[0].setAttribute("class", "mui-control-content");
 				mui(".aIndex")[0].setAttribute("class", "mui-control-item aIndex");
 				mui(".aIndex")[1].setAttribute("class", "mui-control-item aIndex evaluateBtn mui-active");
-				mui('#pullrefresh').pullRefresh().scrollTo(0, 0, 100);
+ 				mui('#pullrefresh').pullRefresh().scrollTo(0,0,100);
 			})
-			mui(".evaluateBtn ")[0].addEventListener("tap", function() {
-				mui('#pullrefresh').pullRefresh().scrollTo(0, 0, 100);
+			mui(".evaluateBtn ")[0].addEventListener("tap",function(){
+ 				mui('#pullrefresh').pullRefresh().scrollTo(0,0,100);
+				pullupRefresh();
+			})
+			mui(".detailBtn")[0].addEventListener("tap",function(){
+ 				mui('#pullrefresh').pullRefresh().scrollTo(0,0,100);
 				pullupRefresh();
 			})
 			if(!localStorage.getItem("url") || window.location.search != "") {
 				var url = window.location.search;
-				var doctorId = url.substring(url.lastIndexOf('=') + 1, url.length);
+				var hoId = url.substring(url.lastIndexOf('=') + 1, url.length);
 				localStorage.setItem("url", url);
-				localStorage.setItem("hoId", doctorId);
-
+				localStorage.setItem("hoId", hoId);
+				
 			} else {
 				var url = localStorage.getItem("url");
-				var doctorId = url.substring(url.lastIndexOf('=') + 1, url.length);
+				var hoId = url.substring(url.lastIndexOf('=') + 1, url.length);
 			}
 			/*//全部评价
 			setEvaluate("all", 8, 1);
@@ -239,15 +193,12 @@
 
 			//进入聊天界面
 			mui("#inlineAask")[0].addEventListener("tap", function() {
-				window.location.href = "single-chat.html?fromWhere=doctor_detail.html";
+				window.location.href = "single-chat.html?fromWhere=hospital_detail.html";
 			})
 			//进入预约挂号页面
 			mui("#inlineOrder")[0].addEventListener("tap", function() {
-				/*mui.openWindow({
-					url: 'single-chat.html',
-					id:'single-chat'
-				})*/
-				window.location.href = "registration.html?fromWhere=doctor_detail.html";
+				
+				window.location.href = "registration.html?fromWhere=hospital_detail.html";
 			})
 		</script>
 

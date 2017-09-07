@@ -1,2 +1,311 @@
-/*!art-template - Template Engine | http://aui.github.com/artTemplate/*/
-!function(){function a(a){return a.replace(t,"").replace(u,",").replace(v,"").replace(w,"").replace(x,"").split(y)}function b(a){return"'"+a.replace(/('|\\)/g,"\\$1").replace(/\r/g,"\\r").replace(/\n/g,"\\n")+"'"}function c(c,d){function e(a){return m+=a.split(/\n/).length-1,k&&(a=a.replace(/\s+/g," ").replace(/<!--[\w\W]*?-->/g,"")),a&&(a=s[1]+b(a)+s[2]+"\n"),a}function f(b){var c=m;if(j?b=j(b,d):g&&(b=b.replace(/\n/g,function(){return m++,"$line="+m+";"})),0===b.indexOf("=")){var e=l&&!/^=[=#]/.test(b);if(b=b.replace(/^=[=#]?|[\s;]*$/g,""),e){var f=b.replace(/\s*\([^\)]+\)/,"");n[f]||/^(include|print)$/.test(f)||(b="$escape("+b+")")}else b="$string("+b+")";b=s[1]+b+s[2]}return g&&(b="$line="+c+";"+b),r(a(b),function(a){if(a&&!p[a]){var b;b="print"===a?u:"include"===a?v:n[a]?"$utils."+a:o[a]?"$helpers."+a:"$data."+a,w+=a+"="+b+",",p[a]=!0}}),b+"\n"}var g=d.debug,h=d.openTag,i=d.closeTag,j=d.parser,k=d.compress,l=d.escape,m=1,p={$data:1,$filename:1,$utils:1,$helpers:1,$out:1,$line:1},q="".trim,s=q?["$out='';","$out+=",";","$out"]:["$out=[];","$out.push(",");","$out.join('')"],t=q?"$out+=text;return $out;":"$out.push(text);",u="function(){var text=''.concat.apply('',arguments);"+t+"}",v="function(filename,data){data=data||$data;var text=$utils.$include(filename,data,$filename);"+t+"}",w="'use strict';var $utils=this,$helpers=$utils.$helpers,"+(g?"$line=0,":""),x=s[0],y="return new String("+s[3]+");";r(c.split(h),function(a){a=a.split(i);var b=a[0],c=a[1];1===a.length?x+=e(b):(x+=f(b),c&&(x+=e(c)))});var z=w+x+y;g&&(z="try{"+z+"}catch(e){throw {filename:$filename,name:'Render Error',message:e.message,line:$line,source:"+b(c)+".split(/\\n/)[$line-1].replace(/^\\s+/,'')};}");try{var A=new Function("$data","$filename",z);return A.prototype=n,A}catch(B){throw B.temp="function anonymous($data,$filename) {"+z+"}",B}}var d=function(a,b){return"string"==typeof b?q(b,{filename:a}):g(a,b)};d.version="3.0.0",d.config=function(a,b){e[a]=b};var e=d.defaults={openTag:"<%",closeTag:"%>",escape:!0,cache:!0,compress:!1,parser:null},f=d.cache={};d.render=function(a,b){return q(a,b)};var g=d.renderFile=function(a,b){var c=d.get(a)||p({filename:a,name:"Render Error",message:"Template not found"});return b?c(b):c};d.get=function(a){var b;if(f[a])b=f[a];else if("object"==typeof document){var c=document.getElementById(a);if(c){var d=(c.value||c.innerHTML).replace(/^\s*|\s*$/g,"");b=q(d,{filename:a})}}return b};var h=function(a,b){return"string"!=typeof a&&(b=typeof a,"number"===b?a+="":a="function"===b?h(a.call(a)):""),a},i={"<":"&#60;",">":"&#62;",'"':"&#34;","'":"&#39;","&":"&#38;"},j=function(a){return i[a]},k=function(a){return h(a).replace(/&(?![\w#]+;)|[<>"']/g,j)},l=Array.isArray||function(a){return"[object Array]"==={}.toString.call(a)},m=function(a,b){var c,d;if(l(a))for(c=0,d=a.length;d>c;c++)b.call(a,a[c],c,a);else for(c in a)b.call(a,a[c],c)},n=d.utils={$helpers:{},$include:g,$string:h,$escape:k,$each:m};d.helper=function(a,b){o[a]=b};var o=d.helpers=n.$helpers;d.onerror=function(a){var b="Template Error\n\n";for(var c in a)b+="<"+c+">\n"+a[c]+"\n\n";"object"==typeof console&&console.error(b)};var p=function(a){return d.onerror(a),function(){return"{Template Error}"}},q=d.compile=function(a,b){function d(c){try{return new i(c,h)+""}catch(d){return b.debug?p(d)():(b.debug=!0,q(a,b)(c))}}b=b||{};for(var g in e)void 0===b[g]&&(b[g]=e[g]);var h=b.filename;try{var i=c(a,b)}catch(j){return j.filename=h||"anonymous",j.name="Syntax Error",p(j)}return d.prototype=i.prototype,d.toString=function(){return i.toString()},h&&b.cache&&(f[h]=d),d},r=n.$each,s="break,case,catch,continue,debugger,default,delete,do,else,false,finally,for,function,if,in,instanceof,new,null,return,switch,this,throw,true,try,typeof,var,void,while,with,abstract,boolean,byte,char,class,const,double,enum,export,extends,final,float,goto,implements,import,int,interface,long,native,package,private,protected,public,short,static,super,synchronized,throws,transient,volatile,arguments,let,yield,undefined",t=/\/\*[\w\W]*?\*\/|\/\/[^\n]*\n|\/\/[^\n]*$|"(?:[^"\\]|\\[\w\W])*"|'(?:[^'\\]|\\[\w\W])*'|\s*\.\s*[$\w\.]+/g,u=/[^\w$]+/g,v=new RegExp(["\\b"+s.replace(/,/g,"\\b|\\b")+"\\b"].join("|"),"g"),w=/^\d[^,]*|,\d[^,]*/g,x=/^,+|,+$/g,y=/^$|,+/;e.openTag="{{",e.closeTag="}}";var z=function(a,b){var c=b.split(":"),d=c.shift(),e=c.join(":")||"";return e&&(e=", "+e),"$helpers."+d+"("+a+e+")"};e.parser=function(a){a=a.replace(/^\s/,"");var b=a.split(" "),c=b.shift(),e=b.join(" ");switch(c){case"if":a="if("+e+"){";break;case"else":b="if"===b.shift()?" if("+b.join(" ")+")":"",a="}else"+b+"{";break;case"/if":a="}";break;case"each":var f=b[0]||"$data",g=b[1]||"as",h=b[2]||"$value",i=b[3]||"$index",j=h+","+i;"as"!==g&&(f="[]"),a="$each("+f+",function("+j+"){";break;case"/each":a="});";break;case"echo":a="print("+e+");";break;case"print":case"include":a=c+"("+b.join(",")+");";break;default:if(/^\s*\|\s*[\w\$]/.test(e)){var k=!0;0===a.indexOf("#")&&(a=a.substr(1),k=!1);for(var l=0,m=a.split("|"),n=m.length,o=m[l++];n>l;l++)o=z(o,m[l]);a=(k?"=":"=#")+o}else a=d.helpers[c]?"=#"+c+"("+b.join(",")+");":"="+a}return a},"function"==typeof define?define(function(){return d}):"undefined"!=typeof exports?module.exports=d:this.template=d}();
+/*!
+ * template.js v0.7.1 (https://github.com/yanhaijing/template.js)
+ * API https://github.com/yanhaijing/template.js/blob/master/doc/api.md
+ * Copyright 2015 yanhaijing. All Rights Reserved
+ * Licensed under MIT (https://github.com/yanhaijing/template.js/blob/master/MIT-LICENSE.txt)
+ */
+;(function(root, factory) {
+    var template = factory(root);
+    if (typeof define === 'function' && define.amd) {
+        // AMD
+        define('template', function() {
+            return template;
+        });
+    } else if (typeof exports === 'object') {
+        // Node.js
+        module.exports = template;
+    } else {
+        // Browser globals
+        var _template = root.template;
+
+        template.noConflict = function() {
+            if (root.template === template) {
+                root.template = _template;
+            }
+
+            return template;
+        };
+        root.template = template;
+    }
+}(this, function(root) {
+    'use strict';
+    var o = {
+        sTag: '<%',//开始标签
+        eTag: '%>',//结束标签
+        compress: false,//是否压缩html
+        escape: true, //默认输出是否进行HTML转义
+        error: function (e) {}//错误回调
+    };
+    var functionMap = {}; //内部函数对象
+    //修饰器前缀
+    var modifierMap = {
+        '': function (param) {return nothing(param)},
+        'h': function (param) {return encodeHTML(param)},
+        'u': function (param) {return encodeURI(param)}
+    };
+
+    var toString = {}.toString;
+    var slice = [].slice;
+    function type(x) {
+        if(x === null){
+            return 'null';
+        }
+
+        var t= typeof x;
+
+        if(t !== 'object'){
+            return t;
+        }
+
+        var c = toString.call(x).slice(8, -1).toLowerCase();
+        if(c !== 'object'){
+            return c;
+        }
+
+        if(x.constructor==Object){
+            return c;
+        }
+
+        return 'unkonw';
+    }
+
+    function isObject(obj) {
+        return type(obj) === 'object';
+    }
+    function isFunction(fn) {
+        return type(fn) === 'function';
+    }
+    function isString(str) {
+        return type(str) === 'string';
+    }
+    function extend() {
+        var target = arguments[0] || {};
+        var arrs = slice.call(arguments, 1);
+        var len = arrs.length;
+     
+        for (var i = 0; i < len; i++) {
+            var arr = arrs[i];
+            for (var name in arr) {
+                target[name] = arr[name];
+            }
+     
+        }
+        return target;
+    }
+    function clone() {
+        var args = slice.call(arguments);
+        return extend.apply(null, [{}].concat(args));
+    }
+    function nothing(param) {
+        return param;
+    }
+    function encodeHTML(source) {
+        return String(source)
+            .replace(/&/g,'&amp;')
+            .replace(/</g,'&lt;')
+            .replace(/>/g,'&gt;')
+            .replace(/\\/g,'&#92;')
+            .replace(/"/g,'&quot;')
+            .replace(/'/g,'&#39;');
+    }
+    function compress(html) {
+        return html.replace(/\s+/g, ' ').replace(/<!--[\w\W]*?-->/g, '');
+    }
+    function consoleAdapter(cmd, msg) {
+        typeof console !== 'undefined' && console[cmd] && console[cmd](msg);
+    }
+    function handelError(e) {
+        var message = 'template.js error\n\n';
+
+        for (var key in e) {
+            message += '<' + key + '>\n' + e[key] + '\n\n';
+        }
+        message += '<message>\n' + e.message + '\n\n';
+        consoleAdapter('error', message);
+
+        o.error(e);
+        function error() {
+            return 'template.js error';
+        }
+        error.toString = function () {
+            return '__code__ = "template.js error"';
+        }
+        return error;
+    }
+    function parse(tpl, opt) {
+        var code = '';
+        var sTag = opt.sTag;
+        var eTag = opt.eTag;
+        var escape = opt.escape;
+        function parsehtml(line) {
+            // 单双引号转义，换行符替换为空格
+            line = line.replace(/('|")/g, '\\$1').replace(/\n/g, ' ');
+            return ';__code__ += ("' + line + '")\n';
+        }
+        function parsejs(line) {              
+            //var reg = /^(:?)(.*?)=(.*)$/;
+            var reg = /^(?:=|(:.*?)=)(.*)$/
+            var html;
+            var arr;
+            var modifier;
+
+            // = := :*=
+            // :h=123 [':h=123', 'h', '123']
+            if (arr = reg.exec(line)) {
+                html = arr[2]; // 输出
+                if (Boolean(arr[1])) {
+                    // :开头
+                    modifier = arr[1].slice(1);
+                } else {
+                    // = 开头
+                    modifier = escape ? 'h' : '';
+                }
+
+                return ';__code__ += __modifierMap__["' + modifier + '"](typeof (' + html + ') !== "undefined" ? (' + html + ') : "")\n';
+            }
+            
+            //原生js
+            return ';' + line + '\n';
+        }
+
+        var tokens = tpl.split(sTag);
+
+        for (var i = 0, len = tokens.length; i < len; i++) {
+            var token = tokens[i].split(eTag);
+
+            if (token.length === 1) {
+                code += parsehtml(token[0]);
+            } else {
+                code += parsejs(token[0], true);
+                if (token[1]) {
+                    code += parsehtml(token[1]);
+                }
+            }
+        }
+
+        return code;
+    }
+    function compiler(tpl, opt) {
+        var mainCode = parse(tpl, opt);
+
+        var headerCode = '\n' + 
+        '    var html = (function (__data__, __modifierMap__) {\n' + 
+        '        var __str__ = "", __code__ = "";\n' + 
+        '        for(var key in __data__) {\n' + 
+        '            __str__+=("var " + key + "=__data__[\'" + key + "\'];");\n' + 
+        '        }\n' + 
+        '        eval(__str__);\n\n';
+
+        var footerCode = '\n' + 
+        '        ;return __code__;\n' + 
+        '    }(__data__, __modifierMap__));\n' + 
+        '    return html;\n';
+
+        var code = headerCode + mainCode + footerCode;
+        code = code.replace(/[\r]/g, ' '); // ie 7 8 会报错，不知道为什么
+        try {
+            var Render = new Function('__data__', '__modifierMap__', code); 
+            Render.toString = function () {
+                return mainCode;
+            }
+            return Render;
+        } catch(e) {
+            e.temp = 'function anonymous(__data__, __modifierMap__) {' + code + '}';
+            throw e;
+        }  
+    }
+    function compile(tpl, opt) {
+        opt = clone(o, opt);
+
+        try {
+            var Render = compiler(tpl, opt);
+        } catch(e) {
+            e.name = 'CompileError';
+            e.tpl = tpl;
+            e.render = e.temp;
+            delete e.temp;
+            return handelError(e);
+        }
+
+        function render(data) {
+            data = clone(functionMap, data);
+            try {
+                var html = Render(data, modifierMap);
+                html = opt.compress ? compress(html) : html;
+                return html;
+            } catch(e) {
+                e.name = 'RenderError';
+                e.tpl = tpl;
+                e.render = Render.toString();
+                return handelError(e)();
+            }            
+        }
+
+        render.toString = function () {
+            return Render.toString();
+        };
+        return render;
+    }
+    function template(tpl, data) {
+        if (typeof tpl !== 'string') {
+            return '';
+        }
+
+        var fn = compile(tpl);
+        if (!isObject(data)) {
+            return fn;
+        }
+
+        return fn(data);
+    }
+
+    template.config = function (option) {
+        if (isObject(option)) {
+            o = extend(o, option);
+        }
+        return clone(o);
+    };
+
+    template.registerFunction = function(name, fn) {
+        if (!isString(name)) {
+            return clone(functionMap);
+        }
+        if (!isFunction(fn)) {
+            return functionMap[name];
+        }
+
+        return functionMap[name] = fn;
+    }
+    template.unregisterFunction = function (name) {
+        if (!isString(name)) {
+            return false;
+        }
+        delete functionMap[name];
+        return true;
+    }
+
+    template.registerModifier = function(name, fn) {
+        if (!isString(name)) {
+            return clone(modifierMap);
+        }
+        if (!isFunction(fn)) {
+            return modifierMap[name];
+        }
+
+        return modifierMap[name] = fn;
+    }
+    template.unregisterModifier = function (name) {
+        if (!isString(name)) {
+            return false;
+        }
+        delete modifierMap[name];
+        return true;
+    }
+
+    template.__encodeHTML = encodeHTML;
+    template.__compress = compress;
+    template.__handelError = handelError;
+    template.__compile = compile;
+    template.version = '0.7.1';
+    return template;
+}));

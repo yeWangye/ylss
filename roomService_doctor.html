@@ -9,13 +9,14 @@
 		<link rel="stylesheet" href="css/search.css" />
 	</head>
 	<script type="text/javascript" src="js/template.js"></script>
+
+
+
 	<body>
-
-
 		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
 			<a class="mui-icon mui-icon-left-nav mui-pull-left" href="index.html"></a>
 
-			<h1 class="mui-title" style="line-height: 64px;color: snow;">中国名医</h1>
+			<h1 class="mui-title" style="line-height: 64px;color: snow;">医生上门</h1>
 		</header>
 		<div class="mui-content" style="padding-top: 64px;">
 
@@ -23,12 +24,9 @@
 				<div class="mui-input-row mui-search" style="background: #999;">
 					<input type="search" autocomplete="off" name="baike-search" placeholder="请输入关键词" class="mui-input-clear" id="keyword" style="">
 					<button style="width: 15%;margin-top: 15px;background-color: #999;color: #6cf;">取消</button>
-
 				</div>
-
 			</form>
-
-			<p>全国知名医生，系统默认推荐3个，如需查看更多，请搜索医生名称或疾病名称</p>
+			<p>当前显示的是20公里以内的服务者，可上门服务，也可在线咨询</p>
 			<div id="wp"></div>
 			<script id="doctorList" type="text/html">
 				<ul id="hospitalList">
@@ -60,15 +58,13 @@
 					<%}%>
 				</ul>
 			</script>
-
 		</div>
 		<script src="js/mui.min.js"></script>
 		<script src="js/search.js"></script>
-		
 		<script type="text/javascript">
 			mui.init();
 			
-			search.getFamousDoctor();
+			search.findDoctorByType("doctor");
 			var keyWord = document.getElementById("keyword");
 			keyWord.addEventListener('keypress', function(e) {
 				var keycode = e.keyCode;
@@ -79,7 +75,7 @@
 					document.getElementById('hospitalList').innerHTML = "";
 
 					//请求搜索接口  
-					search.getFamousDoctor(searchCondition);
+					search.findDoctorByType("doctor",searchCondition);
 				}
 			})
 		</script>
