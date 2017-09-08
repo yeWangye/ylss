@@ -18,7 +18,7 @@
 	<body class="mui-ios mui-ios-9 mui-ios-9-1">
 		<header class="mui-bar mui-bar-nav" style="background: #6cf;">
 
-			<a class="mui-icon mui-icon-left-nav mui-pull-left" href="famous-_special.html"></a>
+			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn"></a>
 			<div>
 				<div id="segmentedControl" class="mui-segmented-control" style="position: relative;top: -44px;">
 					<a class="mui-control-item mui-active aIndex detailBtn" href="#item1">
@@ -174,14 +174,25 @@
 			})
 			if(!localStorage.getItem("url") || window.location.search != "") {
 				var url = window.location.search;
-				var hoId = url.substring(url.lastIndexOf('=') + 1, url.length);
+				var hoId = url.split("&")[0];
+				var fromWhere = url.split("&")[1];
+				hoId=hoId.substring(hoId.indexOf("=")+1,hoId.length);
+				fromWhere=fromWhere.substring(fromWhere.indexOf("=")+1,fromWhere.length);
+				console.log("181"+fromWhere);
+				mui(".backBtn")[0].setAttribute("href", fromWhere);
 				localStorage.setItem("url", url);
 				localStorage.setItem("hoId", hoId);
 				
 			} else {
 				var url = localStorage.getItem("url");
-				var hoId = url.substring(url.lastIndexOf('=') + 1, url.length);
+				var hoId = url.split("&")[0];
+				var fromWhere = url.split("&")[1];
+				console.log(fromWhere);
+				hoId=hoId.substring(hoId.indexOf("=")+1,hoId.length);
+				fromWhere=fromWhere.substring(fromWhere.indexOf("=")+1,fromWhere.length);
+				mui(".backBtn")[0].setAttribute("href", fromWhere);
 			}
+			
 			/*//全部评价
 			setEvaluate("all", 8, 1);
 			//好评
