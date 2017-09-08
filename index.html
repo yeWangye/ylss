@@ -214,19 +214,33 @@
 				if(_flag) {
 					mui("#map")[0].style.height = wh - sliderHeight + "px";
 					mui(".zk")[0].style.top = wh - 100 + "px";
+					
+					setTimeout('setImgSrc("sq")',1000)
 					document.getElementById("map").contentWindow.setMap(wh - sliderHeight);
 
 					_flag = false;
 				} else {
 					mui("#map")[0].style.height = "100px";
 					mui(".zk")[0].style.top = sliderHeight + "px";
+
+					setTimeout('setImgSrc("zk")',1000)
+					
 					document.getElementById("map").contentWindow.setMap(100);
 					_flag = true;
 
 				}
 
 			})
+			function setImgSrc(data){
+				if(data=="sq"){
+					mui(".zkImg")[0].setAttribute("src","images/ylss/sq.png");
+					
+				}else{
+					mui(".zkImg")[0].setAttribute("src","images/ylss/zk.png");
+					
+				}
 
+			}
 			function listAdver() {
 
 				mui.ajax("http://ylss.ss0120.com:8080/ylss/patient/listAdver.do", {
