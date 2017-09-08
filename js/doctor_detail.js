@@ -1,16 +1,7 @@
 //获取医院详情函数
 function getDoctorDetail() {
 
-	if(localStorage.getItem("loginInfo")) {
-		var loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
-
-	} else {
-		loginInfo = {
-			clientId: "1172",
-			sessionKey: "11",
-			phoneNo: "15201251945"
-		}
-	}
+	var loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
 
 	mui.ajax("http://ylss.ss0120.com:8080/ylss/patient/getDoctorEvaluat.do", {
 		data: {

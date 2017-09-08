@@ -59,7 +59,7 @@
 			<a class="mui-icon mui-icon-left-nav mui-pull-left" onclick="window.history.go(-1);"></a>
 			<div>
 				<div id="segmentedControl" class="mui-segmented-control" style="position: relative;top: -44px;">
-					<a class="mui-control-item mui-active aIndex" href="#item1">
+					<a class="mui-control-item mui-active aIndex detailBtn" href="#item1">
 						详情
 					</a>
 					<a class="mui-control-item aIndex evaluateBtn" href="#item2">
@@ -216,6 +216,10 @@
 			})
 			mui(".evaluateBtn ")[0].addEventListener("tap", function() {
 				mui('#pullrefresh').pullRefresh().scrollTo(0, 0, 100);
+				pullupRefresh();
+			})
+			mui(".detailBtn")[0].addEventListener("tap",function(){
+ 				mui('#pullrefresh').pullRefresh().scrollTo(0,0,100);
 				pullupRefresh();
 			})
 			if(!localStorage.getItem("url") || window.location.search != "") {

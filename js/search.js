@@ -1,22 +1,14 @@
 var search = {
 	longitude: localStorage.getItem("longitude"),
 	latitude: localStorage.getItem("latitude"),
+	loginInfo : JSON.parse(localStorage.getItem("loginInfo")),
 	//	医生护士上门
 	findDoctorByType: function(doctorType, searchCondition) {
-		if(localStorage.getItem("loginInfo")) {
-			var loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
-		} else {
-			loginInfo = {
-				clientId: "1172",
-				sessionKey: "11",
-				phoneNo: "15201251945"
-			}
-		}
 		mui.ajax("http://ylss.ss0120.com:8080/ylss/patient/findDoctorByType.do", {
 			data: {
-				clientId: loginInfo.clientId,
-				phoneNo: loginInfo.phoneNo,
-				sessionKey: loginInfo.sessionKey,
+				clientId: this.loginInfo.clientId,
+				phoneNo: this.loginInfo.phoneNo,
+				sessionKey: this.loginInfo.sessionKey,
 				longitude: this.longitude,
 				latitude: this.latitude,
 				pageNo: "1",
@@ -52,26 +44,16 @@ var search = {
 	},
 	//	中国名医
 	getFamousDoctor: function(searchCondition) {
-		if(localStorage.getItem("loginInfo")) {
-			var loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
-		} else {
-			loginInfo = {
-				clientId: "1172",
-				sessionKey: "11",
-				phoneNo: "15201251945"
-			}
-		}
 		mui.ajax("http://ylss.ss0120.com:8080/ylss/patient/getFamousDoctor.do", {
 			data: {
-				clientId: loginInfo.clientId,
-				phoneNo: loginInfo.phoneNo,
-				sessionKey: loginInfo.sessionKey,
+				clientId: this.loginInfo.clientId,
+				phoneNo: this.loginInfo.phoneNo,
+				sessionKey: this.loginInfo.sessionKey,
 				longitude: this.longitude,
 				latitude: this.latitude,
 				pageNo: "1",
 				pageSize: "3",
 				searchCondition: searchCondition ? searchCondition : "",
-
 			},
 			dataType: 'json',
 			type: 'post',
@@ -98,21 +80,13 @@ var search = {
 			}
 		})
 	},
+//	中国名院
 	getFamousSpecial: function(searchCondition) {
-		if(localStorage.getItem("loginInfo")) {
-			var loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
-		} else {
-			loginInfo = {
-				clientId: "1172",
-				sessionKey: "11",
-				phoneNo: "15201251945"
-			}
-		}
 		mui.ajax("http://ylss.ss0120.com:8080/ylss/patient/getFamousSpecial.do", {
 			data: {
-				clientId: loginInfo.clientId,
-				phoneNo: loginInfo.phoneNo,
-				sessionKey: loginInfo.sessionKey,
+				clientId: this.loginInfo.clientId,
+				phoneNo: this.loginInfo.phoneNo,
+				sessionKey: this.loginInfo.sessionKey,
 				longitude: this.longitude,
 				latitude: this.latitude,
 				pageNo: "1",
