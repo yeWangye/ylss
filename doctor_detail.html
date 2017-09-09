@@ -23,7 +23,7 @@
 		
 		.doctorMsg div {
 			float: left;
-			margin:0 2%;
+			margin: 0 2%;
 			width: 28%;
 		}
 		
@@ -56,7 +56,7 @@
 
 	<body class="mui-ios mui-ios-9 mui-ios-9-1">
 		<header class="mui-bar mui-bar-nav" style="background: #6cf;">
-			<a class="mui-icon mui-icon-left-nav mui-pull-left" onclick="window.history.go(-1);"></a>
+			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn"></a>
 			<div>
 				<div id="segmentedControl" class="mui-segmented-control" style="position: relative;top: -44px;">
 					<a class="mui-control-item mui-active aIndex detailBtn" href="#item1">
@@ -171,7 +171,7 @@
 		</div>
 		<div class="bottomTabBar">
 			<img src="images/common/icon_phone.png" alt="" />
-			<button id="inlineOrder">预约挂号</button>
+			<button id="inlineOrder"></button>
 			<button id="inlineAask">在线咨询</button>
 		</div>
 		<script src="js/mui.min.js"></script>
@@ -218,19 +218,35 @@
 				mui('#pullrefresh').pullRefresh().scrollTo(0, 0, 100);
 				pullupRefresh();
 			})
-			mui(".detailBtn")[0].addEventListener("tap",function(){
- 				mui('#pullrefresh').pullRefresh().scrollTo(0,0,100);
+			mui(".detailBtn")[0].addEventListener("tap", function() {
+				mui('#pullrefresh').pullRefresh().scrollTo(0, 0, 100);
 				pullupRefresh();
 			})
+			var fromWhere;
 			if(!localStorage.getItem("url") || window.location.search != "") {
 				var url = window.location.search;
-				var doctorId = url.substring(url.lastIndexOf('=') + 1, url.length);
+				var doctorId = url.split("&")[0];
+				fromWhere = url.split("&")[1];
+				doctorId = doctorId.substring(doctorId.indexOf("=") + 1, doctorId.length);
+				fromWhere = fromWhere.substring(fromWhere.indexOf("=") + 1, fromWhere.length);
+				
+				mui(".backBtn")[0].setAttribute("href", fromWhere);
 				localStorage.setItem("url", url);
-				localStorage.setItem("hoId", doctorId);
+				localStorage.setItem("doctorId", doctorId);
 
 			} else {
 				var url = localStorage.getItem("url");
-				var doctorId = url.substring(url.lastIndexOf('=') + 1, url.length);
+				var doctorId = url.split("&")[0];
+				fromWhere = url.split("&")[1];
+				doctorId = doctorId.substring(doctorId.indexOf("=") + 1, doctorId.length);
+				fromWhere = fromWhere.substring(fromWhere.indexOf("=") + 1, fromWhere.length);
+				mui(".backBtn")[0].setAttribute("href", fromWhere);
+			}
+			if(fromWhere == "roomService_doctor.html"||fromWhere == "roomService_nurse.html") {
+					mui("#inlineOrder")[0].innerHTML = "上门服务";
+
+			}else{
+				mui("#inlineOrder")[0].innerHTML = "预约挂号";
 			}
 			/*//全部评价
 			setEvaluate("all", 8, 1);
@@ -247,11 +263,15 @@
 			})
 			//进入预约挂号页面
 			mui("#inlineOrder")[0].addEventListener("tap", function() {
-				/*mui.openWindow({
-					url: 'single-chat.html',
-					id:'single-chat'
-				})*/
-				window.location.href = "registration.html?fromWhere=doctor_detail.html";
+				if(fromWhere == "famous_doctor.html") {
+
+					window.location.href = "registration.html?fromWhere=doctor_detail.html";
+
+				} else {
+					window.location.href = "roomService_template.html?fromWhere=doctor_detail.html";
+
+				}
+
 			})
 		</script>
 

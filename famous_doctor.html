@@ -33,7 +33,7 @@
 			<script id="doctorList" type="text/html">
 				<ul id="hospitalList">
 					<%for(var i = 0; i < list.length; i++) {%>
-					<a href="doctor_detail.html?doctorId=<%:=list[i].doctorId%>">
+					<a href="doctor_detail.html?doctorId=<%:=list[i].doctorId%>&fromWhere=famous_doctor.html">
 						<li style="clear: both;">
 							<div class="hospitalImg" style="height:<%:=window.innerWidth*0.25%>px;border-radius:<%:=window.innerWidth*0.125%>px;"><img src="<%:=list[i].headImage%>" /></div>
 							<div class="detail">

@@ -47,43 +47,53 @@
 	var geolocation = new BMap.Geolocation();
 	var rPoint = null;
 	var mkTemp = null;
+	var mk;
 
 	function drawMap(msg) {
 		// 百度地图API功能
 		if(rPoint) {
+
+			var label = new BMap.Label(msg, {
+				offset: new BMap.Size(-60, -10)
+			});
+			label.setStyle({
+				display: "none",
+			});
+			mkTemp.setLabel(label);
 			map.addOverlay(mkTemp);
+			
 			map.panTo(rPoint);
 		} else {
 			geolocation.getCurrentPosition(function(r) {
 				if(this.getStatus() == BMAP_STATUS_SUCCESS) {
 
 					var myIcon = new BMap.Icon("images/ylss/orientationicon.png", new BMap.Size(30, 30));
-					var mk = new BMap.Marker(r.point, {
+					mk = new BMap.Marker(r.point, {
 						icon: myIcon
 					});
-//					mk.setAnimation(BMAP_ANIMATION_BOUNCE);
+					//設置圖層顯示順序
+					mk.setZIndex(100);
+					//					mk.setAnimation(BMAP_ANIMATION_BOUNCE);
 					var label = new BMap.Label(msg, {
 						offset: new BMap.Size(-60, -10)
 					});
 					label.setStyle({
-						display:"block",
+						display: "block",
 						color: "red",
 						fontSize: "12px",
 						lineHeight: "25px",
-						padding:"10px",
+						padding: "10px",
 						textAlign: "center",
-						zIndex:"1000",
 						fontFamily: "微软雅黑"
 					});
-					if(msg){
+					if(msg) {
 						mk.setLabel(label);
 					}
-					
 					localStorage.setItem("longitude", r.point.lng);
 					localStorage.setItem("latitude", r.point.lat);
-					
-					
+
 					map.addOverlay(mk);
+
 					map.panTo(r.point);
 					rPoint = r.point;
 					mkTemp = mk;
@@ -101,16 +111,35 @@
 		document.getElementById("allmap").style.height = num + "px";
 		//		document.getElementById("allmap").style.transform = 'scale(1,2)';
 
-		setTimeout("drawMap()", 1000)
+		setTimeout("drawMap()", 1000);
 
 	}
 
 	function addMarkerHos(point) {
+
 		var marker = new BMap.Marker(point);
 		var myIcon = new BMap.Icon("images/ylss/yiyuancion.png", new BMap.Size(25, 25));
 		var mk = new BMap.Marker(point, {
 			icon: myIcon
 		});
+//		mk.setZIndex(99);
+
+		/*var label = new BMap.Label(msg, {
+			offset: new BMap.Size(-60, -10)
+		});
+		label.setStyle({
+			display: "block",
+			color: "red",
+			fontSize: "12px",
+			lineHeight: "25px",
+			padding: "10px",
+			textAlign: "center",
+			fontFamily: "微软雅黑"
+		});
+		
+		mk.addEventListener("click", function() {
+
+		});*/
 		map.addOverlay(mk);
 	}
 
@@ -147,8 +176,8 @@
 				var doctorInfo = data.doctorInfo;
 				var medicineStoreInfo = data.medicineStoreInfo;
 				var message = data.message.toString();
-				message=message.split(",").join("</br>");
-				
+				message = message.split(",").join("</br>");
+
 				for(i = 0; i < hospInfo.length; i++) {
 
 					var point = new BMap.Point(hospInfo[i].longitude, hospInfo[i].latitude);
@@ -172,4 +201,8 @@
 			mui.toast('网络异常，请稍后再试！');
 		}
 	});
+	map.addEventListener("click", function() {
+		console.log(1);
+		map.removeOverlay(mk);
+	})
 </script>
