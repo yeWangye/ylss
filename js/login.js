@@ -18,7 +18,7 @@
 		if(loginInfo.password.length != 4) {
 			return mui.toast('验证码不正确');
 		}
-		mui.ajax("http://192.168.0.166:8080/ylss/user/clientlogin.do", {
+		mui.ajax(config.rootUrl+"ylss/user/clientlogin.do", {
 			data: {
 				phoneNo: loginInfo.account,
 				password: loginInfo.password,
@@ -30,13 +30,10 @@
 			type: 'post',
 			timeout: 10000,
 			success: function(data) {
-				//							plus.nativeUI.closeWaiting();
-				console.log("login begain:" + JSON.stringify(data));
 				if(data.code == "1") {
 					mui.toast(data.msg);
 					var info=JSON.stringify(data.info);
 					localStorage.setItem("loginInfo",info);
-					localStorage.setItem("loginInfo_temp",info);
 					window.location.href="index.html";
 
 				} else if(data.code == "0") {

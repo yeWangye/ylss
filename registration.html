@@ -82,6 +82,8 @@
 				</div>
 			</form>
 		</div>
+		<script src="js/config.js"></script>
+		<script src="js/isLogin.js"></script>
 		<script type="text/javascript">
 			(function($, doc) {
 				$.init();
@@ -139,7 +141,7 @@
 
 					})
 				})
-				$.ajax("http://ylss.ss0120.com:8080/ylss/patient/appointAddress.do", {
+				$.ajax(config.rootUrl+"ylss/patient/appointAddress.do", {
 					data: {
 						sessionKey: loginInfo.sessionKey,
 						patientId: loginInfo.clientId,

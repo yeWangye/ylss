@@ -1,10 +1,10 @@
 var search = {
 	longitude: localStorage.getItem("longitude"),
 	latitude: localStorage.getItem("latitude"),
-	loginInfo: JSON.parse(localStorage.getItem("loginInfo")),
+	loginInfo: loginInfo,
 	//	医生护士上门
 	findDoctorByType: function(doctorType, searchCondition) {
-		mui.ajax("http://ylss.ss0120.com:8080/ylss/patient/findDoctorByType.do", {
+		mui.ajax(config.rootUrl+"ylss/patient/findDoctorByType.do", {
 			data: {
 				clientId: this.loginInfo.clientId,
 				phoneNo: this.loginInfo.phoneNo,
@@ -44,7 +44,7 @@ var search = {
 	},
 	//	中国名医
 	getFamousDoctor: function(searchCondition) {
-		mui.ajax("http://ylss.ss0120.com:8080/ylss/patient/getFamousDoctor.do", {
+		mui.ajax(config.rootUrl+"ylss/patient/getFamousDoctor.do", {
 			data: {
 				clientId: this.loginInfo.clientId,
 				phoneNo: this.loginInfo.phoneNo,
@@ -82,7 +82,7 @@ var search = {
 	},
 	//	中国名院
 	getFamousSpecial: function(searchCondition) {
-		mui.ajax("http://ylss.ss0120.com:8080/ylss/patient/getFamousSpecial.do", {
+		mui.ajax(config.rootUrl+"ylss/patient/getFamousSpecial.do", {
 			data: {
 				clientId: this.loginInfo.clientId,
 				phoneNo: this.loginInfo.phoneNo,
@@ -126,7 +126,7 @@ var search = {
 		var pageSize = data.pageSize;
 		var pageNo = data.pageNo;
 		var flag = data.flag;
-		mui.ajax("http://ylss.ss0120.com:8080/ylss/patient/getHospitalList.do", {
+		mui.ajax(config.rootUrl+"ylss/patient/getHospitalList.do", {
 			data: {
 				clientId: this.loginInfo.clientId,
 				phoneNo: this.loginInfo.phoneNo,

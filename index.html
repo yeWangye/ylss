@@ -11,108 +11,17 @@
 		<!--标准mui.css-->
 		<link rel="stylesheet" href="css/mui.min.css">
 		<!--App自定义的css-->
-		<link rel="stylesheet" type="text/css" href="css/app.css">
+		<!--<link rel="stylesheet" type="text/css" href="css/app.css">-->
+		<link rel="stylesheet" type="text/css" href="css/index.css">
+		
+		<script type="text/javascript" src="js/flexible.js"></script>
 	</head>
-	<style>
-		.headImgBox {
-			position: absolute;
-			z-index: 99;
-			width: 40px;
-			top: 30px;
-			height: 40px;
-			left: 30px;
-			border: 1px solid snow;
-			border-radius: 20px;
-			text-align: center;
-			overflow: hidden;
-		}
-		
-		.headImgBox img {
-			width: 40px;
-		}
-		
-		.more {
-			position: absolute;
-			z-index: 99;
-			width: 30px;
-			height: 30px;
-			right: 20px;
-			top: 30px;
-		}
-		
-		.more img {
-			width: 30px;
-		}
-		
-		.moduleBox {
-			width: 100%;
-		}
-		
-		.moduleList {
-			width: 100%;
-			margin: 0;
-			padding: 0;
-			list-style: none;
-		}
-		
-		.module {
-			width: 17%;
-			float: left;
-			margin: 4%;
-		}
-		
-		.imgBox {
-			width: 100%;
-			text-align: center;
-		}
-		
-		.imgBox p {
-			font-size: 12px;
-			color: #827d7d;
-		}
-		
-		.imgBox img {
-			width: 60%;
-		}
-		
-		#map {
-			width: 100%;
-			height: 100px;
-			border: 0;
-			transition: height 1s;
-			-moz-transition: height 1s;
-			/* Firefox 4 */
-			-webkit-transition: height 1s;
-			/* Safari and Chrome */
-			-o-transition: height 1s;
-			/* Opera */
-		}
-		
-		.zk {
-			position: absolute;
-			width: 50%;
-			left: 25%;
-			text-align: center;
-			transition: top 1s;
-			-moz-transition: top 1s;
-			/* Firefox 4 */
-			-webkit-transition: top 1s;
-			/* Safari and Chrome */
-			-o-transition: top 1s;
-			/* Opera */
-		}
-		
-		.zk img {
-			width: 50%;
-			max-width: 100px;
-		}
-	</style>
 	<header>
 		<div class="headImgBox">
-			<a href="login.html"><img src="" class="headImg" /></a>
+			<a href=""><img src="" class="headImg" /></a>
 		</div>
 		<div class="more">
-			<a href=""><img src="images/common/icon_more2.png" alt="" /></a>
+			<a><img src="images/common/icon_more2.png" alt="" /></a>
 		</div>
 	</header>
 
@@ -166,7 +75,7 @@
 
 					</div>
 				</li>
-				
+
 				<li class="module">
 					<div class="imgBox">
 						<a href="getHospitalList.html">
@@ -178,13 +87,45 @@
 				</li>
 				<li class="module">
 					<div class="imgBox">
-						<img src="images/ylss/sysm.png" />
-						<p>送药上门</p>
+						<a href="liliao.html">
+							<img src="images/ylss/zyll.png" />
+							<p>养生理疗</p>
+						</a>
+
+					</div>
+				</li>
+				<li class="module">
+					<div class="imgBox">
+						<a href="quiz.html">
+							<img src="images/ylss/zncs.png" />
+							<p>智能测试</p>
+						</a>
+
+					</div>
+				</li>
+				<li class="module">
+					<div class="imgBox">
+						<a href="zimeiti.html">
+							<img src="images/ylss/ylzmt.png" />
+							<p>医疗自媒体</p>
+						</a>
+
+					</div>
+				</li>
+				<li class="module">
+					<div class="imgBox">
+						<a href="hanjianbing.html">
+							<img src="images/ylss/hjb.png" />
+							<p>罕见病</p>
+						</a>
+
 					</div>
 				</li>
 			</ul>
 		</div>
 		<script src="js/mui.min.js"></script>
+		<script src="js/config.js"></script>
+		<script src="js/isLogin.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			var slider = mui("#slider");
 			var _flag = true;
@@ -194,28 +135,27 @@
 			mui.init({
 				swipeBack: true //启用右滑关闭功能
 			});
-
-			function isLogin() {
-				if(localStorage.getItem("loginInfo")) {
-					return true;
-				} else {
-					return false;
-				}
+			function goChouJiang(){
+				window.location.href="choujiang.html";
 			}
-			if(isLogin()) {
-				var headImg = JSON.parse(localStorage.getItem("loginInfo")).headImage;
-				mui(".headImg")[0].src = headImg == "" ? "images/common/tx.png" : headImg;
-			} else {
-				window.location.href = "login.html";
+			function goHospital(hoId){
+				window.location.href="hospital_detail.html?hoId="+hoId+"&fromWhere=index.html";
 			}
-
+			function goDoctor(doctorId){
+				window.location.href="doctor_detail.html?doctorId="+doctorId+"&fromWhere=index.html";
+			}
+			
+			var headImg = loginInfo.headImage;
+			mui(".headImg")[0].src = headImg == ""? "images/common/tx.png" : headImg;
+			mui(".headImgBox a")[0].setAttribute("href", "personal_msg.html");
+			
 			mui(".zkImg")[0].addEventListener("tap", function(e) {
 				var sliderHeight = slider[0].clientHeight;
 				if(_flag) {
 					mui("#map")[0].style.height = wh - sliderHeight + "px";
 					mui(".zk")[0].style.top = wh - 100 + "px";
-					
-					setTimeout('setImgSrc("sq")',500)
+
+					setTimeout('setImgSrc("sq")', 500)
 					document.getElementById("map").contentWindow.setMap(wh - sliderHeight);
 
 					_flag = false;
@@ -223,27 +163,29 @@
 					mui("#map")[0].style.height = "100px";
 					mui(".zk")[0].style.top = sliderHeight + "px";
 
-					setTimeout('setImgSrc("zk")',500)
-					
+					setTimeout('setImgSrc("zk")', 500)
+
 					document.getElementById("map").contentWindow.setMap(100);
 					_flag = true;
 
 				}
 
 			})
-			function setImgSrc(data){
-				if(data=="sq"){
-					mui(".zkImg")[0].setAttribute("src","images/ylss/sq.png");
-					
-				}else{
-					mui(".zkImg")[0].setAttribute("src","images/ylss/zk.png");
-					
+
+			function setImgSrc(data) {
+				if(data == "sq") {
+					mui(".zkImg")[0].setAttribute("src", "images/ylss/sq.png");
+
+				} else {
+					mui(".zkImg")[0].setAttribute("src", "images/ylss/zk.png");
+
 				}
 
 			}
+
 			function listAdver() {
 
-				mui.ajax("http://ylss.ss0120.com:8080/ylss/patient/listAdver.do", {
+				mui.ajax(config.rootUrl+"ylss/patient/listAdver.do", {
 					data: {},
 					dataType: 'json',
 					type: 'post',
@@ -301,15 +243,14 @@
 					}
 				})
 			}
-			
 			window.onload = function() {
 
 				var sliderHeight = slider[0].clientHeight;
-				mui("#map")[0].style.height = "100px";
-				mui(".zk")[0].style.top = sliderHeight + "px";
+				mui("#map")[0].style.height = "2.5rem";
+				mui(".zk")[0].style.top = sliderHeight/40 + "rem";
 				document.getElementById("map").contentWindow.setMap(100);
-				mui.trigger(mui(".zkImg")[0],"tap");
-//				setTimeout('mui.trigger(mui(".zkImg")[0],"tap")',2000);
+				mui.trigger(mui(".zkImg")[0], "tap");
+				//				setTimeout('mui.trigger(mui(".zkImg")[0],"tap")',2000);
 			};
 		</script>
 

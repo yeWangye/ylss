@@ -1,0 +1,299 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+
+		<script type="text/javascript" src="js/flexible.js"></script>
+		<script type="text/javascript" src="js/template.js"></script>
+
+	</head>
+
+	<style>
+		body {
+			background: white;
+		}
+		
+		.tixian {
+			text-align: center;
+			padding-top: 0!important;
+		}
+		
+		.mui-bar-nav.mui-bar .backBtn {
+			color: white;
+			font-size: 0.4rem;
+			position: absolute;
+			top: 0.35rem;
+		}
+		
+		.tip {
+			color: red;
+			font-size: 0.6rem;
+			margin: 0;
+			padding: 0;
+			height: 2rem;
+			line-height: 1rem;
+		}
+		
+		.bigFont {
+			text-align: center;
+			position: relative;
+			padding: 0.5rem;
+		}
+		
+		.bigFont img {
+			width: 2.5rem;
+		}
+		
+		.bigFont a {
+			text-decoration: none;
+			color: #007aff;
+			display: inline-block;
+			/* float: right; */
+			position: absolute;
+			top: 0;
+			right: 0;
+		}
+		
+		.bigFont p {
+			font-size: 1rem;
+			color: black;
+		}
+		
+		.bigFont button {
+			font-size: 0.2rem;
+		}
+		
+		.mui-table-view-cell {
+			line-height: 1.5rem;
+		}
+		
+		.mui-table-view-cell a.mui-navigate-right {
+			padding: 11px 65px 11px 15px !important;
+		}
+		
+		.mui-table-view-cell {
+			padding: 0 65px 0 15px !important;
+		}
+		
+		.mui-table-view-cell img {
+			vertical-align: middle;
+			width: 1.2rem;
+		}
+		
+		.fontB {
+			font-weight: 600;
+			font-size: 0.4rem;
+		}
+		
+		.fontA {
+			color: darkgray;
+			font-size: 0.4rem;
+			display: inline-block;
+			margin-left: 1rem;
+		}
+		
+		.hb {
+			font-size: 0.4rem;
+			color: red;
+		}
+		
+		.kk {
+			display: inline-block;
+			font-size: 0.4rem;
+			margin-left: 1.5rem;
+			color: red;
+		}
+		
+		.mui-scroll-wrapper {
+			background: white;
+			top:8.5rem;
+		}
+
+		
+		.mui-scroll .mui-table-view {
+			padding-left: 15px;
+			background: white;
+		}
+		
+		.yuEdetail {
+			list-style: none;
+			padding: 0;
+		}
+		
+		.left {
+			width: 60%;
+			display: inline-block;
+		}
+		
+		.left p {
+			color: black;
+		}
+		
+		.right {
+			width: 30%;
+			float: right;
+			padding-left: 10%;
+			display: inline-block;
+		}
+		
+		.flow {
+			color: red;
+		}
+		
+		.mui-btn {
+			border: 1px solid #6cf;
+			background-color: #6cf;
+		}
+		
+		.mui-btn,
+		.tip1 {
+			width: 44%;
+			display: inline-block;
+		}
+		
+		.listItem {
+			border-bottom: 1px solid darkgray;
+			text-align: left;
+		}
+		
+		.mui-bar-nav~.mui-content .mui-pull-top-pocket {
+			top: 0.5rem;
+		}
+	</style>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:1.6rem;">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn">返回</a>
+
+			<h1 class="mui-title" style="line-height: 1.6rem;color: white;">我的钱包</h1>
+		</header>
+		<div class="mui-content" style="padding-top: 1.6rem;background: white;">
+			<p class="tip">钱包余额可直接体现,也可直接用于购买商城物品</p>
+		</div>
+		<hr />
+		<div class="bigFont">
+			<div class="msg">
+				<p class="adAmount">0.00</p>
+				<button>查看活动规则</button>
+			</div>
+			<a href="">
+				<img src="images/ylss/scrk03.png" alt="" />
+			</a>
+		</div>
+		<div class="mui-content tixian">
+			<button class="mui-btn mui-btn-primary">立即提现</button>
+			<button class="mui-btn mui-btn-primary">转入我的余额</button>
+			<p class="tip1">5元以上可提现</p>
+			<p class="tip1">用于余额消费</p>
+			<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<!--数据列表-->
+
+					<ul class="mui-table-view mui-table-view-chevron">
+						<div id="wp"></div>
+
+					</ul>
+				</div>
+				<script id="listScript" type="text/html">
+					<ul id="list" class="yuEdetail">
+						<%for(var i = 0; i < list.length; i++) {%>
+						<li class="listItem">
+							<div class="left">
+								<p class="detailName">抽奖</p>
+								<p class="detailDate">
+									<%var newDate=new Date(list[i].createTime)%>
+									<%:=newDate.format('yyyy-MM-dd h:m:s')%>
+								</p>
+							</div>
+							<div class="right">
+								<p class="flow">
+									<%:=list[i].luckName%>
+								</p>
+							</div>
+						</li>
+						<%}%>
+					</ul>
+				</script>
+
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/config.js"></script>
+		<script src="js/isLogin.js"></script>
+		<script src="js/dateFormat.js"></script>
+		<script src="js/fromWhere.js"></script>
+		<script type="text/javascript" src="js/refresh.js">
+		</script>
+		<script type="text/javascript">
+			
+			var pullrefresh=mui("#pullrefresh")[0];
+			var contHeight=mui(".mui-content")[0].clientHeight;
+			var bigFontHeight=mui(".bigFont")[0].clientHeight;
+			var tixianHeight=mui(".tixian")[0].clientHeight;
+			pullrefresh.style.top=contHeight+bigFontHeight+tixianHeight+"px";
+			var loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+			function getIncomeDetail(data) {
+				var callback = data.callback;
+				var flag = data.flag;
+				var page = data.page;
+				var rows = data.rows;
+				mui.ajax(config.rootUrl+"ylss/patient/getIncomeDetail.do", {
+					data: {
+						phoneNo: loginInfo.phoneNo,
+						sessionKey: loginInfo.sessionKey,
+						clientId: loginInfo.clientId,
+						page: page,
+						rows: rows
+					},
+					dataType: 'json',
+					type: 'post',
+					timeout: 10000,
+					success: function(data) {
+
+						if(data.code == "1") {
+							var info = data.info;
+							if(info.length == 0) {
+								return callback(true);
+							}
+							if(flag == "down") {
+								var adAmount = data.adAmount;
+								mui(".adAmount")[0].innerText = adAmount;
+								var listScript = document.getElementById('listScript').innerHTML;
+								document.getElementById("wp").innerHTML = template(listScript, {
+									list: info
+								});
+
+							} else {
+								var adAmount = data.adAmount;
+								var listScript = document.getElementById('listScript').innerHTML;
+								document.getElementById("wp").innerHTML += template(listScript, {
+									list: info
+								})
+							}
+
+						} else {
+							mui.toast("获取信息出错");
+
+						}
+						if(callback) {
+							callback();
+						}
+
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('网络异常，请稍后再试！');
+						if(callback) {
+							callback();
+						}
+					}
+				})
+			}
+			refresh.init(getIncomeDetail);
+		</script>
+	</body>
+
+</html>

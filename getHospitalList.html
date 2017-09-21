@@ -50,7 +50,7 @@
 					<!--数据列表-->
 					<ul class="mui-table-view mui-table-view-chevron">
 						<div id="wp"></div>
-
+						
 					</ul>
 				</div>
 			</div>
@@ -86,6 +86,8 @@
 			</script>
 		</div>
 		<script src="js/mui.min.js"></script>
+		<script src="js/config.js"></script>
+		<script src="js/isLogin.js"></script>
 		<script src="js/search.js"></script>
 		<script type="text/javascript">
 			var pageNo = 2,
@@ -109,7 +111,8 @@
 					callback: endPulldownToRefresh,
 					pageNo: 1,
 					pageSize: pageSize,
-					flag: "down"
+					flag: "down",
+					searchCondition:searchCondition?searchCondition:""
 				});
 			}
 
@@ -118,7 +121,8 @@
 				search.getHospitalList({
 					callback: endPullupToRefresh,
 					pageNo: pageNo,
-					pageSize: pageSize
+					pageSize: pageSize,
+					searchCondition:searchCondition?searchCondition:""
 				});
 				pageNo++;
 			}
@@ -154,17 +158,20 @@
 				}
 			});
 			var keyWord = document.getElementById("keyword");
+			var searchCondition;
 			keyWord.addEventListener('keypress', function(e) {
 				var keycode = e.keyCode;
 				var searchName = keyWord.value;
 				if(keycode == '13') {
-					var searchCondition = keyWord.value;
+					searchCondition = keyWord.value;
 					e.preventDefault();
 					document.getElementById('hospitalList').innerHTML = "";
 
 					//请求搜索接口  
 					search.getHospitalList({
-						searchCondition: searchCondition
+						searchCondition: searchCondition,
+						pageSize:"10",
+						pageNo:"1"
 					});
 				}
 			})

@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/search.css" />
+	</head>
+	<script type="text/javascript" src="js/template.js"></script>
+	</style>
+
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" href="index.html"></a>
+
+			<h1 class="mui-title" style="line-height: 64px;color: snow;"></h1>
+		</header>
+		<div class="mui-content" style="padding-top: 64px;">
+
+			
+			<p>当前显示的是20公里以内的服务者，可上门服务，也可在线咨询</p>
+			<div id="wp"></div>
+			<script id="doctorList" type="text/html">
+				<ul id="hospitalList">
+					<%for(var i = 0; i < list.length; i++) {%>
+					<a href="doctor_detail.html?doctorId=<%:=list[i].doctorId%>&fromWhere=roomService_nurse.html">
+						<li style="clear: both;">
+							<div class="hospitalImg" style="height:<%:=window.innerWidth*0.25%>px;border-radius:<%:=window.innerWidth*0.125%>px;"><img src="<%:=list[i].headImage%>" /></div>
+							<div class="detail">
+								<div class="hospitalName">
+									<%:=list[i].doctorName%>
+								</div>
+								<div class="hospitalType"><%:=list[i].department%></div>
+								<div class="subject">
+									<%:=list[i].specials.split(";")[0]%>
+								</div>
+							</div>
+							<div class="distanceBox">
+								<span class="mui-icon mui-icon-location"></span>
+								<p class="distance">
+									<%:=Math.round(list[i].length)==0?"<1":Math.round(list[i].length)%>km
+								</p>
+							</div>
+
+						</li>
+					</a>
+					<%}%>
+				</ul>
+			</script>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/config.js"></script>
+		<script src="js/isLogin.js"></script>
+		<script src="js/search.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			search.findDoctorByType("expert");
+			var keyWord = document.getElementById("keyword");
+			keyWord.addEventListener('keypress', function(e) {
+				var keycode = e.keyCode;
+				var searchName = keyWord.value;
+				if(keycode == '13') {
+					var searchCondition = keyWord.value;
+					e.preventDefault();
+					document.getElementById('hospitalList').innerHTML = "";
+
+					//请求搜索接口  
+					search.findDoctorByType("expert",searchCondition);
+				}
+			})
+		</script>
+	</body>
+
+</html>

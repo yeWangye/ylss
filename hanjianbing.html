@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/search.css" />
+	</head>
+	<style type="text/css">
+
+		
+		#list {
+			list-style: none;
+			padding-left: 10px;
+			padding-top: 5px;
+		}
+		
+		.left {
+			width: 25%;
+			float: left;
+		}
+		
+		.left img {
+			width: 100%;
+		}
+		
+		.right {
+			width: 70%;
+			margin-left: 28%;
+		}
+		.detailDate{
+			margin-top: 20px;
+		}
+	</style>
+	<script type="text/javascript" src="js/template.js"></script>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;font-size: 18px;position: absolute;top: 14px;" href="index.html">返回</a>
+
+			<h1 class="mui-title" style="line-height: 64px;color: snow;">罕见病</h1>
+		</header>
+		<div class="mui-content" style="padding-top: 64px;">
+
+			<form action="" class="input-kw-form" style="display: inline;">
+				<div class="mui-input-row mui-search" style="background: #e0dfdf;">
+					<input type="search" autocomplete="off" name="baike-search" placeholder="文章标题或疾病名称" id="keyword" style="width:80%">
+					<button style="width: 15%;margin-top: 15px;background-color: #e0dfdf;color: #6cf;">取消</button>
+
+				</div>
+
+			</form>
+
+			<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<!--数据列表-->
+
+					<ul class="mui-table-view mui-table-view-chevron">
+						<div id="wp"></div>
+
+					</ul>
+				</div>
+				<script id="listScript" type="text/html">
+					<ul id="list">
+						<%for(var i = 0; i < list.length; i++) {%>
+						<li class="listItem">
+							<a href="zimeiti_detail.html?mid=<%:=list[i].illInfoId%>&fromWhere=hanjianbing.html">
+								<div class="left">
+									<img class="headImg" src="<%:=list[i].images?list[i].images[0]:list[i].image.split(";")[0]%>">
+
+								</div>
+								<%var minHeight=window.innerWidth*0.25%>
+								<div class="right" style="min-height:<%:=minHeight%>px">
+									<h4 class="title"><%:=list[i].title%></h4>
+									
+									<p class="detailDate">
+										<%var newDate=new Date(list[i].createTime)%>
+										<%:=newDate.format('yyyy-MM-dd h:m:s')%>
+									</p>
+								</div>
+							</a>
+
+						</li>
+						<%}%>
+					</ul>
+				</script>
+
+			</div>
+
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/config.js"></script>
+		<script src="js/isLogin.js"></script>
+		<script src="js/refresh.js"></script>
+		<script src="js/dateFormat.js"></script>
+		<script type="text/javascript">
+			console.log(JSON.stringify(loginInfo))
+			var pullrefresh=mui("#pullrefresh")[0];
+			var contHeight=mui(".mui-content")[0].clientHeight;
+			pullrefresh.style.top=contHeight+"px";
+			mui('body').on('tap', 'a', function () { document.location.href = this.href; })
+			function listRareIllInfo(data) {
+				var callback = data.callback;
+				var flag = data.flag || "";
+				var page = data.page;
+				var rows = data.rows;
+				var title = data.title || document.getElementById("keyword").value || "";
+				mui.ajax(config.rootUrl+"ylss/patient/listRareIllInfo.do", {
+					data: {
+						phoneNo: loginInfo.phoneNo,
+						sessionKey: loginInfo.sessionKey,
+						clientId: loginInfo.clientId,
+						page: page,
+						rows: rows,
+						title: title,
+					},
+					dataType: 'json',
+					type: 'post',
+					timeout: 10000,
+					success: function(data) {
+						console.log(JSON.stringify(data))
+						if(data.code == "1") {
+							var info = data.info;
+							if(info.length == 0) {
+								return callback(true);
+							}
+							var listScript = document.getElementById('listScript').innerHTML;
+							var wp = document.getElementById("wp");
+							if(flag == "down") {
+								wp.innerHTML = template(listScript, {
+									list: info
+								});
+
+							} else {
+								wp.innerHTML += template(listScript, {
+									list: info
+								});
+							}
+
+						} else {
+							mui.toast("获取信息出错");
+
+						}
+						if(callback) {
+							callback();
+						}
+
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('网络异常，请稍后再试！');
+						if(callback) {
+							callback();
+						}
+					}
+				})
+			}
+			refresh.init(listRareIllInfo);
+
+			var keyWord = document.getElementById("keyword");
+			keyWord.addEventListener('keypress', function(e) {
+				var keycode = e.keyCode;
+				var searchName = keyWord.value;
+				if(keycode == '13') {
+					mui('#pullrefresh').pullRefresh().refresh(true);
+					e.preventDefault();
+					document.getElementById("wp").innerHTML = "";
+
+					//请求搜索接口  
+					listRareIllInfo({
+						phoneNo: loginInfo.phoneNo,
+						sessionKey: loginInfo.sessionKey,
+						clientId: loginInfo.clientId,
+						page: 1,
+						rows: 5,
+						title: searchName,
+					});
+				}
+			})
+		</script>
+	</body>
+
+</html>

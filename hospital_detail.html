@@ -43,11 +43,11 @@
 							<img alt="" class="hosImg" />
 							<div class="instructionBox">
 								<h4>医院简介</h4>
-									<p class="instruction">
-						
-									</p>	
-					
-									<h4>主推疾病</h4>
+								<p class="instruction">
+
+								</p>
+
+								<h4>主推疾病</h4>
 								<p class="attendDisease"> </p>
 								<h4>基本信息</h4>
 								<div class="commonInfo">
@@ -125,6 +125,8 @@
 			<button id="inlineAask">在线咨询</button>
 		</div>
 		<script src="js/mui.min.js"></script>
+		<script src="js/config.js"></script>
+		<script src="js/isLogin.js"></script>
 		<script type="text/javascript" src="js/hospital_detail.js"></script>
 		<script>
 			mui.init({
@@ -162,37 +164,36 @@
 				mui("#item1")[0].setAttribute("class", "mui-control-content");
 				mui(".aIndex")[0].setAttribute("class", "mui-control-item aIndex");
 				mui(".aIndex")[1].setAttribute("class", "mui-control-item aIndex evaluateBtn mui-active");
- 				mui('#pullrefresh').pullRefresh().scrollTo(0,0,100);
+				mui('#pullrefresh').pullRefresh().scrollTo(0, 0, 100);
 			})
-			mui(".evaluateBtn ")[0].addEventListener("tap",function(){
- 				mui('#pullrefresh').pullRefresh().scrollTo(0,0,100);
+			mui(".evaluateBtn ")[0].addEventListener("tap", function() {
+				mui('#pullrefresh').pullRefresh().scrollTo(0, 0, 100);
 				pullupRefresh();
 			})
-			mui(".detailBtn")[0].addEventListener("tap",function(){
- 				mui('#pullrefresh').pullRefresh().scrollTo(0,0,100);
+			mui(".detailBtn")[0].addEventListener("tap", function() {
+				mui('#pullrefresh').pullRefresh().scrollTo(0, 0, 100);
 				pullupRefresh();
 			})
 			if(!localStorage.getItem("url") || window.location.search != "") {
 				var url = window.location.search;
 				var hoId = url.split("&")[0];
 				var fromWhere = url.split("&")[1];
-				hoId=hoId.substring(hoId.indexOf("=")+1,hoId.length);
-				fromWhere=fromWhere.substring(fromWhere.indexOf("=")+1,fromWhere.length);
-				console.log("181"+fromWhere);
+				hoId = hoId.substring(hoId.indexOf("=") + 1, hoId.length);
+				fromWhere = fromWhere.substring(fromWhere.indexOf("=") + 1, fromWhere.length);
 				mui(".backBtn")[0].setAttribute("href", fromWhere);
 				localStorage.setItem("url", url);
 				localStorage.setItem("hoId", hoId);
-				
+
 			} else {
 				var url = localStorage.getItem("url");
 				var hoId = url.split("&")[0];
 				var fromWhere = url.split("&")[1];
 				console.log(fromWhere);
-				hoId=hoId.substring(hoId.indexOf("=")+1,hoId.length);
-				fromWhere=fromWhere.substring(fromWhere.indexOf("=")+1,fromWhere.length);
+				hoId = hoId.substring(hoId.indexOf("=") + 1, hoId.length);
+				fromWhere = fromWhere.substring(fromWhere.indexOf("=") + 1, fromWhere.length);
 				mui(".backBtn")[0].setAttribute("href", fromWhere);
 			}
-			
+
 			/*//全部评价
 			setEvaluate("all", 8, 1);
 			//好评
@@ -205,11 +206,13 @@
 			//进入聊天界面
 			mui("#inlineAask")[0].addEventListener("tap", function() {
 				window.location.href = "single-chat.html?fromWhere=hospital_detail.html";
+
 			})
 			//进入预约挂号页面
 			mui("#inlineOrder")[0].addEventListener("tap", function() {
-				
-				window.location.href = "registration.html?fromWhere=hospital_detail.html";
+
+				//				window.location.href = "registration.html?fromWhere=hospital_detail.html";
+				mui.toast("功能完善中...");
 			})
 		</script>
 

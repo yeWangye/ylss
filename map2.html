@@ -22,6 +22,17 @@
 				-webkit-transition: height 1s;
 				-o-transition: height 1s;
 			}
+			
+			.choujiang {
+				position: absolute;
+				bottom: 0;
+				left: 10px;
+				width: 50px;
+			}
+			
+			.choujiang img {
+				width: 50px;
+			}
 		</style>
 		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=h7FmYfal3X1emsR59G29XPXbACQGhyw4"></script>
 		<title>map</title>
@@ -31,25 +42,112 @@
 		<div id="allmap">
 
 		</div>
-
+		<div class="choujiang">
+			<img src="images/ylss/z1.png" class="choujiangBtn" />
+		</div>
 	</body>
 
 </html>
 <script src="js/mui.min.js"></script>
+<script src="js/config.js"></script>
+<script type="text/javascript" src="js/maker.js"></script>
 <script type="text/javascript">
+	var msg;
 	window.onload = function() {
 
+		setInterval("doAnimation()", 100);
+		mui.ajax(config.rootUrl + "ylss/patient/getAroundDoctor.do", {
+			data: {
+				longitude: localStorage.getItem("longitude"),
+				latitude: localStorage.getItem("latitude"),
+				phoneNo: JSON.parse(localStorage.getItem("loginInfo")).phoneNo,
+			},
+			dataType: 'json',
+			type: 'post',
+			timeout: 10000,
+			success: function(data) {
+				if(data.code == 1) {
+
+					var hospInfo = data.hospInfo;
+					var doctorInfo = data.doctorInfo;
+					var medicineStoreInfo = data.medicineStoreInfo;
+					var message = data.message.toString();
+					message = message.split(",").join("</br>");
+					msg = message;
+					for(i = 0; i < hospInfo.length; i++) {
+
+						var point = new BMap.Point(hospInfo[i].longitude, hospInfo[i].latitude);
+						addMarkerHos({
+							point: point,
+							hoId: hospInfo[i].hoId,
+							hospitalImage: hospInfo[i].hospitalImage,
+							hospital: hospInfo[i].hospital,
+							stars: hospInfo[i].stars
+						});
+					}
+					for(i = 0; i < doctorInfo.length; i++) {
+
+						var point = new BMap.Point(doctorInfo[i].longitude, doctorInfo[i].latitude);
+						addMarkerDoc({
+							point: point,
+							hoId: doctorInfo[i].doctorId,
+							hospitalImage: doctorInfo[i].headImage,
+							hospital: doctorInfo[i].doctorName,
+							stars: doctorInfo[i].starLevel
+						});
+					}
+					for(i = 0; i < medicineStoreInfo.length; i++) {
+
+						var point = new BMap.Point(medicineStoreInfo[i].longitude, medicineStoreInfo[i].latitude);
+						addMarkerYaodian({
+							point: point,
+							hoId: medicineStoreInfo[i].msId,
+							hospitalImage: medicineStoreInfo[i].storeImage,
+							hospital: medicineStoreInfo[i].medStoreName,
+							stars: medicineStoreInfo[i].stars
+						});
+					}
+					drawMap();
+				}
+
+			},
+			error: function(xhr, type, errorThrown) {
+				mui.toast('网络异常，请稍后再试！');
+			}
+		});
 	}
+	var ui = {
+		choujiangBtn: mui(".choujiangBtn")[0],
+	}
+	var counter = 0;
+
+	function doAnimation(flag) {
+
+		if(counter % 2 == 0) {
+			ui.choujiangBtn.setAttribute("src", "images/ylss/z2.png");
+
+		} else {
+			ui.choujiangBtn.setAttribute("src", "images/ylss/z1.png");
+
+		}
+		if(counter == 10) {
+			counter = 0;
+		}
+		counter++;
+	}
+	ui.choujiangBtn.addEventListener("tap", function() {
+		window.parent.goChouJiang();
+	})
 	var map = new BMap.Map("allmap");
-	var point = new BMap.Point(116, 40);
-	map.centerAndZoom(point, 13);
+
+	map.centerAndZoom(new BMap.Point(116.565659595, 39.568985), 12);
 
 	var geolocation = new BMap.Geolocation();
 	var rPoint = null;
 	var mkTemp = null;
 	var mk;
 
-	function drawMap(msg) {
+	function drawMap() {
 		// 百度地图API功能
 		if(rPoint) {
 
@@ -61,7 +159,7 @@
 			});
 			mkTemp.setLabel(label);
 			map.addOverlay(mkTemp);
-			
+
 			map.panTo(rPoint);
 		} else {
 			geolocation.getCurrentPosition(function(r) {
@@ -72,28 +170,24 @@
 						icon: myIcon
 					});
 					//設置圖層顯示順序
-					mk.setZIndex(100);
-					//					mk.setAnimation(BMAP_ANIMATION_BOUNCE);
-					var label = new BMap.Label(msg, {
-						offset: new BMap.Size(-60, -10)
-					});
-					label.setStyle({
-						display: "block",
-						color: "red",
-						fontSize: "12px",
-						lineHeight: "25px",
-						padding: "10px",
-						textAlign: "center",
-						fontFamily: "微软雅黑"
-					});
-					if(msg) {
-						mk.setLabel(label);
-					}
+					mk.setZIndex(99);
+
 					localStorage.setItem("longitude", r.point.lng);
 					localStorage.setItem("latitude", r.point.lat);
 
 					map.addOverlay(mk);
-
+					var opts = {
+						width: 200, // 信息窗口宽度
+						height: 80, // 信息窗口高度
+						title: "", // 信息窗口标题
+						enableMessage: false, //设置允许信息窗发送短息
+						message: ""
+					}
+					var point = new BMap.Point(r.point.lng, r.point.lat);
+					var infoWindow = new BMap.InfoWindow(msg, opts); // 创建信息窗口对象 
+					mk.addEventListener("click", function() {
+						map.openInfoWindow(infoWindow, point); //开启信息窗口
+					});
 					map.panTo(r.point);
 					rPoint = r.point;
 					mkTemp = mk;
@@ -115,94 +209,89 @@
 
 	}
 
-	function addMarkerHos(point) {
-
+	function addMarkerHos(data) {
+		var point = data.point;
 		var marker = new BMap.Marker(point);
 		var myIcon = new BMap.Icon("images/ylss/yiyuancion.png", new BMap.Size(25, 25));
 		var mk = new BMap.Marker(point, {
 			icon: myIcon
 		});
-//		mk.setZIndex(99);
-
-		/*var label = new BMap.Label(msg, {
-			offset: new BMap.Size(-60, -10)
-		});
-		label.setStyle({
-			display: "block",
-			color: "red",
-			fontSize: "12px",
-			lineHeight: "25px",
-			padding: "10px",
-			textAlign: "center",
-			fontFamily: "微软雅黑"
-		});
-		
-		mk.addEventListener("click", function() {
-
-		});*/
+		//		mk.setZIndex(99);
 		map.addOverlay(mk);
+
+		var sContent = "<a onClick='window.parent.goHospital(" + data.hoId + ")'><img style='border: 1px solid snow;border-radius: 25px;float: left;' id='imgDemo' alt='" + data.hospital + "'  src='" + data.hospitalImage + "' width='50' height='50'/>" +
+			"<span style=''>" + data.hospital + "</span><br/>" +
+			"<img src='images/ylss/gifstar" + Math.round(data.stars) + ".gif' max-width='197' height='20'/></a>";
+		var msg = data.hospital;
+		var point = new BMap.Point(point);
+		var infoWindow = new BMap.InfoWindow(sContent); // 创建信息窗口对象 
+		mk.addEventListener("click", function() {
+			this.openInfoWindow(infoWindow);
+			//图片加载完毕重绘infowindow
+			document.getElementById('imgDemo').onload = function() {
+				infoWindow.redraw(); //防止在网速较慢，图片未加载时，生成的信息框高度比图片的总高度小，导致图片部分被隐藏
+			}
+		});
 	}
 
-	function addMarkerDoc(point) {
+	function addMarkerDoc(data) {
+		var point = data.point;
+
 		var marker = new BMap.Marker(point);
 		var myIcon = new BMap.Icon("images/ylss/icon_doctor.png", new BMap.Size(25, 25));
 		var mk = new BMap.Marker(point, {
 			icon: myIcon
 		});
 		map.addOverlay(mk);
+		var sContent = "<a onClick='window.parent.goDoctor(" + data.hoId + ")'><img  alt='" + data.hospital + "'  style='border: 1px solid snow;border-radius: 25px;float: left;' id='imgDemo' src='" + data.hospitalImage + "'+ width='50' height='50'/>" +
+			"<span style=''>" + data.hospital + "</span><br/>" +
+			"<img src='images/ylss/gifstar" + Math.round(data.stars) + ".gif' max-width='197' height='20'/></a>";
+		var msg = data.hospital;
+		var point = new BMap.Point(point);
+		var infoWindow = new BMap.InfoWindow(sContent); // 创建信息窗口对象 
+		mk.addEventListener("click", function() {
+			this.openInfoWindow(infoWindow);
+			//图片加载完毕重绘infowindow
+			document.getElementById('imgDemo').onload = function() {
+				infoWindow.redraw(); //防止在网速较慢，图片未加载时，生成的信息框高度比图片的总高度小，导致图片部分被隐藏
+			}
+		});
 	}
 
-	function addMarkerYaodian(point) {
+	function addMarkerYaodian(data) {
+		var point = data.point;
 		var marker = new BMap.Marker(point);
 		var myIcon = new BMap.Icon("images/ylss/yaodianicon.png", new BMap.Size(25, 25));
 		var mk = new BMap.Marker(point, {
 			icon: myIcon
 		});
 		map.addOverlay(mk);
+		var sContent = "<a onClick='window.parent.goHospital(" + data.hoId + ")'><img alt='" + data.hospital + "' style='border: 1px solid snow;border-radius: 25px;float: left;' id='imgDemo' src='" + data.hospitalImage + "'+ width='50' height='50'/>" +
+			"<span style=''>" + data.hospital + "</span><br/>" +
+			"<img src='images/ylss/gifstar" + Math.round(data.stars) + ".gif' max-width='197' height='20'/></a>";
+		var msg = data.hospital;
+		var point = new BMap.Point(point);
+		var infoWindow = new BMap.InfoWindow(sContent); // 创建信息窗口对象 
+		mk.addEventListener("click", function() {
+			this.openInfoWindow(infoWindow);
+			//图片加载完毕重绘infowindow
+			document.getElementById('imgDemo').onload = function() {
+				infoWindow.redraw(); //防止在网速较慢，图片未加载时，生成的信息框高度比图片的总高度小，导致图片部分被隐藏
+			}
+		});
 	}
 
-	mui.ajax("http://ylss.ss0120.com:8080/ylss/patient/getAroundDoctor.do", {
-		data: {
-			longitude: localStorage.getItem("longitude"),
-			latitude: localStorage.getItem("latitude"),
-			phoneNo: "18832078110",
-		},
-		dataType: 'json',
-		type: 'post',
-		timeout: 10000,
-		success: function(data) {
-			if(data.code == 1) {
-				var hospInfo = data.doctorInfo;
-				var doctorInfo = data.doctorInfo;
-				var medicineStoreInfo = data.medicineStoreInfo;
-				var message = data.message.toString();
-				message = message.split(",").join("</br>");
-
-				for(i = 0; i < hospInfo.length; i++) {
-
-					var point = new BMap.Point(hospInfo[i].longitude, hospInfo[i].latitude);
-					addMarkerHos(point);
-				}
-				for(i = 0; i < doctorInfo.length; i++) {
-
-					var point = new BMap.Point(doctorInfo[i].longitude, doctorInfo[i].latitude);
-					addMarkerDoc(point);
-				}
-				for(i = 0; i < medicineStoreInfo.length; i++) {
-
-					var point = new BMap.Point(medicineStoreInfo[i].longitude, medicineStoreInfo[i].latitude);
-					addMarkerYaodian(point);
-				}
-				drawMap(message);
-			}
-
-		},
-		error: function(xhr, type, errorThrown) {
-			mui.toast('网络异常，请稍后再试！');
-		}
-	});
-	map.addEventListener("click", function() {
+	map.addEventListener("zoomend", function() {
 		console.log(1);
 		map.removeOverlay(mk);
 	})
+	map.addEventListener("removeoverlay", function(data) {
+		console.log("移除");
+		console.log(data);
+		//		map.removeOverlay(mk);
+	})
+	/*map.addEventListener("addoverlay", function() {
+		console.log("添加");
+		//		map.removeOverlay(mk);
+	})*/
 </script>

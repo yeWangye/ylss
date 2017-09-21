@@ -7,6 +7,7 @@
 		<title></title>
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" type="text/css" href="css/chat-msg.css" />
+		<link rel="stylesheet" type="text/css" href="css/app.css" />
 		<style type="text/css">
 			/*如要发送完最后一条消息就滚上去，就要设置内滚动模式*/
 			
@@ -23,6 +24,9 @@
 			.mui-content {
 				height: 100%;
 				padding: 44px 0px 50px 0px;
+				width: 100%;
+				position: absolute;
+				top: 0;
 				overflow: auto;
 				background-color: #eaeaea;
 			}
@@ -34,7 +38,7 @@
 			}
 			
 			footer {
-				position: fixed;
+				position: absolute;
 				width: 100%;
 				height: 50px;
 				min-height: 50px;
@@ -166,9 +170,8 @@
 					var fromWhere = window.location.search;
 					fromWhere = fromWhere.substring(fromWhere.lastIndexOf('=') + 1, fromWhere.length);
 
-
 					mui(".backBtn")[0].setAttribute("href", fromWhere);
-console.log(fromWhere);
+
 				} else {
 					var fromWhere = "index.html";
 					mui(".backBtn")[0].setAttribute("href", fromWhere);
@@ -243,9 +246,12 @@ console.log(fromWhere);
 			Easemob.im.Helper.registerUser(options);
 			// UI控件对象
 			var ui = {
+				body:mui("body")[0],
+				header: mui('header')[0],
 				content: mui('.mui-content')[0],
 				msgList: mui('#msg-list')[0],
 				footer: mui('footer')[0],
+				content: mui(".mui-content")[0],
 				msgChooseImg: mui("#msg-choose-img")[0],
 				msgInputText: mui('#msg-text')[0],
 				msgSendText: mui('#msg-send-text')[0]
@@ -337,13 +343,33 @@ console.log(fromWhere);
 				msgInputTextFocus();
 				event.preventDefault();
 			});
-
+			var wh = window.innerHeight;
+			console.log(wh)
 			// 输入框监听事件
 			ui.msgInputText.addEventListener('input', function(event) {
 				msgInputTextFocus();
 				ui.footer.style.height = this.scrollHeight + 'px';
-			});
 
+			});
+			ui.msgInputText.addEventListener("focus", function() {
+				//				ui.header.style.top = window.innerHeight - wh+ 'px';
+				console.log(window.innerHeight);
+				setTimeout("setPosition()", 100)
+			})
+			ui.msgInputText.addEventListener("blur", function() {
+//				ui.header.style.height = "100%";
+				ui.header.style.top = 0;
+				ui.content.style.top = 0;
+				ui.content.style.height = "100%";
+
+			})
+
+			function setPosition() {
+				var offset = wh - window.innerHeight + 'px';
+				ui.header.style.top = offset;
+				ui.content.style.top = offset;
+				ui.content.style.height = offset;
+			}
 			// 调整窗口
 			window.addEventListener('resize', function() {
 				msgScrollTop();
@@ -363,7 +389,7 @@ console.log(fromWhere);
 					msgShow('sender', 'text', msg);
 					// 发送文本消息到环信服务器
 					conn.sendTextMessage({
-						to: hxPhone, //用户登录名，SDK根据AppKey和domain组织jid，如easemob-demo#chatdemoui_**TEST**@easemob.com，中"to:TEST",下同
+						to: "16666666664", //用户登录名，SDK根据AppKey和domain组织jid，如easemob-demo#chatdemoui_**TEST**@easemob.com，中"to:TEST",下同
 						msg: msg, //文本消息
 						type: "chat",
 						success: function(id, serverMsgId) {
@@ -404,7 +430,7 @@ console.log(fromWhere);
 						// 上传到服务器并且发送
 						conn.sendPicture({
 							fileInputId: 'sendImgInput',
-							to: hxPhone,
+							to: "16666666664",
 							onFileUploadError: function(error) {
 								//处理图片上传失败
 								alert(JSON.stringify(error));
@@ -533,7 +559,9 @@ console.log(fromWhere);
 			var msgScrollTop = function() {
 				ui.msgList.scrollTop = ui.msgList.scrollHeight + ui.msgList.offsetHeight;
 			}
-
+			var msgScrollBottom = function() {
+				ui.msgList.scrollTop = ui.msgList.scrollHeight + ui.msgList.offsetHeight;
+			}
 			// 获得输入框键盘焦点
 			var msgInputTextFocus = function() {
 				ui.msgInputText.focus();

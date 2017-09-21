@@ -175,6 +175,8 @@
 			<button id="inlineAask">在线咨询</button>
 		</div>
 		<script src="js/mui.min.js"></script>
+		<script src="js/config.js"></script>
+		<script src="js/isLogin.js"></script>
 		<script type="text/javascript" src="js/doctor_detail.js"></script>
 		<script>
 			mui.init({
@@ -229,7 +231,7 @@
 				fromWhere = url.split("&")[1];
 				doctorId = doctorId.substring(doctorId.indexOf("=") + 1, doctorId.length);
 				fromWhere = fromWhere.substring(fromWhere.indexOf("=") + 1, fromWhere.length);
-				
+
 				mui(".backBtn")[0].setAttribute("href", fromWhere);
 				localStorage.setItem("url", url);
 				localStorage.setItem("doctorId", doctorId);
@@ -242,10 +244,10 @@
 				fromWhere = fromWhere.substring(fromWhere.indexOf("=") + 1, fromWhere.length);
 				mui(".backBtn")[0].setAttribute("href", fromWhere);
 			}
-			if(fromWhere == "roomService_doctor.html"||fromWhere == "roomService_nurse.html") {
-					mui("#inlineOrder")[0].innerHTML = "上门服务";
+			if(fromWhere == "roomService_doctor.html" || fromWhere == "roomService_nurse.html") {
+				mui("#inlineOrder")[0].innerHTML = "上门服务";
 
-			}else{
+			} else {
 				mui("#inlineOrder")[0].innerHTML = "预约挂号";
 			}
 			/*//全部评价
@@ -265,10 +267,12 @@
 			mui("#inlineOrder")[0].addEventListener("tap", function() {
 				if(fromWhere == "famous_doctor.html") {
 
-					window.location.href = "registration.html?fromWhere=doctor_detail.html";
+//					window.location.href = "registration.html?fromWhere=doctor_detail.html";
+					mui.toast("功能完善中...");
 
 				} else {
-					window.location.href = "roomService_template.html?fromWhere=doctor_detail.html";
+					//					window.location.href = "roomService_template.html?fromWhere=doctor_detail.html";
+					mui.toast("功能完善中...");
 
 				}
 

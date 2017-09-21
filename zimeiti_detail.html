@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/search.css" />
+	</head>
+	<style type="text/css">
+		.headImg {
+			width: 4rem;
+			height: 4rem;
+			border: 1px solid #6cf;
+			border-radius: 2rem;
+			overflow: hidden;
+			float: left;
+			margin: 5px;
+		}
+		
+		.headImg img {
+			width: 100%;
+		}
+		
+		.name {
+			font-size: 16px;
+			color: black;
+		}
+		
+		.item {
+			margin-left: 5px;
+			padding: 5px;
+			border: 1px solid darkgrey;
+			text-align: center;
+			display: inline-block;
+		}
+		
+		.bigImg {
+			text-align: center
+		}
+		
+		.bigImg img {
+			width: 80%;
+		}
+		
+		.bottomBox div {
+			width: 4rem;
+			text-align: center;
+			display: inline-block;
+		}
+		
+		.bottomBox {
+			text-align: center;
+		}
+		
+		.liulan img,
+		.dianzan img,
+		.shang img {
+			width: 100%;
+		}
+	</style>
+	<script type="text/javascript" src="js/template.js"></script>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn" style="color: white;font-size: 18px;position: absolute;top: 14px;">返回</a>
+
+			<h1 class="mui-title" style="line-height: 64px;color: snow;">详情</h1>
+			<a class="mui-pull-right" style="color: white;font-size: 18px;position: relative;top: 20px;" href="index.html">分享</a>
+		</header>
+		<div class="mui-content" style="padding-top: 64px;">
+			<div class="headImg">
+				<img src="" alt="" />
+			</div>
+			<div class="rightItem">
+				<p class="name">
+
+				</p>
+
+			</div>
+			<h4 class="title"></h4>
+			<p class="content"></p>
+			<div class="bigImg">
+				<img src="" alt="" />
+			</div>
+			<div class="bottomBox">
+				<div class="liulan">
+					<img src="images/ylss/yd.png" alt="" />
+					<p></p>
+				</div>
+				<div class="dianzan">
+					<img src="images/ylss/dzf.png" alt="" />
+					<p></p>
+				</div>
+				<div class="shang">
+					<img src="images/ylss/ds.png" alt="" />
+					<p></p>
+				</div>
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/config.js"></script>
+		<script src="js/isLogin.js"></script>
+		<script type="text/javascript">
+			var fromWhere;
+			if(!localStorage.getItem("url") || window.location.search != "") {
+				var url = window.location.search;
+				var mid = url.split("&")[0];
+				fromWhere = url.split("&")[1];
+				mid = mid.substring(mid.indexOf("=") + 1, mid.length);
+				fromWhere = fromWhere.substring(fromWhere.indexOf("=") + 1, fromWhere.length);
+				mui(".backBtn")[0].setAttribute("href", fromWhere);
+
+			} else {
+				var url = localStorage.getItem("url");
+				var mid = url.split("&")[0];
+				fromWhere = url.split("&")[1];
+				mid = mid.substring(mid.indexOf("=") + 1, mid.length);
+				fromWhere = fromWhere.substring(fromWhere.indexOf("=") + 1, fromWhere.length);
+				mui(".backBtn")[0].setAttribute("href", fromWhere);
+			}
+			medicalMediaDetail() ;
+			function medicalMediaDetail() {
+
+				mui.ajax(config.rootUrl + "ylss/patient/medicalMediaDetail.do", {
+					data: {
+						phoneNo: loginInfo.phoneNo,
+						sessionKey: loginInfo.sessionKey,
+						clientId: loginInfo.clientId,
+						mId: mid,
+
+					},
+					dataType: 'json',
+					type: 'post',
+					timeout: 10000,
+					success: function(data) {
+						console.log(JSON.stringify(data))
+						if(data.code == "1") {
+							var info = data.info;
+							mui(".headImg img")[0].setAttribute("src", info.headImage);
+							mui(".name")[0].innerText = info.userName;
+							mui(".title")[0].innerText = info.title;
+							mui(".content")[0].innerText = info.content;
+							mui(".liulan p")[0].innerText = info.readNum;
+							mui(".dianzan p")[0].innerText = info.isAtten;
+							mui(".shang p")[0].innerText = info.isPraise;
+							mui(".bigImg img")[0].setAttribute("src", info.images[0]);
+							var specialty = info.specialty.split(";");
+							for(var i in specialty) {
+								mui(".rightItem")[0].innerHTML += '<p class="item">' + specialty[i] + '</p>';
+							}
+						} else {
+							mui.toast("获取信息出错");
+
+						}
+
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('网络异常，请稍后再试！');
+
+					}
+				})
+			}
+		</script>
+	</body>
+
+</html>

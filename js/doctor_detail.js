@@ -3,7 +3,7 @@ function getDoctorDetail() {
 
 	var loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
 
-	mui.ajax("http://ylss.ss0120.com:8080/ylss/patient/getDoctorEvaluat.do", {
+	mui.ajax(config.rootUrl+"ylss/patient/getDoctorEvaluat.do", {
 		data: {
 			doctorId: doctorId,
 			longitude: localStorage.getItem("longitude"),
@@ -34,7 +34,7 @@ function getDoctorDetail() {
 			localStorage.setItem("password", loginInfo.hxPwd);
 			//聊天对象账号缓存
 			localStorage.setItem("hxPhone", doctInfo.doctorPhone);
-			console.log("hxPhone" + localStorage.getItem("hxPhone"));
+
 
 			localStorage.setItem("chatname", doctInfo.doctorName);
 			//聊天界面用作头像显示
@@ -55,7 +55,7 @@ function getDoctorDetail() {
 					'</div>' +
 					'<div class="userInfo">' +
 					'<h5 class="userName">' + einfo[i].patientName + '</h5>' +
-					'<ul class="starBox"  data-star-num=' + einfo[i].satisfaction + '>' +
+					'<ul class="starBox"  data-star-num=' + einfo[i].starLevel + '>' +
 
 					'</ul>' +
 					'<p class="userEvaluate">' + einfo[i].evaluation + '</p>' +
@@ -102,7 +102,7 @@ Date.prototype.format = function(format) {
 }
 //构建评论dom结构函数
 function setEvaluate(type, pageSize, pageNo) {
-	mui.ajax("http://ylss.ss0120.com:8080/ylss/patient/listDoctorEvaluat.do", {
+	mui.ajax(config.rootUrl+"ylss/patient/listDoctorEvaluat.do", {
 		data: {
 			doctorId: doctorId,
 			pageNo: pageNo,
@@ -124,10 +124,10 @@ function setEvaluate(type, pageSize, pageNo) {
 						systemEvaluateBox.innerHTML += '<div class="systemEvaluateItem"><p>' + tempInfo[i].evaLabel + '(' + tempInfo[i].count + ')</p></div>';
 					}
 				}
-				mui(".allEvaluation")[0].innerHTML = einfo.allEvaluat;
-				mui(".goodEvaluation")[0].innerHTML = einfo.goodEvaluat;
-				mui(".commonEvaluation")[0].innerHTML = einfo.commonEvaluat;
-				mui(".badEvaluation")[0].innerHTML = einfo.badEvaluat;
+				mui(".allEvaluation")[0].innerHTML = einfo.allEvaluat?einfo.allEvaluat:0;
+				mui(".goodEvaluation")[0].innerHTML = einfo.goodEvaluat?einfo.goodEvaluat:0;
+				mui(".commonEvaluation")[0].innerHTML = einfo.commonEvaluat?einfo.commonEvaluat:0;
+				mui(".badEvaluation")[0].innerHTML = einfo.badEvaluat?einfo.badEvaluat:0;
 			}
 			for(i = 0; i < info.length; i++) {
 				var timeStamp = info[i].createTime;
@@ -144,7 +144,7 @@ function setEvaluate(type, pageSize, pageNo) {
 					'</div>' +
 					'<div class="userInfo">' +
 					'<h5 class="userName">' + info[i].patientName + '</h5>' +
-					'<ul class="starBox"  data-star-num=' + info[i].satisfaction + '>' +
+					'<ul class="starBox"  data-star-num=' + info[i].starLevel + '>' +
 
 					'</ul>' +
 					'<p class="userEvaluate">' + info[i].evaluation + '</p>' +
@@ -239,7 +239,7 @@ function pullupRefresh() {
 	//全部评价
 	setEvaluate("all", 8, count);
 	//好评
-	setEvaluate("good", 4, count);
+	setEvaluate("good", 8, count);
 	//中评
 	setEvaluate("common", 8, count);
 	//差评
