@@ -34,7 +34,7 @@
 	<body>
 
 		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
-			<a class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;font-size: 18px;position: absolute;top: 14px;" href="index.html">返回</a>
+			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn">返回</a>
 
 			<h1 class="mui-title" style="line-height: 64px;color: snow;">医疗自媒体</h1>
 		</header>
@@ -43,7 +43,7 @@
 			<form action="" class="input-kw-form" style="display: inline;">
 				<div class="mui-input-row mui-search" style="background: #e0dfdf;">
 					<input type="search" autocomplete="off" name="baike-search" placeholder="文章标题" id="keyword" style="width:80%">
-					<button style="width: 15%;margin-top: 15px;background-color: #e0dfdf;color: #6cf;">取消</button>
+					<button class="quxiao" style="width: 15%;margin-top: 15px;background-color: #e0dfdf;color: #6cf;">取消</button>
 
 				</div>
 
@@ -71,7 +71,13 @@
 								<div class="right" style="min-height:<%:=minHeight%>px">
 									<h4 class="title"><%:=list[i].title%></h4>
 									<p class="flow">
+										<%if(list[i].content.length>20){%>
 										<%:=list[i].content.substring(0,28)+"..."%>
+
+										<%}else{%>
+										<%:=list[i].content%>
+
+										<%}%>
 									</p>
 									<p class="detailDate">
 										<%var newDate=new Date(list[i].createTime)%>
@@ -91,20 +97,178 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/config.js"></script>
 		<script src="js/isLogin.js"></script>
-		<script src="js/refresh.js"></script>
+		<!--<script src="js/refresh.js"></script>-->
 		<script src="js/dateFormat.js"></script>
 		<script type="text/javascript">
-			var pullrefresh=mui("#pullrefresh")[0];
-			var contHeight=mui(".mui-content")[0].clientHeight;
-			pullrefresh.style.top=contHeight+"px";
-			mui('body').on('tap', 'a', function () { document.location.href = this.href; })
+			var page = 2,
+				rows = 4;
+			firstTime = true;
+			mui(".quxiao")[0].addEventListener("tap", function() {
+				mui("#keyword")[0].value = "";
+				mui("#keyword")[0].blur();
+				var history = JSON.parse(sessionStorage.getItem("history"));
+				if(history){history.title = "";}
+				pulldownRefresh() ;
+				
+				sessionStorage.setItem("history", JSON.stringify(history));
+
+			})
+
+			function endPulldownToRefresh() {
+				//重置起始页
+				page = 2;
+				mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+				mui('#pullrefresh').pullRefresh().refresh(true);
+				sessionStorage.setItem("scrollY", "0");	
+			}
+
+			function endPullupToRefresh(flag) {
+				mui('#pullrefresh').pullRefresh().endPullupToRefresh(flag); //refresh completed
+
+			}
+
+			function pulldownRefresh() {
+				listMedicalMedia({
+					callback: endPulldownToRefresh,
+					page: 1,
+					rows: rows,
+					flag: "down",
+					type: 1,
+					title: searchCondition ? searchCondition : ""
+				});
+			}
+
+			function pullupRefresh() {
+
+				listMedicalMedia({
+					callback: endPullupToRefresh,
+					page: page,
+					rows: rows,
+					flag: "up",
+					type: 1,
+					title: searchCondition ? searchCondition : ""
+				});
+				page++;
+			}
+			mui.init({
+				pullRefresh: {
+					container: '#pullrefresh',
+					down: {
+						callback: pulldownRefresh,
+						height: 50, //可选,默认50.触发下拉刷新拖动距离,
+						auto: true, //可选,默认false.首次加载自动下拉刷新一次
+						contentdown: "下拉可以刷新", //可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+						contentover: "释放立即刷新", //可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+						contentrefresh: "正在刷新...", //可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+					},
+					up: {
+						height: 50,
+						contentrefresh: '正在加载...',
+						callback: pullupRefresh,
+						contentnomore: "没有更多医院了",
+						auto: false
+					}
+				},
+				gestureConfig: {
+					tap: true, //默认为true
+					doubletap: true, //默认为false
+					longtap: true, //默认为false
+					swipe: true, //默认为true
+					drag: true, //默认为true
+					hold: false, //默认为false，不监听
+					release: false //默认为false，不监听
+				}
+			});
+		</script>
+		<script type="text/javascript">
+			var firstTime = true;
+			mui(".quxiao")[0].addEventListener("tap", function() {
+				mui("#keyword")[0].value = "";
+				mui("#keyword")[0].blur();
+
+				sessionStorage.removeItem("ajaxs");
+			})
+			/*mui('.mui-scroll-wrapper').scroll({
+				scrollY: true, //是否竖向滚动
+				scrollX: false, //是否横向滚动
+				startX: 0, //初始化时滚动至x
+				startY: 0, //初始化时滚动至y
+				indicators: true, //是否显示滚动条
+				deceleration: 0.0006, //阻尼系数,系数越小滑动越灵敏 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+				bounce: false //是否启用回弹
+			});*/
+			mui(".backBtn")[0].addEventListener("tap", function(e) {
+				sessionStorage.removeItem("ajaxs");
+				sessionStorage.removeItem("scrollY");
+				
+				e.stopPropagation();
+				e.preventDefault();
+				window.location.href = "index.html";
+			})
+			var pullrefresh = mui("#pullrefresh")[0];
+			var contHeight = mui(".mui-content")[0].clientHeight;
+			pullrefresh.style.top = contHeight + "px";
+			mui('body').on('tap', 'a', function() {
+				document.location.href = this.href;
+			})
+			
+			
+			//记录刷新次数,自动下拉触发三次滚动时间,从第四次开始为用户输入
+			
+			document.querySelector('.mui-scroll-wrapper').addEventListener('swipe', function(e) {
+				e.stopPropagation();
+				e.preventDefault();
+				console.log(e.detail)
+				console.log(scroll)	
+				console.log(sessionStorage.getItem("scrollY"));
+				if(sessionStorage.getItem("scrollY")){
+					var scrollY=sessionStorage.getItem("scrollY");
+					/*if(e.detail.direction=="up"){
+						
+					}*/
+					sessionStorage.setItem("scrollY", eval(Number(scrollY)+e.detail.deltaY));
+				}else{
+					sessionStorage.setItem("scrollY", e.detail.deltaY);				
+				}
+
+			})
+
+			
+
 			function listMedicalMedia(data) {
 				var callback = data.callback;
 				var flag = data.flag || "";
 				var page = data.page;
 				var rows = data.rows;
 				var title = data.title || document.getElementById("keyword").value || "";
-				mui.ajax(config.rootUrl+"ylss/patient/listMedicalMedia.do", {
+
+				if(sessionStorage.getItem("ajaxs") && firstTime) {
+					var ajaxs = JSON.parse(sessionStorage.getItem("ajaxs"));
+					for(var i in ajaxs) {
+						if(ajaxs[i].history.title != "") {
+							mui("#keyword")[0].focus();
+							mui("#keyword")[0].value = ajaxs[i].history.title;
+						}
+						firstCall(ajaxs[i]);
+					}
+					mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+					mui('#pullrefresh').pullRefresh().refresh(true);
+					firstTime = false;
+					
+					
+					return;
+					//					sessionStorage.removeItem("ajaxs");
+
+				} else if(sessionStorage.getItem("ajaxs") && flag == "up") {
+					var ajaxs = JSON.parse(sessionStorage.getItem("ajaxs"));
+					var ajaxLast = ajaxs[ajaxs.length - 1];
+					var pageNow = ajaxLast.history.page;
+					var titleNow = ajaxLast.history.title;
+					page = pageNow + 1;
+					title = titleNow;
+				}
+
+				mui.ajax(config.rootUrl + "ylss/patient/listMedicalMedia.do", {
 					data: {
 						phoneNo: loginInfo.phoneNo,
 						sessionKey: loginInfo.sessionKey,
@@ -117,24 +281,29 @@
 					type: 'post',
 					timeout: 10000,
 					success: function(data) {
-						console.log(JSON.stringify(data))
+						var ajaxs = [];
 						if(data.code == "1") {
-							var info = data.info;
-							if(info.length == 0) {
-								return callback(true);
+							var data = data;
+							var history = {
+								page: page,
+								rows: rows,
+								title: title,
+							};
+							data.history = history;
+							firstTime = false;
+							if(sessionStorage.getItem("ajaxs")) {
+								ajaxs = JSON.parse(sessionStorage.getItem("ajaxs"));
 							}
-							var listScript = document.getElementById('listScript').innerHTML;
-							var wp = document.getElementById("wp");
-							if(flag == "down") {
-								wp.innerHTML = template(listScript, {
-									list: info
-								});
 
-							} else {
-								wp.innerHTML += template(listScript, {
-									list: info
-								});
-							}
+							ajaxs.push(data);
+							sessionStorage.setItem("ajaxs", JSON.stringify(ajaxs));
+
+							data.callback = callback;
+							data.flag = flag;
+
+							if(successCall(data)) {
+								return;
+							};
 
 						} else {
 							mui.toast("获取信息出错");
@@ -143,7 +312,6 @@
 						if(callback) {
 							callback();
 						}
-
 					},
 					error: function(xhr, type, errorThrown) {
 						mui.toast('网络异常，请稍后再试！');
@@ -153,17 +321,54 @@
 					}
 				})
 			}
-			refresh.init(listMedicalMedia);
+			//			refresh.init(listMedicalMedia);
 
+			function firstCall(data) {
+				var info = data.info;
+				var listScript = document.getElementById('listScript').innerHTML;
+				var wp = document.getElementById("wp");
+				wp.innerHTML += template(listScript, {
+					list: info
+				});
+
+			}
+
+			function successCall(data) {
+				var callback = data.callback;
+				var flag = data.flag;
+				var info = data.info;
+				if(info.length == 0) {
+					mui('#pullrefresh').pullRefresh().endPullupToRefresh(true); //refresh completed
+					return true;
+				}
+				var listScript = document.getElementById('listScript').innerHTML;
+				var wp = document.getElementById("wp");
+				if(flag == "down") {
+					wp.innerHTML = template(listScript, {
+						list: info
+					});
+					sessionStorage.removeItem("ajaxs");
+					var ajaxs = [];
+					ajaxs.push(data);
+					sessionStorage.setItem("ajaxs", JSON.stringify(ajaxs));
+				} else {
+					wp.innerHTML += template(listScript, {
+						list: info
+					});
+				}
+			}
 			var keyWord = document.getElementById("keyword");
+			var searchCondition;
 			keyWord.addEventListener('keypress', function(e) {
 				var keycode = e.keyCode;
-				var searchName = keyWord.value;
+				var searchCondition = keyWord.value;
 				if(keycode == '13') {
 					mui('#pullrefresh').pullRefresh().refresh(true);
 					e.preventDefault();
+					mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 100);
+					sessionStorage.setItem("scrollY", "0");	
 					document.getElementById("wp").innerHTML = "";
-
+					sessionStorage.removeItem("ajaxs");
 					//请求搜索接口  
 					listMedicalMedia({
 						phoneNo: loginInfo.phoneNo,
@@ -171,10 +376,16 @@
 						clientId: loginInfo.clientId,
 						page: 1,
 						rows: 5,
-						title: searchName,
+						title: searchCondition,
 					});
 				}
 			})
+			window.onload=function(){
+				if(sessionStorage.getItem("scrollY")){
+					var scrollY=sessionStorage.getItem("scrollY");
+					mui('.mui-scroll-wrapper').scroll().scrollTo(0, scrollY, 100);
+					mui('.mui-scroll-wrapper').scroll().resetPosition(true);
+			}}
 		</script>
 	</body>
 

@@ -141,22 +141,22 @@
 		<hr />
 		<div class="bigFont">
 			<span>0.00</span>
-			<a href="">
+			<a  onclick="mui.alert('测试期间暂不提供')">
 				<img src="images/ylss/scrk03.png" alt="" />
 			</a>
 		</div>
-		<div class="chongzhi">
+		<div class="chongzhiBox">
 
 			<ul id="list" class="mui-table-view mui-table-view-chevron">
 				<li class="mui-table-view-cell">
 
-					<a class="mui-navigate-right">
+					<a class="mui-navigate-right" class="chongzhi" onclick="mui.alert('测试期间暂不提供')">
 						<img src="images/ylss/cz2.png" alt="" />
 						<span class="fontB">充值</span>
 						<span class="fontA">充值到钱包余额</span>
 					</a>
 				</li>
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell" class="tixian" onclick="mui.alert('测试期间暂不提供')">
 					<a class="mui-navigate-right">
 						<img src="images/ylss/tx2.png" alt="" />
 						<span class="fontB">提现</span>
@@ -166,7 +166,7 @@
 				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" href="hongbao.html?fromWhere=myWallet.html">
 						<img src="images/ylss/hb2.png" alt="" />
-						<span class="hb">现金红包0.00元</span>
+						<span class="hb">现金红包<span class="adAmount"></span>元</span>
 						<span class="kk">去看看</span>
 					</a>
 				</li>
@@ -179,7 +179,7 @@
 					<!--数据列表-->
 					<ul class="mui-table-view mui-table-view-chevron">
 						<div id="wp">
-							<ul class="yuEdetail">
+							<!--<ul class="yuEdetail">
 								<li>
 									<div class="left">
 										<p class="detailName">提现</p>
@@ -189,7 +189,7 @@
 										<p class="flow">-65.60</p>
 									</div>
 								</li>
-							</ul>
+							</ul>-->
 						</div>
 
 					</ul>
@@ -200,6 +200,39 @@
 		<script src="js/config.js"></script>
 		<script src="js/isLogin.js"></script>
 		<script type="text/javascript">
+			/*mui(".chongzhi")[0].addEventListener("tap",function(){
+				
+			})*/
+			getIncomeDetail();
+			function getIncomeDetail() {
+				mui.ajax(config.rootUrl+"ylss/patient/getIncomeDetail.do", {
+					data: {
+						phoneNo: loginInfo.phoneNo,
+						sessionKey: loginInfo.sessionKey,
+						clientId: loginInfo.clientId,
+						page: 1,
+						rows: 1
+					},
+					dataType: 'json',
+					type: 'post',
+					timeout: 10000,
+					success: function(data) {
+
+						if(data.code == "1") {
+							var adAmount = data.adAmount;
+								mui(".adAmount")[0].innerText = adAmount;
+
+						} else {
+							mui.toast("获取信息出错");
+
+						}						
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('网络异常，请稍后再试！');
+						
+					}
+				})
+			}
 		</script>
 	</body>
 

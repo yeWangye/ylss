@@ -1628,8 +1628,8 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		index: 10,
 		handle: handle,
 		options: {
-			swipeMaxTime: 300,
-			swipeMinDistince: 18
+			swipeMaxTime: 3000,
+			swipeMinDistince: 1//18
 		}
 	});
 })(mui, 'swipe');

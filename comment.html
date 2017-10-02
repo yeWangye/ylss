@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<link rel="stylesheet" href="css/mui.min.css" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>上传图片</title>
+		<meta charset="utf-8">
+		<script src="js/mui.min.js"></script>
+		<script src="js/flexible.js"></script>
+	</head>
+	<style>
+		.mui-bar-nav~.mui-content {
+			padding-top: 64px;
+		}
+		
+		textarea {
+			width: 100%;
+			min-height: 4rem;
+			margin-bottom: 0;
+		}
+		
+		.content {
+			background: white;
+		}
+		.btn{
+			width:100%;
+			background: #6cf;
+			border: 1px solid #6cf;
+		}
+		.bottomImg{
+			vertical-align: middle;
+			width:1rem;
+		}
+	</style>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn" style="color: snow;font-size: 16px;margin-top: 16px;">返回</a>
+			<h1 class="mui-title" style="line-height: 64px;color: snow;">评论</h1>
+		</header>
+		<div class="mui-content">
+			<div>
+				<div class="content">
+					<textarea rows="4" cols="50" placeholder="请输入评论..."></textarea>
+				</div>
+				<div class="bottom">
+					<img src="images/ylss/nocolor.png" class="bottomImg" data-is="0"/><span>匿名提交</span>
+					<input type="hidden" name="niming" />
+				
+				</div>
+				<button class="btn">提交</button>
+			</div>
+			<script src="js/fromWhere.js"></script>
+			<script type="text/javascript">
+				mui(".bottomImg")[0].addEventListener("tap",function(){
+					if(this.getAttribute("data-is")=="0"){
+						this.setAttribute("src","images/ylss/color.png");
+						this.setAttribute("data-is","1");
+					}else{
+						this.setAttribute("src","images/ylss/nocolor.png");
+						this.setAttribute("data-is","0");
+					}
+				})
+				mui(".btn")[0].addEventListener("tap",function(){
+					mui.alert("测试期间暂不提供");
+				})
+			</script>
+	</body>
+
+</html>

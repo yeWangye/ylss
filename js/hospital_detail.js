@@ -16,17 +16,25 @@ function getHospitalDetail() {
 				mui(".instruction")[0].innerText += info.introduction;
 				mui(".hosAddress")[0].innerText += info.address;
 				mui(".hosPhone")[0].innerText += info.hxPhone;
-				mui(".attendDisease")[0].innerText = info.attendDisease;
+				mui(".call")[0].setAttribute("href","tel://"+info.hxPhone);
+				var patt=/[;； ,，。、]/.exec(info.attendDisease);
+				var  attendDiseases=info.attendDisease.split(patt);
+				for(i in attendDiseases){
+					if(attendDiseases[i]!=""){
+						mui(".attendDisease")[0].innerHTML += "<div class='subject'>"+attendDiseases[i]+"</div>";
+						
+					}
+
+				}
+				
 				mui(".hosName")[0].innerText += info.hospital;
 
-				localStorage.setItem("username", loginInfo.phoneNo);
-				localStorage.setItem("password", loginInfo.hxPwd);
 				//聊天对象账号缓存
-				localStorage.setItem("hxPhone", info.hxPhone);
-				localStorage.setItem("chatname", info.hospital);
+				sessionStorage.setItem("hxPhone", info.hxPhone);
+				sessionStorage.setItem("chatname", info.hospital);
 				//聊天界面用作头像显示
-				localStorage.setItem("receiverAvatar", info.hospitalImage);
-				localStorage.setItem("hosAddress", info.address);
+				sessionStorage.setItem("receiverAvatar", info.hospitalImage);
+				sessionStorage.setItem("hosAddress", info.address);
 				for(i = 0; i < einfo.length; i++) {
 					if(einfo[i].patientImage == "") {
 						einfo[i].patientImage = "images/common/tx.png";

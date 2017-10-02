@@ -3,7 +3,7 @@ function getDoctorDetail() {
 
 	var loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
 
-	mui.ajax(config.rootUrl+"ylss/patient/getDoctorEvaluat.do", {
+	mui.ajax(config.rootUrl + "ylss/patient/getDoctorEvaluat.do", {
 		data: {
 			doctorId: doctorId,
 			longitude: localStorage.getItem("longitude"),
@@ -18,28 +18,31 @@ function getDoctorDetail() {
 			var doctInfo = data.doctInfo;
 			var einfo = data.info.evalList;
 
-
 			mui(".hosImg")[0].src = doctInfo.headImage;
 			mui(".instruction")[0].innerText += doctInfo.introduction;
 			mui(".fucsItm")[0].innerText = doctInfo.serviceTime + "次";
 			mui(".gznxItem")[0].innerText = doctInfo.workAge + "年";
-			
+
 			mui(".jlItem")[0].innerText = Math.round(doctInfo.length) == "0" ? "<1km" : Math.round(doctInfo.length) + "km";
 
 			mui(".hosImg")[0].src = doctInfo.headImage;
 
-			mui(".attendDisease")[0].innerText = doctInfo.specials;
+			//			mui(".attendDisease")[0].innerText = doctInfo.specials;
+			var patt = /[;； ,，。、]/.exec(doctInfo.specials);
+			var attendDiseases = doctInfo.specials.split(patt);
+			for(i in attendDiseases) {
+				if(attendDiseases[i] != "") {
+					mui(".attendDisease")[0].innerHTML += "<div class='subject'>" + attendDiseases[i] + "</div>";
 
-			localStorage.setItem("username", loginInfo.phoneNo);
-			localStorage.setItem("password", loginInfo.hxPwd);
+				}
+			}
 			//聊天对象账号缓存
-			localStorage.setItem("hxPhone", doctInfo.doctorPhone);
-
-
-			localStorage.setItem("chatname", doctInfo.doctorName);
+			sessionStorage.setItem("hxPhone", doctInfo.doctorPhone);
+			mui(".call")[0].setAttribute("href","tel://"+doctInfo.doctorPhone);
+			sessionStorage.setItem("chatname", doctInfo.doctorName);
 			//聊天界面用作头像显示
-			localStorage.setItem("receiverAvatar", doctInfo.headImage);
-			localStorage.setItem("hosAddress", doctInfo.hospitalAddress);
+			sessionStorage.setItem("receiverAvatar", doctInfo.headImage);
+			sessionStorage.setItem("hosAddress", doctInfo.hospitalAddress);
 			for(i = 0; i < einfo.length; i++) {
 				if(einfo[i].patientImage == "") {
 					einfo[i].patientImage = "images/common/tx.png";
@@ -102,7 +105,7 @@ Date.prototype.format = function(format) {
 }
 //构建评论dom结构函数
 function setEvaluate(type, pageSize, pageNo) {
-	mui.ajax(config.rootUrl+"ylss/patient/listDoctorEvaluat.do", {
+	mui.ajax(config.rootUrl + "ylss/patient/listDoctorEvaluat.do", {
 		data: {
 			doctorId: doctorId,
 			pageNo: pageNo,
@@ -124,10 +127,10 @@ function setEvaluate(type, pageSize, pageNo) {
 						systemEvaluateBox.innerHTML += '<div class="systemEvaluateItem"><p>' + tempInfo[i].evaLabel + '(' + tempInfo[i].count + ')</p></div>';
 					}
 				}
-				mui(".allEvaluation")[0].innerHTML = einfo.allEvaluat?einfo.allEvaluat:0;
-				mui(".goodEvaluation")[0].innerHTML = einfo.goodEvaluat?einfo.goodEvaluat:0;
-				mui(".commonEvaluation")[0].innerHTML = einfo.commonEvaluat?einfo.commonEvaluat:0;
-				mui(".badEvaluation")[0].innerHTML = einfo.badEvaluat?einfo.badEvaluat:0;
+				mui(".allEvaluation")[0].innerHTML = einfo.allEvaluat ? einfo.allEvaluat : 0;
+				mui(".goodEvaluation")[0].innerHTML = einfo.goodEvaluat ? einfo.goodEvaluat : 0;
+				mui(".commonEvaluation")[0].innerHTML = einfo.commonEvaluat ? einfo.commonEvaluat : 0;
+				mui(".badEvaluation")[0].innerHTML = einfo.badEvaluat ? einfo.badEvaluat : 0;
 			}
 			for(i = 0; i < info.length; i++) {
 				var timeStamp = info[i].createTime;

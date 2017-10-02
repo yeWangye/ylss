@@ -20,7 +20,7 @@ function checkLogin() {
 
 			if(data.code == "1") {
 				console.log(data.msg);
-				//				window.location.href = "personal_msg.html";
+//								window.location.href = "personal_msg.html";
 
 				return true;
 			} else {

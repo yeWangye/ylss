@@ -9,27 +9,24 @@
 		<link rel="stylesheet" href="css/search.css" />
 	</head>
 	<style>
-		#hospitalList a {
-			color: black;
+		.kefu {
+			color: red;
+			text-decoration: underline;
 		}
 		
-		.hospitalType {
-			color: black;
-			text-align: left;
-			background-color: #efeff4;
+		#wp {
+			text-align: center;
 		}
 		
-		.typeys {
-			width: 20%;
+		.noData {
 			display: inline-block;
-			position: absolute;
-			top: 90%;
-			left: 3%;
+			width: 50%;
+			position: relative;
+			top: 100px;
 		}
-		.list{
-			display: inline-block;
-			position:relative;
-			width:100%;
+		
+		.noData img {
+			width: 100%;
 		}
 	</style>
 	<script type="text/javascript" src="js/template.js"></script>
@@ -38,13 +35,19 @@
 		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
 			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn" href="index.html">返回</a>
 
-			<h1 class="mui-title" style="line-height: 64px;color: snow;">养生理疗</h1>
+			<h1 class="mui-title" style="line-height: 64px;color: snow;">体检</h1>
 		</header>
 		<div class="mui-content" style="padding-top: 64px;">
 
-			<p>当前显示的是20公里以内的服务者，可上门服务，也可在线咨询</p>
-			<div id="wp"></div>
-			<script id="doctorList" type="text/html">
+			<p>可在线预约体检中心,可远程邮寄检测</p>
+			<div id="wp">
+				<div class="noData">
+					<img src="images/ylss/nowater.png" alt="" />
+					<a class="kefu" href="tel://400-616-5120">联系客服了解详情</a>
+				</div>
+
+			</div>
+			<!--<script id="doctorList" type="text/html">
 				<ul id="hospitalList">
 					<%for(var i = 0; i < list.length; i++) {%>
 					<a href="doctor_detail.html?doctorId=<%:=list[i].doctorId%>&fromWhere=liliao.html">
@@ -75,15 +78,15 @@
 					</a>
 					<%}%>
 				</ul>
-			</script>
+			</script>-->
 		</div>
 		<script src="js/mui.min.js"></script>
 		<script src="js/config.js"></script>
 		<script src="js/isLogin.js"></script>
-		<script src="js/search.js"></script>
+		<!--<script src="js/search.js"></script>-->
 		<script type="text/javascript">
 			mui.init();
-			search.findDoctorByType("acupunmass");
+			//			search.findDoctorByType("acupunmass");
 		</script>
 	</body>
 

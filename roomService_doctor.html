@@ -14,7 +14,7 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
-			<a class="mui-icon mui-icon-left-nav mui-pull-left" href="index.html"></a>
+			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn" href="index.html">返回</a>
 
 			<h1 class="mui-title" style="line-height: 64px;color: snow;">医生上门</h1>
 		</header>
@@ -41,12 +41,22 @@
 									<%:=list[i].doctorName%>
 								</div>
 								<div class="hospitalType"><%:=list[i].department%></div>
+								<br />
 								<div class="subject">
 									<%var patt=/[;； ,，。]/.exec(list[i].specials)%>
 									<%:=list[i].specials.split(patt)[0]%>
 									
 								</div>
-								
+								<%if(list[i].specials.split(patt)[1]){%>
+								<div class="subject">
+									<%:=list[i].specials.split(patt)[1]%>
+								</div>
+								<%}%>
+								<%if(list[i].specials.split(patt)[2]){%>
+								<div class="subject">
+									<%:=list[i].specials.split(patt)[2]%>
+								</div>
+								<%}%>
 							</div>
 							<div class="distanceBox">
 								<span class="mui-icon mui-icon-location"></span>

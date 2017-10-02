@@ -116,6 +116,7 @@
 		<a class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;font-size: 18px;position: absolute;top: 0.8rem;" href="index.html">返回</a>
 		<div class="headImgBox">
 			<a><img src="" class="headImg" /></a>
+			<input type="file" name="headImg" style="visibility: hidden;" class="uploadImg"/>
 		</div>
 		<div class="msg">
 			<p class="name">姓名: </p>
@@ -152,7 +153,7 @@
 				</li>
 				<li class="module">
 					<div class="imgBox">
-						<a>
+						<a href="gouwuche.html">
 							<img src="images/ylss/newme_gouwu.png" />
 							<p>购物车</p>
 						</a>
@@ -161,7 +162,7 @@
 				</li>
 				<li class="module">
 					<div class="imgBox">
-						<a>
+						<a href="dingdan.html">
 							<img src="images/ylss/newme_dingdan.png" />
 							<p>订单管理</p>
 						</a>
@@ -170,7 +171,7 @@
 				</li>
 				<li class="module">
 					<div class="imgBox">
-						<a>
+						<a href="dizhi.html">
 							<img src="images/ylss/newme_gl.png" />
 							<p>地址管理</p>
 						</a>
@@ -179,7 +180,7 @@
 				</li>
 				<li class="module">
 					<div class="imgBox">
-						<a >
+						<a href="bingli.html">
 							<img src="images/ylss/newme_bingli.png" />
 							<p>电子病例</p>
 						</a>
@@ -188,7 +189,7 @@
 				</li>
 				<li class="module">
 					<div class="imgBox">
-						<a >
+						<a href="changjian.html">
 							<img src="images/ylss/cjwt.png" />
 							<p>常见问题</p>
 						</a>
@@ -211,11 +212,15 @@
 		<script src="js/config.js"></script>
 		<script src="js/isLogin.js"></script>
 		<script type="text/javascript" charset="utf-8">
-		console.log(checkLogin());
 			var headImg = loginInfo.headImage;
 				mui(".headImg")[0].src = headImg == "" ? "images/common/tx.png" : headImg;
 				mui(".name")[0].innerHTML+=loginInfo.userName||loginInfo.hxNick;
 				if(loginInfo.sex){mui(".sex")[0].innerHTML+=loginInfo.sex="man"?"男":"女";}
+				mui(".headImg")[0].addEventListener("tap",function(){
+					console.log(this)
+					mui.trigger(mui(".uploadImg")[0],"focus")
+				})
+				mui.trigger(mui(".uploadImg")[0],"tap")
 		</script>
 
 	</body>

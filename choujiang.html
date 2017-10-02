@@ -4,10 +4,12 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="css/ball-spin-fade-loader.css"/>
+		<script src="js/loading.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 	<style>
 		body,
@@ -222,7 +224,7 @@
 				</div>
 			</div>
 			<div class="msg">
-				<p>您还有次<span class="luckLimit">0</span>抽奖机会</p>
+				<p>您还有次<span class="luckLimit"></span>抽奖机会</p>
 				<a href="hongbao.html?fromWhere=choujiang.html"><img src="images/ylss/lalahb.png" alt="" /></a>
 			</div>
 			<div class="guize">
@@ -292,11 +294,13 @@
 				</div>
 			</div>
 		</div>
+		<div id="wrap"></div>
 		<script src="js/mui.min.js"></script>
 		<script src="js/config.js"></script>
 		<script src="js/isLogin.js"></script>
 
 		<script type="text/javascript">
+			loading.showLoading();
 			mui.init()
 			var tempData;
 			var mask = mui.createMask();
@@ -322,7 +326,7 @@
 					animateTo: 2160,
 					duration: 8000,
 					callback: function() {
-						alert('网络超时，请检查您的网络设置！');
+						mui.alert('网络超时，请检查您的网络设置！');
 					}
 				});
 			};
@@ -337,7 +341,7 @@
 				$(".coin2").css("display", "none");
 				$(".coin5").css("display", "none");
 				$(".xxsc").css("display", "none");
-				var angles = (item + 1) * (360 / turnplate.restaraunts.length)-324;
+				var angles = (item + 1) * (360 / turnplate.restaraunts.length) - 324;
 				/*if(angles < 270) {
 					angles = 270 - angles;
 				} else {
@@ -347,8 +351,8 @@
 				$('.pointer').stopRotate();
 				$('.pointer').rotate({
 					angle: 0,
-					animateTo: angles + 3600,
-					duration: 8000,
+					animateTo: angles + 5400,
+					duration: 10000,
 					callback: function() {
 						mask = mui.createMask(); //callback为用户点击蒙版时自动执行的回调；
 						mask.show(); //显示遮罩
@@ -381,8 +385,6 @@
 
 						}
 						$(".model").css("display", "block");
-
-
 						turnplate.bRotate = !turnplate.bRotate;
 					}
 				});
@@ -393,8 +395,52 @@
 				$(".model").css("display", "none");
 
 			})
-
+			var luckData;
+			
 			function getLuckDraw() {
+				mui.ajax(config.rootUrl + "ylss/user/getLuckDraw.do", {
+					data: {
+						clientId: loginInfo.clientId,
+						phoneNo: loginInfo.phoneNo,
+						sessionKey: loginInfo.sessionKey,
+					},
+					dataType: 'json',
+					type: 'post',
+					timeout: 10000,
+					success: function(data) {
+						console.log(data);
+						if(data.code == "1") {
+							var luckCount = data.luckCount;
+							var luckLimit = data.luckLimit;
+							luckData = luckLimit - luckCount;
+							$(".luckLimit").text(luckData);
+						} else if(data.code == "0") {
+							
+							turnplate.bRotate=true;
+							mui.toast(data);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('网络异常，请稍后再试！');
+					}
+				})
+			}
+			$('.pointer').click(function() {
+				loading.showLoading();
+				if(turnplate.bRotate||luckData==0) {
+					/*if(luckData<=0){
+						loading.closeLoading();
+						mui.alert("您今天的抽奖次数已用完，明日再来", "提示", "知道了");
+						
+					}*/
+					loading.closeLoading();
+					mui.alert("您今天的抽奖次数已用完，明日再来", "提示", "知道了");
+					return
+				};
+				//获取随机数(奖品个数范围内)
+				//					var item = rnd(1, turnplate.restaraunts.length);
+				//奖品数量等于10,指针落在对应奖品区域的中心角度[252, 216, 180, 144, 108, 72, 36, 360, 324, 288]
+				turnplate.bRotate = !turnplate.bRotate;
 
 				mui.ajax(config.rootUrl + "ylss/user/startLuckDraw.do", {
 					data: {
@@ -406,15 +452,16 @@
 					type: 'post',
 					timeout: 10000,
 					success: function(data) {
-
+						loading.closeLoading();
+						console.log(JSON.stringify(data));
 						if(data.code == "1") {
 							var luckCount = data.luckCount;
 							var luckLimit = data.luckLimit;
-
-							localStorage.setItem("luckData", JSON.stringify(data));
-
-							$(".luckLimit").text(luckLimit - luckCount+1);
-
+							luckData=luckLimit - luckCount;
+							$(".luckLimit").text(luckData);
+							luckName = data.luckName;
+							var item = turnplate.restaraunts.lastIndexOf(luckName) + 1;
+							rotateFn(item, turnplate.restaraunts[item - 1]);
 						} else if(data.code == "0") {
 							turnplate.bRotate = true;
 							$(".luckLimit").text(0);
@@ -422,64 +469,9 @@
 					},
 					error: function(xhr, type, errorThrown) {
 						mui.toast('网络异常，请稍后再试！');
+						loading.closeLoading();
 					}
 				})
-
-			}
-			var count = 1;
-			$('.pointer').click(function() {
-				if(turnplate.bRotate) {
-					mui.alert("您今天的抽奖次数已用完，明日再来", "提示", "知道了");
-					return
-				};
-				var luckName;
-				//获取随机数(奖品个数范围内)
-				//					var item = rnd(1, turnplate.restaraunts.length);
-				//奖品数量等于10,指针落在对应奖品区域的中心角度[252, 216, 180, 144, 108, 72, 36, 360, 324, 288]
-				turnplate.bRotate = !turnplate.bRotate;
-				if(localStorage.getItem("luckData")) {
-					var luckData = JSON.parse(localStorage.getItem("luckData"));
-					luckName = luckData.luckName;
-					$(".luckLimit").text($(".luckLimit").text()-1);
-					var item = turnplate.restaraunts.lastIndexOf(luckName) + 1;
-
-					rotateFn(item, turnplate.restaraunts[item - 1]);
-					localStorage.removeItem("luckData");
-				} else {
-					mui.ajax(config.rootUrl + "ylss/user/startLuckDraw.do", {
-						data: {
-							clientId: loginInfo.clientId,
-							phoneNo: loginInfo.phoneNo,
-							sessionKey: loginInfo.sessionKey,
-						},
-						dataType: 'json',
-						type: 'post',
-						timeout: 10000,
-						success: function(data) {
-							console.log(JSON.stringify(data));
-
-							if(data.code == "1") {
-								var luckCount = data.luckCount;
-								var luckLimit = data.luckLimit;
-								$(".luckLimit").text(luckLimit - luckCount);
-								luckName = data.luckName;
-								console.log(luckName)
-								var item = turnplate.restaraunts.lastIndexOf(luckName) + 1;
-
-								rotateFn(item, turnplate.restaraunts[item - 1]);
-							} else if(data.code == "0") {
-								turnplate.bRotate = !turnplate.bRotate;
-								$(".luckLimit").text(0);
-							}
-						},
-						error: function(xhr, type, errorThrown) {
-							mui.toast('网络异常，请稍后再试！');
-						}
-					})
-
-				}
-
-				count++;
 
 			});
 
@@ -488,17 +480,12 @@
 				return random;
 
 			}
-
 			//页面所有元素加载完毕后执行drawRouletteWheel()方法对转盘进行渲染
 			window.onload = function() {
 				drawRouletteWheel();
-				if(!localStorage.getItem("luckData")) {
-					getLuckDraw();
-
-				} else {
-					var luckData = JSON.parse(localStorage.getItem("luckData"));
-					$(".luckLimit").text(luckData.luckLimit - luckData.luckCount);
-				}
+				getLuckDraw();
+				loading.closeLoading(); 
+				
 			};
 
 			function drawRouletteWheel() {

@@ -120,7 +120,7 @@
 			</div>
 		</div>
 		<div class="bottomTabBar">
-			<img src="images/common/icon_phone.png" alt="" />
+			<a class="call" href=""><img src="images/common/icon_phone.png"/></a>
 			<button id="inlineOrder">预约挂号</button>
 			<button id="inlineAask">在线咨询</button>
 		</div>
@@ -193,15 +193,15 @@
 				fromWhere = fromWhere.substring(fromWhere.indexOf("=") + 1, fromWhere.length);
 				mui(".backBtn")[0].setAttribute("href", fromWhere);
 			}
-
-			/*//全部评价
-			setEvaluate("all", 8, 1);
-			//好评
-			setEvaluate("good", 4, 1);
-			//中评
-			setEvaluate("common", 8, 1);
-			//差评
-			setEvaluate("bad", 8, 1);*/
+			//清空session
+			mui(".backBtn")[0].addEventListener("tap",function(){
+				sessionStorage.removeItem("hxPhone");
+				sessionStorage.removeItem("chatname");
+				sessionStorage.removeItem("receiverAvatar");
+				sessionStorage.removeItem("hosAddress");
+				
+			})
+			
 
 			//进入聊天界面
 			mui("#inlineAask")[0].addEventListener("tap", function() {

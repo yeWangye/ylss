@@ -15,10 +15,26 @@
 		<link rel="stylesheet" href="css/detail_common.css" />
 	</head>
 	<style type="text/css">
+		.backBtn {
+			color: snow;
+		}
+		
 		.hosImg {
 			width: 100px;
 			border: 1px solid #6cf;
 			border-radius: 50px;
+		}
+		
+		.subject {
+			border: 1px solid darkgray;
+			border-radius: 3px;
+			color: snow;
+			margin-top: 5px;
+			text-align: center;
+			padding: 2px;
+			background: #6cf;
+			display: inline-block;
+			margin-left: 5px;
 		}
 		
 		.doctorMsg div {
@@ -170,7 +186,7 @@
 			</div>
 		</div>
 		<div class="bottomTabBar">
-			<img src="images/common/icon_phone.png" alt="" />
+			<a class="call"><img src="images/common/icon_phone.png" alt="" /></a>
 			<button id="inlineOrder"></button>
 			<button id="inlineAask">在线咨询</button>
 		</div>
@@ -244,6 +260,14 @@
 				fromWhere = fromWhere.substring(fromWhere.indexOf("=") + 1, fromWhere.length);
 				mui(".backBtn")[0].setAttribute("href", fromWhere);
 			}
+			//清空session
+			mui(".backBtn")[0].addEventListener("tap",function(){
+				sessionStorage.removeItem("hxPhone");
+				sessionStorage.removeItem("chatname");
+				sessionStorage.removeItem("receiverAvatar");
+				sessionStorage.removeItem("hosAddress");
+				
+			})
 			if(fromWhere == "roomService_doctor.html" || fromWhere == "roomService_nurse.html") {
 				mui("#inlineOrder")[0].innerHTML = "上门服务";
 
@@ -267,7 +291,7 @@
 			mui("#inlineOrder")[0].addEventListener("tap", function() {
 				if(fromWhere == "famous_doctor.html") {
 
-//					window.location.href = "registration.html?fromWhere=doctor_detail.html";
+					//					window.location.href = "registration.html?fromWhere=doctor_detail.html";
 					mui.toast("功能完善中...");
 
 				} else {

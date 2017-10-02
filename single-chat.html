@@ -123,6 +123,7 @@
 				color: #0062CC;
 				line-height: 30px;
 			}
+			
 		</style>
 	</head>
 
@@ -154,16 +155,19 @@
 		<!--兼容老版本sdk需引入此文件-->
 		<!--config-->
 		<script src="js/easemob.im.config.js"></script>
+		<script src="js/config.js"></script>
+		<script src="js/isLogin.js"></script>
 		<!--<script src="js/cache.js"></script>-->
 		<script src="js/chatMsg.js"></script>
 		<script type="text/javascript" charset="UTF-8">
-			var username = localStorage.getItem("username");
-			var password = localStorage.getItem("password");
-			var hxPhone = localStorage.getItem("hxPhone");
+			var username = loginInfo.hxName;
+			var password = loginInfo.hxPwd;
+			//聊天对象账号
+			var hxPhone = sessionStorage.getItem("hxPhone");
 			console.log(hxPhone);
-			var chatname = localStorage.getItem("chatname");
+			var chatname = sessionStorage.getItem("chatname");
 
-			var receiverAvatar = localStorage.getItem("receiverAvatar");
+			var receiverAvatar = sessionStorage.getItem("receiverAvatar");
 
 			window.onload = function() {
 				if(window.location.search != "") {
@@ -182,7 +186,7 @@
 			var options = {
 				username: username,
 				password: password,
-				nickname: "测试",
+				nickname: "",
 				appKey: Easemob.im.config.appkey,
 				success: function(result) {
 					//注册成功;

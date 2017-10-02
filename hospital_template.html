@@ -10,33 +10,31 @@
 	</head>
 	<script type="text/javascript" src="js/template.js"></script>
 
-
-
 	<body>
-		
 
 		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
-			<a class="mui-icon mui-icon-left-nav mui-pull-left" href="index.html"></a>
+			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn" href="index.html">返回</a>
 
-			<h1 class="mui-title" style="line-height: 64px;color: snow;">中国名院</h1>
+			<h1 class="mui-title titileBox" style="line-height: 64px;color: snow;"></h1>
+
 		</header>
 		<div class="mui-content" style="padding-top: 64px;">
 
 			<form action="" class="input-kw-form" style="display: inline;">
 				<div class="mui-input-row mui-search" style="background: #999;">
-					<input type="search" autocomplete="off" name="baike-search" placeholder="请输入关键词" class="mui-input-clear" id="keyword" style="">
+					<input type="search" autocomplete="off" name="baike-search" placeholder="医院、科室、疾病" class="mui-input-clear" id="keyword" style="">
 					<button style="width: 15%;margin-top: 15px;background-color: #999;color: #6cf;">取消</button>
 
 				</div>
 
 			</form>
 
-			<p>全国知名医院，系统默认推荐3个，如需查看更多，请搜索医院名称、科室名称或疾病名称</p>
+			<p class="jigou"></p>
 			<div id="wp"></div>
 			<script id="doctorList" type="text/html">
 				<ul id="hospitalList">
 					<%for(var i = 0; i < list.length; i++) {%>
-					<a href="hospital_detail.html?hoId=<%:=list[i].hoId%>&fromWhere=famous_special.html">
+					<a href="hospital_detail.html?hoId=<%:=list[i].hoId%>&fromWhere=hospital_template.html?title=<%:=spl(url, "title")%>+type=<%:=spl(url, "type")%>">
 						<li style="clear: both;">
 							<div class="hospitalImg" style="height:<%:=window.innerWidth*0.25%>px;border-radius:<%:=window.innerWidth*0.125%>px;"><img src="<%:=list[i].hospitalImage%>" /></div>
 							<div class="detail">
@@ -44,12 +42,22 @@
 									<%:=list[i].hospital%>
 								</div>
 								<div class="hospitalType">专科医院</div>
+								<br />
 								<div class="subject">
-									<%var patt=/[;； ,，。]/.exec(list[i].specials)%>
+									<%var patt=/[;； ,，。、]/.exec(list[i].specials)%>
 									<%:=list[i].specials.split(patt)[0]%>
-									
+
 								</div>
-								
+								<%if(list[i].specials.split(patt)[1]){%>
+								<div class="subject">
+									<%:=list[i].specials.split(patt)[1]%>
+								</div>
+								<%}%>
+								<%if(list[i].specials.split(patt)[2]){%>
+								<div class="subject">
+									<%:=list[i].specials.split(patt)[2]%>
+								</div>
+								<%}%>
 							</div>
 							<div class="distanceBox">
 								<span class="mui-icon mui-icon-location"></span>
@@ -71,8 +79,34 @@
 		<script src="js/search.js"></script>
 		<script type="text/javascript">
 			mui.init();
-			
-			search.getFamousSpecial();
+			var titles = document.getElementsByClassName('titileBox');
+			var jigou = document.getElementsByClassName('jigou');
+			var url = window.location.search;
+			var title = spl(url, "title");
+			var type = spl(url, "type");
+			for(var i in titles) {
+				titles[i].innerHTML = decodeURI(title);
+				if(decodeURI(title) == "居家养老") {
+					jigou[i].innerHTML = "全国知名养老机构，系统默认推荐3个，如需查看更多，请搜索机构名称、科室名称或疾病名称";
+				} else if(decodeURI(title) == "中国名院") {
+					jigou[i].innerHTML = "全国知名医院，系统默认推荐3个，如需查看更多，请搜索医院名称、科室名称或疾病名称";
+				} else {
+					jigou[i].innerHTML = "全国知名" + decodeURI(title) + "医院，系统默认推荐3个，如需查看更多，请搜索医院名称、科室名称或疾病名称";
+				}
+			}
+
+			search.getFamousSpecial({
+				type: type,
+			});
+
+			function spl(str, need) {
+				var need = str.split(need + "=")[1];
+				if(need.indexOf("+") != -1) {
+					need = need.substring(0, need.indexOf("+"));
+				}
+
+				return need
+			}
 			var keyWord = document.getElementById("keyword");
 			keyWord.addEventListener('keypress', function(e) {
 				var keycode = e.keyCode;
@@ -80,10 +114,13 @@
 				if(keycode == '13') {
 					var searchCondition = keyWord.value;
 					e.preventDefault();
-					document.getElementById('hospitalList').innerHTML = "";
+					document.getElementById('wp').innerHTML = "";
 
 					//请求搜索接口  
-					search.getFamousSpecial(searchCondition);
+					search.getFamousSpecial({
+						type:type,
+						searchCondition: searchCondition
+					});
 				}
 			})
 		</script>

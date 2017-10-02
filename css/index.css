@@ -1,92 +1,120 @@
 .headImgBox {
-			position: absolute;
-			z-index: 99;
-			width: 1rem;
-			top: 1rem;
-			height: 1rem;
-			left: 1rem;
-			border: 1px solid snow;
-			border-radius: 0.5rem;
-			text-align: center;
-			overflow: hidden;
-		}
-		
-		.headImgBox img {
-			width: 1rem;
-		}
-		
-		.more {
-			position: absolute;
-			z-index: 99;
-			width: 1rem;
-			height: 1rem;
-			right: 0.5rem;
-			top: 1rem;
-		}
-		
-		.more img {
-			width: 1rem;
-		}
-		
-		.moduleBox {
-			width: 100%;
-		}
-		
-		.moduleList {
-			width: 100%;
-			margin: 0;
-			padding: 0;
-			list-style: none;
-		}
-		
-		.module {
-			width: 17%;
-			float: left;
-			margin: 4%;
-		}
-		
-		.imgBox {
-			width: 100%;
-			text-align: center;
-		}
-		
-		.imgBox p {
-			font-size: 12px;
-			color: #827d7d;
-		}
-		
-		.imgBox img {
-			width: 60%;
-		}
-		
-		#map {
-			width: 100%;
-			height: 2.5rem;
-			border: 0;
-			transition: height 1s;
-			-moz-transition: height 1s;
-			/* Firefox 4 */
-			-webkit-transition: height 1s;
-			/* Safari and Chrome */
-			-o-transition: height 1s;
-			/* Opera */
-		}
-		
-		.zk {
-			position: absolute;
-			width: 50%;
-			left: 25%;
-			text-align: center;
-			transition: top 1s;
-			-moz-transition: top 1s;
-			/* Firefox 4 */
-			-webkit-transition: top 1s;
-			/* Safari and Chrome */
-			-o-transition: top 1s;
-			/* Opera */
-		}
-		
-		.zk img {
-			width: 50%;
-			max-width: 2.5rem;
-		}
+	position: absolute;
+	z-index: 99;
+	width: 1rem;
+	top: 1rem;
+	height: 1rem;
+	left: 1rem;
+	border: 1px solid snow;
+	border-radius: 0.5rem;
+	text-align: center;
+	overflow: hidden;
+}
+
+.picker {
+	background: snow;
+/*	visibility: hidden;*/
+	display: none;
+	text-align: center;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	z-index: 99999;
+}
+
+.picker a {
+	display: block;
+	color: black;
+	border-bottom: 1px solid #6cf;
+	height: 1.2rem;
+	line-height: 1.2rem;
+}
+.picker a:last-child {
+
+	border-bottom: 1px solid snow;
+	color:#6cf;
+
+}
+.picker a:active {
+	color: #6cf;
+}
+
+.headImgBox img {
+	width: 1rem;
+}
+
+.more {
+	position: absolute;
+	z-index: 99;
+	width: 1rem;
+	height: 1rem;
+	right: 0.5rem;
+	top: 1rem;
+}
+
+.more img {
+	width: 1rem;
+}
+
+.moduleBox {
+	width: 100%;
+}
+
+.moduleList {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.module {
+	width: 17%;
+	float: left;
+	margin: 1% 4%;
+}
+
+.imgBox {
+	width: 100%;
+	text-align: center;
+}
+
+.imgBox p {
+	font-size: 12px;
+	color: #827d7d;
+}
+
+.imgBox img {
+	width: 60%;
+}
+
+#map {
+	width: 100%;
+	height: 2.5rem;
+	border: 0;
+	transition: height 1s;
+	-moz-transition: height 1s;
+	/* Firefox 4 */
+	-webkit-transition: height 1s;
+	/* Safari and Chrome */
+	-o-transition: height 1s;
+	/* Opera */
+}
+
+.zk {
+	position: absolute;
+	width: 50%;
+	left: 25%;
+	text-align: center;
+	transition: top 1s;
+	-moz-transition: top 1s;
+	/* Firefox 4 */
+	-webkit-transition: top 1s;
+	/* Safari and Chrome */
+	-o-transition: top 1s;
+	/* Opera */
+}
+
+.zk img {
+	width: 50%;
+	max-width: 2.5rem;
+}

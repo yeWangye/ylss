@@ -39,7 +39,7 @@
 	<body>
 
 		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
-			<a class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;font-size: 18px;position: absolute;top: 14px;" href="index.html">返回</a>
+			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn"  href="index.html">返回</a>
 
 			<h1 class="mui-title" style="line-height: 64px;color: snow;">罕见病</h1>
 		</header>
@@ -48,7 +48,7 @@
 			<form action="" class="input-kw-form" style="display: inline;">
 				<div class="mui-input-row mui-search" style="background: #e0dfdf;">
 					<input type="search" autocomplete="off" name="baike-search" placeholder="文章标题或疾病名称" id="keyword" style="width:80%">
-					<button style="width: 15%;margin-top: 15px;background-color: #e0dfdf;color: #6cf;">取消</button>
+					<button class="quxiao" style="width: 15%;margin-top: 15px;background-color: #e0dfdf;color: #6cf;">取消</button>
 
 				</div>
 
@@ -97,17 +97,62 @@
 		<script src="js/refresh.js"></script>
 		<script src="js/dateFormat.js"></script>
 		<script type="text/javascript">
+			var firstTime = true;
+			mui(".quxiao")[0].addEventListener("tap",function(){
+					mui("#keyword")[0].value = "";
+					mui("#keyword")[0].blur();
+					sessionStorage.removeItem("ajaxs_hanjian");
+			})
 			console.log(JSON.stringify(loginInfo))
 			var pullrefresh=mui("#pullrefresh")[0];
 			var contHeight=mui(".mui-content")[0].clientHeight;
 			pullrefresh.style.top=contHeight+"px";
-			mui('body').on('tap', 'a', function () { document.location.href = this.href; })
+			mui('body').on('tap', 'a', function () { document.location.href = this.href; });
+			//记录刷新次数,自动下拉触发三次滚动时间,从第四次开始为用户输入
+			var scrollCount = 1;
+
+			document.querySelector('.mui-scroll-wrapper').addEventListener('scroll', function(e) {
+
+				if(scrollCount < 4) {
+					console.log(scroll.y);
+				} else {
+					sessionStorage.setItem("scrollY", scroll.y);
+
+				}
+				scrollCount++;
+
+			})
 			function listRareIllInfo(data) {
 				var callback = data.callback;
 				var flag = data.flag || "";
 				var page = data.page;
 				var rows = data.rows;
 				var title = data.title || document.getElementById("keyword").value || "";
+				if(sessionStorage.getItem("ajaxs_hanjian") && firstTime) {
+					var ajaxs_hanjian = JSON.parse(sessionStorage.getItem("ajaxs_hanjian"));
+					for(var i in ajaxs_hanjian) {
+						if(ajaxs_hanjian[i].history.title!="") {
+							mui("#keyword")[0].focus();
+							mui("#keyword")[0].value=ajaxs_hanjian[i].history.title;
+						}
+						firstCall(ajaxs_hanjian[i]);
+					}
+					mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+					mui('#pullrefresh').pullRefresh().refresh(true);
+					firstTime = false;
+					var scrollY = sessionStorage.getItem("scrollY");
+					mui('.mui-scroll-wrapper').scroll().scrollTo(0, scrollY, 100);
+					return;
+					//					sessionStorage.removeItem("ajaxs_hanjian");
+
+				} else if(sessionStorage.getItem("ajaxs_hanjian") && flag == "up") {
+					var ajaxs_hanjian = JSON.parse(sessionStorage.getItem("ajaxs_hanjian"));
+					var ajaxLast = ajaxs_hanjian[ajaxs_hanjian.length - 1];
+					var pageNow = ajaxLast.history.page;
+					var titleNow = ajaxLast.history.title;
+					page = pageNow + 1;
+					title = titleNow;
+				}
 				mui.ajax(config.rootUrl+"ylss/patient/listRareIllInfo.do", {
 					data: {
 						phoneNo: loginInfo.phoneNo,
@@ -116,29 +161,36 @@
 						page: page,
 						rows: rows,
 						title: title,
+						
 					},
 					dataType: 'json',
 					type: 'post',
 					timeout: 10000,
 					success: function(data) {
+						var ajaxs_hanjian = [];
 						console.log(JSON.stringify(data))
 						if(data.code == "1") {
-							var info = data.info;
-							if(info.length == 0) {
-								return callback(true);
+							var data = data;
+							var history = {
+								page: page,
+								rows: rows,
+								title: title,
+							};
+							data.history = history;
+							firstTime = false;
+							if(sessionStorage.getItem("ajaxs_hanjian")) {
+								ajaxs_hanjian = JSON.parse(sessionStorage.getItem("ajaxs_hanjian"));
 							}
-							var listScript = document.getElementById('listScript').innerHTML;
-							var wp = document.getElementById("wp");
-							if(flag == "down") {
-								wp.innerHTML = template(listScript, {
-									list: info
-								});
 
-							} else {
-								wp.innerHTML += template(listScript, {
-									list: info
-								});
-							}
+							ajaxs_hanjian.push(data);
+							sessionStorage.setItem("ajaxs_hanjian", JSON.stringify(ajaxs_hanjian));
+
+							data.callback = callback;
+							data.flag = flag;
+
+							if(successCall(data)){
+								return;
+							};
 
 						} else {
 							mui.toast("获取信息出错");
@@ -158,7 +210,40 @@
 				})
 			}
 			refresh.init(listRareIllInfo);
+			function firstCall(data) {
+				var info = data.info;
+				var listScript = document.getElementById('listScript').innerHTML;
+				var wp = document.getElementById("wp");	
+				wp.innerHTML += template(listScript, {
+						list: info
+				});
+				
+			}
 
+			function successCall(data) {
+				var callback = data.callback;
+				var flag = data.flag;
+				var info = data.info;
+				if(info.length == 0) {
+					mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);//refresh completed
+					return true;
+				} 
+				var listScript = document.getElementById('listScript').innerHTML;
+				var wp = document.getElementById("wp");
+				if(flag == "down") {
+					wp.innerHTML = template(listScript, {
+						list: info
+					});
+				sessionStorage.removeItem("ajaxs_hanjian");
+				var ajaxs_hanjian=[];
+				ajaxs_hanjian.push(data);
+				sessionStorage.setItem("ajaxs_hanjian", JSON.stringify(ajaxs_hanjian));
+				} else {
+					wp.innerHTML += template(listScript, {
+						list: info
+					});
+				}
+			}
 			var keyWord = document.getElementById("keyword");
 			keyWord.addEventListener('keypress', function(e) {
 				var keycode = e.keyCode;
@@ -167,7 +252,7 @@
 					mui('#pullrefresh').pullRefresh().refresh(true);
 					e.preventDefault();
 					document.getElementById("wp").innerHTML = "";
-
+					sessionStorage.removeItem("ajaxs_hanjian");
 					//请求搜索接口  
 					listRareIllInfo({
 						phoneNo: loginInfo.phoneNo,
@@ -176,6 +261,7 @@
 						page: 1,
 						rows: 5,
 						title: searchName,
+					
 					});
 				}
 			})

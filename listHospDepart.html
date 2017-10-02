@@ -38,18 +38,7 @@
 		<script type="text/javascript">
 			mui.init();
 			var hoId = localStorage.getItem("hoId");
-			if(localStorage.getItem("loginInfo")) {
-				var loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
-
-			} else {
-				loginInfo = {
-					clientId: "1172",
-					sessionKey: "11",
-					phoneNo: "15201251945"
-				}
-			}
-			console.log(loginInfo);
-			mui.ajax("http://ylss.ss0120.com:8080/ylss/patient/listHospDepart.do", {
+			mui.ajax(config.rootUrl + "ylss/patient/listHospDepart.do", {
 				data: {
 					sessionKey: loginInfo.sessionKey,
 					patientId: loginInfo.clientId,

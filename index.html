@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="background: white;">
 
 	<head>
 		<meta charset="utf-8">
@@ -13,7 +13,7 @@
 		<!--App自定义的css-->
 		<!--<link rel="stylesheet" type="text/css" href="css/app.css">-->
 		<link rel="stylesheet" type="text/css" href="css/index.css">
-		
+
 		<script type="text/javascript" src="js/flexible.js"></script>
 	</head>
 	<header>
@@ -21,7 +21,7 @@
 			<a href=""><img src="" class="headImg" /></a>
 		</div>
 		<div class="more">
-			<a><img src="images/common/icon_more2.png" alt="" /></a>
+			<a href="tips.html"><img src="images/common/icon_more2.png" alt="" /></a>
 		</div>
 	</header>
 
@@ -40,7 +40,7 @@
 			<ul class="moduleList">
 				<li class="module">
 					<div class="imgBox">
-						<a href="famous_special.html">
+						<a href="hospital_template.html?title=中国名院+type=''">
 							<img src="images/ylss/zgmy.png" />
 							<p>中国名院</p>
 						</a>
@@ -121,13 +121,194 @@
 
 					</div>
 				</li>
+				<li class="module">
+					<div class="imgBox">
+						<a href="hospital_template.html?title=眼科+type=eye">
+							<img src="images/ylss/yk.png" />
+							<p>眼科</p>
+						</a>
+
+					</div>
+				</li>
+				<li class="module">
+					<div class="imgBox">
+						<a href="hospital_template.html?title=整形美容+type=plastic">
+							<img src="images/ylss/zxmr.png" />
+							<p>整形美容</p>
+						</a>
+
+					</div>
+				</li>
+				<li class="module">
+					<div class="imgBox">
+						<a href="hospital_template.html?title=男科·妇科·产科+type=preProduct">
+							<img src="images/ylss/cpch.png" />
+							<p>男科·妇科·产科</p>
+						</a>
+
+					</div>
+				</li>
+				<li class="module">
+					<div class="imgBox">
+						<a href="hospital_template.html?title=居家养老+type=home">
+							<img src="images/ylss/jjyl.png" />
+							<p>居家养老</p>
+						</a>
+
+					</div>
+				</li>
+				<li class="module">
+					<div class="imgBox">
+						<a href="tijian.html">
+							<img src="images/ylss/smtj.png" />
+							<p>体检</p>
+						</a>
+
+					</div>
+				</li>
+				<li class="module">
+					<div class="imgBox">
+						<a href="mingyou.html">
+							<img src="images/ylss/ysdpb.png" />
+							<p>医生医院名优榜</p>
+						</a>
+
+					</div>
+				</li>
+
+				<li class="module">
+					<div class="imgBox" onclick="mui.alert('测试阶段')">
+						<p>
+							<img src="images/ylss/wqrjysm.png" />
+							<p>为远方亲人叫医护</p>
+						</p>
+
+					</div>
+				</li>
+				<!--<li class="module">
+					<div class="imgBox">
+						<a href="tijian.html">
+							<img src="images/ylss/tbxl.png" />
+							<p>同病相怜</p>
+						</a>
+
+					</div>
+				</li>-->
+
+				<!--<li class="module">
+					<div class="imgBox">
+						<a href="tijian.html">
+							<img src="images/ylss/hwyy.png" />
+							<p>海外孕医</p>
+						</a>
+
+					</div>
+				</li>-->
+				<!--<li class="module">
+					<div class="imgBox">
+						<a href="tijian.html">
+							<img src="images/ylss/sysm.png" />
+							<p>送药上门</p>
+						</a>
+
+					</div>
+				</li>-->
+
+				<li class="module">
+					<div class="imgBox">
+						<a href="baoguang.html">
+							<img src="images/ylss/yydpb.png" />
+							<p>曝光台</p>
+						</a>
+					</div>
+				</li>
+				<!--<li class="module">
+					<div class="imgBox">
+						<a href="tijian.html">
+							<img src="images/ylss/jinjis.png" />
+							<p>医疗经纪人</p>
+						</a>
+
+					</div>
+				</li>-->
+				<!--<li class="module">
+					<div class="imgBox">
+						<a href="camera.html">
+							<img src="images/ylss/scss.png" />
+							<p>商城</p>
+						</a>
+
+					</div>
+				</li>-->
+				<li class="module">
+					<div class="imgBox" id="tel">
+						<a href="tijian.html">
+							<img src="images/ylss/lxgf.png" />
+							<p>联系客服</p>
+						</a>
+					</div>
+				</li>
 			</ul>
 		</div>
+		<div class="picker">
+			<a  class="kefu">客服电话</a>
+			<a class="kefu_inline">在线客服</a>
+			<a class="closePicker">取消</a>
+		</div>
 		<script src="js/mui.min.js"></script>
+		<!--sdk-->
+		<script src="sdk/strophe.js"></script>
+		<script src="sdk/easemob.im-1.1.js"></script>
+		<script src="sdk/easemob.im-1.1.shim.js"></script>
+		<!--兼容老版本sdk需引入此文件-->
+		<!--config-->
+		<script src="js/easemob.im.config.js"></script>
+
 		<script src="js/config.js"></script>
 		<script src="js/isLogin.js"></script>
+		<script src="js/connect_im.js"></script>
 		<script type="text/javascript" charset="utf-8">
+		var mask = mui.createMask();
+			document.getElementById('tel').addEventListener('tap', function(e) {
+				e.stopPropagation();
+				e.preventDefault();
+				mask.show();
+				
+				mui(".picker")[0].style.display="block";
+			})
+			document.getElementsByTagName("body")[0].addEventListener("tap",function(){
+
+				if(mui(".picker")[0].style.display!="none"){
+					mui(".picker")[0].style.display="none";
+					
+				}
+
+			})
+			/*客服--开始*/
+			document.getElementsByClassName('closePicker')[0].addEventListener('tap', function(e) {
+				e.stopPropagation();
+				e.preventDefault();
+				mui(".picker")[0].style.display="none";
+				mask.close();
+				
+			})
+			document.getElementsByClassName('kefu')[0].addEventListener('tap', function() {
+				
+				mui(".picker")[0].style.display="none";
+
+				setTimeout("window.location.href = 'tel://400-616-5120'",10)
+				mask.close();
+			})
+			document.getElementsByClassName('kefu_inline')[0].addEventListener('tap', function() {
+				sessionStorage.setItem("chatname","医来伸手客服");
+				sessionStorage.setItem("hxPhone","4006165120");
+				sessionStorage.setItem("receiverAvatar","images/ylss/icon_app.png");
+				window.location.href ="single-chat.html";
+				
+			})
+			/*客服--结束 */
 			var slider = mui("#slider");
+			//用于控制地图展开误触的标识
 			var _flag = true;
 			var ww = window.innerWidth;
 			var wh = window.innerHeight;
@@ -135,21 +316,34 @@
 			mui.init({
 				swipeBack: true //启用右滑关闭功能
 			});
-			function goChouJiang(){
-				window.location.href="choujiang.html";
+			/*前往各模块的模板页面--开始*/
+			function goChouJiang() {
+				window.location.href = "choujiang.html";
 			}
-			function goHospital(hoId){
-				window.location.href="hospital_detail.html?hoId="+hoId+"&fromWhere=index.html";
+
+			function goHospital(hoId) {
+				window.location.href = "hospital_detail.html?hoId=" + hoId + "&fromWhere=index.html";
 			}
-			function goDoctor(doctorId){
-				window.location.href="doctor_detail.html?doctorId="+doctorId+"&fromWhere=index.html";
+
+			function goDoctor(doctorId) {
+				window.location.href = "doctor_detail.html?doctorId=" + doctorId + "&fromWhere=index.html";
 			}
+			/*前往各模块的模板页面--结束*/
 			
 			var headImg = loginInfo.headImage;
-			mui(".headImg")[0].src = headImg == ""? "images/common/tx.png" : headImg;
+			mui(".headImg")[0].src = headImg == "" ? "images/common/tx.png" : headImg;
 			mui(".headImgBox a")[0].setAttribute("href", "personal_msg.html");
-			
+
 			mui(".zkImg")[0].addEventListener("tap", function(e) {
+				e.stopPropagation();
+				e.preventDefault();
+				//禁用首页地图展开时的模块点击造成不好的用户体验
+				var moduls=mui(".module a");
+				for(var i=0;i<moduls.length;i++){
+					var _temp=moduls[i].getAttribute("href");
+					moduls[i].setAttribute("data-href",_temp);
+					moduls[i].setAttribute("href","javascript:void(0)");
+				}
 				var sliderHeight = slider[0].clientHeight;
 				if(_flag) {
 					mui("#map")[0].style.height = wh - sliderHeight + "px";
@@ -159,6 +353,7 @@
 					document.getElementById("map").contentWindow.setMap(wh - sliderHeight);
 
 					_flag = false;
+					return;
 				} else {
 					mui("#map")[0].style.height = "100px";
 					mui(".zk")[0].style.top = sliderHeight + "px";
@@ -167,12 +362,18 @@
 
 					document.getElementById("map").contentWindow.setMap(100);
 					_flag = true;
-
+					return;
 				}
 
 			})
 
 			function setImgSrc(data) {
+				var moduls=mui(".module a");
+				for(var i=0;i<moduls.length;i++){
+					var _temp=moduls[i].getAttribute("data-href");
+					
+					moduls[i].setAttribute("href",_temp);
+				}
 				if(data == "sq") {
 					mui(".zkImg")[0].setAttribute("src", "images/ylss/sq.png");
 
@@ -185,7 +386,7 @@
 
 			function listAdver() {
 
-				mui.ajax(config.rootUrl+"ylss/patient/listAdver.do", {
+				mui.ajax(config.rootUrl + "ylss/patient/listAdver.do", {
 					data: {},
 					dataType: 'json',
 					type: 'post',
@@ -247,7 +448,7 @@
 
 				var sliderHeight = slider[0].clientHeight;
 				mui("#map")[0].style.height = "2.5rem";
-				mui(".zk")[0].style.top = sliderHeight/40 + "rem";
+				mui(".zk")[0].style.top = sliderHeight / 40 + "rem";
 				document.getElementById("map").contentWindow.setMap(100);
 				mui.trigger(mui(".zkImg")[0], "tap");
 				//				setTimeout('mui.trigger(mui(".zkImg")[0],"tap")',2000);

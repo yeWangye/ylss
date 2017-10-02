@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="css/search.css" />-->
+		<script src="js/flexible.js"></script>
+		<style>
+			.backBtn {
+				color: snow;
+				font-size: 16px!important;
+				margin-top: 16px;
+			}
+			
+			ul.listBox {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+			}
+			
+			.listBox li {
+				width: 100%;
+				text-align: center;
+				margin-top: 10px;
+			}
+			
+			.listBox li a {
+				display: inline-block;
+				width: 80%;
+				border: 1px solid darkgray;
+				border-radius: 0.5rem;
+			}
+			
+			.listBox li a p {
+				font-size: 0.4rem;
+				color: red;
+				padding: 0;
+				margin: 0;
+			}
+			
+			.listBox li a span {
+				font-size: 0.3rem;
+				color: black;
+				display: block;
+			}
+			
+			.listBox li a img {
+				width: 0.8rem;
+				vertical-align: middle
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn" href="personal_msg.html">返回</a>
+			<h1 class="mui-title" style="line-height: 64px;color: snow;">邀请得红包</h1>
+		</header>
+		<div class="mui-content" style="padding-top: 64px;">
+			<ul class="listBox">
+				<li>
+					<a href="">
+						<p>普通用户</p>
+						<span>分享给普通用户,且成功注册可得3元红包</span>
+						<img src="images/ylss/sharedsicon.png" alt="" />
+					</a>
+				</li>
+				<li>
+					<a href="">
+						<p style="color:blue">医生</p>
+						<span>分享给您身边证件齐全,有空余时间的医生,入驻平台成功后,您可得50元现金红包,并长期拥有其订单提成</span>
+						<img src="images/ylss/sharedsicon.png" alt="" />
+					</a>
+				</li>
+				<li>
+					<a href="">
+						<p style="color:green">护士</p>
+						<span>分享给您身边证件齐全,有空余时间的护士,入驻平台成功后,您可得50元现金红包,并长期拥有其订单提成</span>
+						<img src="images/ylss/sharedsicon.png" alt="" />
+					</a>
+				</li>
+				<li>
+					<a href="">
+						<p style="color:darkgoldenrod">药店</p>
+						<span>分享给您身边证件齐全的药店,入驻平台成功后,您可得50元现金红包</span>
+						<img src="images/ylss/sharedsicon.png" alt="" />
+					</a>
+				</li>
+				<li>
+					<a href="">
+						<p style="color:darkcyan">周边医院</p>
+						<span>推荐一个医院,入驻平台成为周边医院成功后,您可得100元现金红包</span>
+						<img src="images/ylss/sharedsicon.png" alt="" />
+					</a>
+				</li>
+				<li>
+					<a href="">
+						<p style="color:darkmagenta">中国名院</p>
+						<span>推荐一个医院,入驻平台成为名院(全国推广)成功后,您可得300元现金红包</span>
+						<img src="images/ylss/sharedsicon.png" alt="" />
+					</a>
+				</li>
+				<li>
+					<a href="">
+						<p style="color:#6cf">区域代理</p>
+						<span>推荐一个区域代理(生意人,有意发展医疗行业者),入驻平台成功后,您可得1000元现金红包</span>
+						<img src="images/ylss/sharedsicon.png" alt="" />
+					</a>
+				</li>
+			</ul>
+			<div class="zhuyi">
+				<h4>注意事项:</h3>
+				<p>1.如果存在刷单情况,不仅不能提现还要负法律责任.</p>
+				<p>2.分享好友注册成功并提交提现申请,我们会进行核实,核实无误后会将提现金额打到您的账户.</p>
+				<p>3.最终解释权归医来伸手所有</p>
+				<p>4.如有疑问,请联系医来伸手客服</p>
+				
+			</div>
+			<div style="text-align: center;font-size: 0.6rem;" >
+				<a href="tel://400-616-5120">400-616-5120</a>
+			</div>
+			
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/config.js"></script>
+		<script src="js/isLogin.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript">
+// 微信配置
+wx.config({
+    debug: true, 
+    appId: "wxa8cc134f7e226358", 
+    timestamp: '上一步生成的时间戳', 
+    nonceStr: '上一步中的字符串', 
+    signature: '上一步生成的签名',
+    jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 功能列表，我们要使用JS-SDK的什么功能
+});
+// config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在 页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready 函数中。
+wx.ready(function(){
+    // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
+    wx.onMenuShareTimeline({
+        title: '分享标题', // 分享标题
+        link:"分享的url,以http或https开头",
+        imgUrl: "分享图标的url,以http或https开头" // 分享图标
+    });
+    // 获取“分享给朋友”按钮点击状态及自定义分享内容接口
+    wx.onMenuShareAppMessage({
+        title: '分享标题', // 分享标题
+        desc: "分享描述", // 分享描述
+        link:"分享的url,以http或https开头",
+        imgUrl: "分享图标的url,以http或https开头", // 分享图标
+        type: 'link', // 分享类型,music、video或link，不填默认为link
+    });
+});
+</script>
+	</body>
+
+</html>

@@ -68,7 +68,7 @@
 			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn">返回</a>
 
 			<h1 class="mui-title" style="line-height: 64px;color: snow;">详情</h1>
-			<a class="mui-pull-right" style="color: white;font-size: 18px;position: relative;top: 20px;" onclick="mui.alert('暂不支持')">分享</a>
+			<a class="mui-pull-right" style="color: white;font-size: 18px;position: relative;top: 20px;" href="comment.html?fromWhere=baoguang_detail.html">评论</a>
 		</header>
 		<div class="mui-content" style="padding-top: 64px;">
 			<div class="headImg">
@@ -105,48 +105,46 @@
 		<script src="js/isLogin.js"></script>
 		<script type="text/javascript">
 			var fromWhere;
-			mui(".backBtn")[0].addEventListener("tap",function(){
-				window.history.back(-1);
-			});
 			if(!localStorage.getItem("url") || window.location.search != "") {
 				var url = window.location.search;
-				var mId = url.split("&")[0];
-
+			
+				var fsId = url.split("&")[0];
 				fromWhere = url.split("&")[1];
-				mId = mId?mId.substring(mId.indexOf("=") + 1, mId.length):"";
 
+				fsId = fsId?fsId.substring(fsId.indexOf("=") + 1, fsId.length):"";
 				
 				fromWhere = fromWhere.substring(fromWhere.indexOf("=") + 1, fromWhere.length);
-
-
+				mui(".backBtn")[0].setAttribute("href", fromWhere);
+				sessionStorage.setItem("url",url);
 			} else {
-				var url = localStorage.getItem("url");
-				var mId = url.split("&")[0];
+				var url = sessionStorage.getItem("url");
 
+				var fsId = url.split("&")[0];
 				fromWhere = url.split("&")[1];
-				mId = mId?mId.substring(mId.indexOf("=") + 1, mId.length):"";
 
+				fsId = fsId?fsId.substring(fsId.indexOf("=") + 1, fsId.length):"";
 				fromWhere = fromWhere.substring(fromWhere.indexOf("=") + 1, fromWhere.length);
+				mui(".backBtn")[0].setAttribute("href", fromWhere);
 			}
-			
-			medicalMediaDetail() ;
-			
+			mui(".backBtn")[0].addEventListener("tap",function(){
+				sessionStorage.removeItem("url");
+			})
+			getSayDetail(fsId) ;
 			//点赞等接口调用
 			
-				mui(".bottomBox")[0].addEventListener("tap",function(){
+			mui(".bottomBox")[0].addEventListener("tap",function(){
 					mui.alert("测试期间暂不提供");
-				})
-			
-			
-			function medicalMediaDetail() {
+			})
+			function getSayDetail(type) {
 
-				mui.ajax(config.rootUrl + "ylss/patient/medicalMediaDetail.do", {
+				mui.ajax(config.rootUrl + "ylss/patient/getSayDetail.do", {
 					data: {
 						phoneNo: loginInfo.phoneNo,
 						sessionKey: loginInfo.sessionKey,
 						clientId: loginInfo.clientId,
-						mId:mId,
-
+						fsId: type,
+						page:1,
+						rows:1,
 					},
 					dataType: 'json',
 					type: 'post',
@@ -154,24 +152,19 @@
 					success: function(data) {
 						console.log(JSON.stringify(data))
 						if(data.code == "1") {
-							var info = data.info;
+							var info = data.sayInfo;
 							mui(".headImg img")[0].setAttribute("src", info.headImage);
-							mui(".name")[0].innerText = info.userName;
+							mui(".name")[0].innerText = info.userName=="匿名"?"":info.userName;
 							mui(".title")[0].innerText = info.title;
 							mui(".content")[0].innerText = info.content;
 							mui(".liulan p")[0].innerText = info.readNum;
-							mui(".dianzan p")[0].innerText = info.isAtten;
+							mui(".dianzan p")[0].innerText = info.rewardNum;
 							mui(".shang p")[0].innerText = info.isPraise;
 							mui(".bigImg img")[0].setAttribute("src", info.images.length==0?"":info.images[0]);
-							var specialty = info.specialty.split(";");
-							for(var i in specialty) {
-								if(specialty[i]!=""){
-									mui(".rightItem")[0].innerHTML += '<p class="item">' + specialty[i] + '</p>';
-									
-									
-								}
-
+							if(info.userName=="匿名"){
+								mui(".headImg")[0].style.display="none";
 							}
+							
 						} else {
 							mui.toast("获取信息出错");
 
@@ -184,6 +177,7 @@
 					}
 				})
 			}
+			
 		</script>
 	</body>
 

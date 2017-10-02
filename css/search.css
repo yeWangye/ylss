@@ -12,24 +12,32 @@
 	padding-top: 5px;
 }
 
+.backBtn {
+	color: snow;
+	font-size: 16px!important;
+	margin-top: 16px;
+}
+
 .detail {
 	display: inline-block;
 	float: left;
 	margin-left: 10%;
-	max-width:50%;
+	max-width: 50%;
 }
 
 .hospitalType {
 	background-color: #ffcc33;
-	color: snow;
-	text-align: center;
+    color: snow;
+    text-align: left;
+    padding: 2px;
+    display: inline-block;
 }
 
 .distanceBox {
 	float: right;
 	margin-right: 5%;
 	text-align: right;
-	width:10%;
+	width: 10%;
 }
 
 .hospitalImg {
@@ -67,4 +75,6 @@
 	color: darkgray;
 	margin-top: 5px;
 	text-align: center;
+	padding: 2px;
+	display: inline-block;
 }

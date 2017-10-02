@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="css/search.css" />-->
+		<script src="js/flexible.js"></script>
+		<style>
+			.backBtn {
+				color: snow;
+				font-size: 16px!important;
+				margin-top: 16px;
+			}
+		</style>
+	</head>
+	<style type="text/css">
+		.listBox {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+		
+		li {
+			border-bottom: 1px solid darkgray;
+			padding: 5px;
+		}
+		
+		img {
+			width: 1rem;
+			vertical-align: middle;
+		}
+		
+		.listBox span ,.listBox img{
+			display: inline-block;
+			margin-left: 0.4rem;
+			color: black;
+		}
+	</style>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn" href="personal_msg.html">返回</a>
+			<h1 class="mui-title" style="line-height: 64px;color: snow;">订单管理</h1>
+		</header>
+		<div class="mui-content" style="padding-top: 64px;">
+			<ul class="listBox">
+				<li>
+					<a href="">
+						<img src="images/ylss/putongdingdan.png" alt="" />
+						<span>普通订单</span>
+					</a>
+
+				</li>
+				<li>
+					<a href="">
+						<img src="images/ylss/yuyuedingdan.png" alt="" />
+						<span>预约医生订单</span>
+					</a>
+
+				</li>
+				<li>
+					<a href="">
+						<img src="images/ylss/yyyy.png" alt="" />
+						<span>预约医院订单</span>
+					</a>
+
+				</li>
+				<li>
+					<a href="">
+						<img src="images/ylss/zy.png" alt="" />
+						<span>中药订单</span>
+					</a>
+
+				</li>
+				<li>
+					<a href="">
+						<img src="images/ylss/mzxyao.png" alt="" />
+						<span>中药订单</span>
+					</a>
+
+				</li>
+				<li>
+					<a href="">
+						<img src="images/ylss/sc.png" alt="" />
+						<span>商城订单</span>
+					</a>
+
+				</li>
+				<li>
+					<a href="">
+						<img src="images/ylss/jj.png" alt="" />
+						<span>男妇科生育预约订单</span>
+					</a>
+
+				</li>
+				<li>
+					<a href="">
+						<img src="images/ylss/cp.png" alt="" />
+						<span>居家养老预约订单</span>
+					</a>
+
+				</li>
+			</ul>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/config.js"></script>
+		<script src="js/isLogin.js"></script>
+		<script>
+			mui(".listBox")[0].addEventListener("tap",function(){
+				mui.alert("暂未添加!");
+			})
+		</script>
+	</body>
+
+</html>

@@ -18,7 +18,7 @@ var refresh = {
 					height: 50,
 					contentrefresh: '正在加载...',
 					callback: this.pullupRefresh,
-					contentnomore: "没有更多数据了",
+					contentnomore: "没有更多文章了",
 					auto: false
 				}
 			},
@@ -36,7 +36,7 @@ var refresh = {
 		_this.callback=callback;
 	},
 	endPulldownToRefresh: function() {
-
+		
 		_this.page = 2;
 		mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
 		mui('#pullrefresh').pullRefresh().refresh(true);
@@ -45,21 +45,24 @@ var refresh = {
 		mui('#pullrefresh').pullRefresh().endPullupToRefresh(flag); //refresh completed
 	},
 	pulldownRefresh: function() {
-
+		
+		
 		_this.callback({
 			callback: _this.endPulldownToRefresh,
 			page: 1,
 			rows: _this.rows,
 			flag: "down",
+			
 		});
 	},
 	pullupRefresh: function() {
-
+		
 		_this.callback({
 			page: _this.page,
 			rows: _this.rows,
 			callback: _this.endPullupToRefresh,
 			flag: "up",
+			
 		});
 		_this.page++;
 	},

@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<link rel="stylesheet" href="css/mui.min.css" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>上传图片</title>
+		<meta charset="utf-8">
+		<script src="js/mui.min.js"></script>
+		<script src="js/flexible.js"></script>
+	</head>
+	<style>
+		.mui-bar-nav~.mui-content {
+			padding-top: 64px;
+		}
+		
+		textarea {
+			width: 100%;
+			min-height: 4rem;
+			border: 0;
+		}
+		
+		.content {
+			background: white;
+		}
+		
+		.tianjiaBtn {
+			width: 2rem;
+		}
+	</style>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn" style="color: snow;font-size: 16px;margin-top: 16px;" href="manage.html">返回</a>
+			<h1 class="mui-title" style="line-height: 64px;color: snow;">曝光台管理</h1>
+			<a class="mui-pull-right" style="color: white;font-size: 16px;position: relative;top: 20px;" onclick="mui.alert('测试期间暂不提供')">提交</a>
+		</header>
+		<div class="mui-content">
+			<div>
+				<input type="text" class="name" placeholder="请输入医院名称或医生名称" style="margin: 5px 0;padding:5px" />
+
+				<div class="content">
+				<textarea rows="4" cols="50" placeholder="请输入内容..."></textarea>
+					<div data-role="fieldcontain">
+						<div id="localImag">
+							<img id="preview" width="-1" height="-1" style="display: none" />
+						</div>
+					</div>
+					<div id="DivUp" style="">
+
+						<img src="images/ylss/iconfont-tianjia.png" class="tianjiaBtn" />
+						<span style="font-size: 0.3rem;color: darkgray;">最多添加8张图片</span>
+						<input type="file" name="file_head" id="file_head" accept="image/*" onchange="javascript:setImagePreview();" style="display:none;" />
+					</div>
+
+				</div>
+			</div>
+
+			<script type="text/javascript">
+				mui(".tianjiaBtn")[0].addEventListener("tap", function() {
+					var file_head = mui("#file_head")[0];
+
+					file_head.click();
+				})
+
+				function setImagePreview() {
+					var preview, img_txt, localImag = document.getElementById("localImag"),
+						file_head = document.getElementById("file_head"),
+						picture = file_head.value;
+					if(!picture.match(/.jpg|.gif|.png|.bmp/i)) return alert("您上传的图片格式不正确，请重新选择！"), !1;
+					preview = new Image();
+					if(file_head.files && file_head.files[0]) {
+						preview.style.display = "inline-block",
+							preview.style.width = "2rem",
+
+							preview.src = window.navigator.userAgent.indexOf("Chrome") >= 1 || window.navigator.userAgent.indexOf("Safari") >= 1 ? window.webkitURL.createObjectURL(file_head.files[0]) : window.URL.createObjectURL(file_head.files[0]);
+						preview.onload = function() {
+							localImag.appendChild(preview);
+						}
+					} else {
+						file_head.select(),
+							file_head.blur(),
+							img_txt = document.selection.createRange().text,
+							localImag = document.getElementById("localImag"),
+							localImag.style.width = "2rem";
+
+						try {
+							localImag.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)",
+								localImag.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = img_txt
+						} catch(f) {
+							return alert("您上传的图片格式不正确，请重新选择！"), !1
+						}
+						preview.style.display = "none",
+							document.selection.empty()
+					}
+					return document.getElementById("DivUp").style.display = "block", !0
+				}
+			</script>
+	</body>
+
+</html>
