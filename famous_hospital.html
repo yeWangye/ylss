@@ -7,42 +7,39 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="css/search.css" />
-		<script type="text/javascript" src="js/template.js"></script>
-		<style>
-			#pullrefresh {
+	</head>
+	<style type="text/css">
+		#pullrefresh {
 			top: 170px;
 		}
 		
 		#pullrefresh .mui-pull-top-pocket {
 			top: 0px;
 		}
-		</style>
-	</head>
-
-
+	</style>
+	<script type="text/javascript" src="js/template.js"></script>
 
 	<body>
 
 		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
 			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn">返回</a>
 
-			<h1 class="mui-title titileBox" style="line-height: 64px;color: snow;"></h1>
-
+			<h1 class="mui-title titileBox" style="line-height: 64px;color: snow;">中国名院</h1>
 		</header>
 		<div class="mui-content" style="padding-top: 64px;">
 
 			<form action="" class="input-kw-form" style="display: inline;">
 				<div class="mui-input-row mui-search" style="background: #999;">
-					<input type="search" autocomplete="off" name="baike-search" placeholder="医院科室疾病" class="mui-input-clear" id="keyword" style="">
+					<input type="search" autocomplete="off" name="baike-search" placeholder="医院、科室、疾病" class="mui-input-clear" id="keyword" style="">
 					<button class="quxiao" style="width: 15%;margin-top: 15px;background-color: #999;color: #6cf;">取消</button>
 
 				</div>
 
 			</form>
 
-			<p class="jigou"></p>
+			<p class="jigou">全国知名医生，系统默认推荐3个，如需查看更多，请搜索医生名称或疾病名称</p>
 			<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
-				<div class="mui-scroll">
+				<div class="mui-scroll" id="scrollDiv">
 					<!--数据列表-->
 					<ul class="mui-table-view mui-table-view-chevron">
 						<div id="wp"></div>
@@ -53,7 +50,7 @@
 			<script id="listScript" type="text/html">
 				<ul id="hospitalList">
 					<%for(var i = 0; i < list.length; i++) {%>
-					<a href="hospital_detail.html?hoId=<%:=list[i].hoId%>&fromWhere=hospital_template.html?title=<%:=spl(url, "title")%>+type=<%:=spl(url, "type")%>">
+					<a href="hospital_detail.html?hoId=<%:=list[i].hoId%>">
 						<li style="clear: both;">
 							<div class="hospitalImg" style="height:<%:=window.innerWidth*0.25%>px;border-radius:<%:=window.innerWidth*0.125%>px;"><img src="<%:=list[i].hospitalImage%>" /></div>
 							<div class="detail">
@@ -90,10 +87,13 @@
 					<%}%>
 				</ul>
 			</script>
-
+		<div class="noData" style="text-align: center;position: fixed;top: 300px;display: none;z-index: 100;">
+			<img style="width:50%;" src="images/ylss/newnodata.png" />
+		</div>
 		</div>
 		<script src="js/mui.js"></script>
 		<script src="js/config.js"></script>
+		<script src="js/refresh.js"></script>
 		<script src="js/isLogin.js"></script>
 		<script src="js/search.js"></script>
 		<script type="text/javascript">
@@ -178,7 +178,6 @@
 			});
 		</script>
 		<script type="text/javascript">
-			mui.init();
 			var titles = document.getElementsByClassName('titileBox');
 			var jigou = document.getElementsByClassName('jigou');
 			var url = decodeURI(window.location.search);
@@ -203,17 +202,45 @@
 
 				return need;
 			}
+			var actionBegain=false;
+			/*mui('.mui-scroll-wrapper').scroll({
+    			deceleration: 0.1, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值 0.0006 
+  				indicators: false,   //隐藏一条滚动条 增大减速系数。。。
+  				bounce: false,
+			});*/
+			var scrollDiv = document.getElementById('scrollDiv');
+			scrollDiv.addEventListener('scrollstart', function() {
+
+				var translate3d = this.style.webkitTransform; //translate3d(0px, -147px, 0px) translateZ(0px)
+				var scrollData = translate3d.substring(12, translate3d.length - 17); //0px, -147px, 0px
+
+				var scrollTop = scrollData.split(",")[1].substring(0, scrollData.split(",")[1].length - 2) //-147
+				if(actionBegain){
+					sessionStorage.setItem("scrollY",scrollTop);
+				}
+				
+			});
+
+			document.querySelector('.mui-scroll-wrapper').addEventListener('swipe', function(e) {
+				e.stopPropagation();
+				e.preventDefault();
+				actionBegain=true;
+				document.querySelector('.mui-scroll-wrapper').removeEventListener("swipe",function(){},false);
+			})
 			mui(".backBtn")[0].addEventListener("tap",function(){
 				sessionStorage.removeItem("ajaxs");
+				sessionStorage.removeItem("scrollY");
 				window.history.back(-1);
-
 			});
 			var keyWord = document.getElementById("keyword");
 			var searchCondition;
 			keyWord.addEventListener('keypress', function(e) {
+				e.preventDefault();
 				var keycode = e.keyCode;
-				if(keycode == '13') {
-					searchCondition = keyWord.value.replace(/^\s+|\s+$/g,"");
+				searchCondition = keyWord.value.replace(/^\s+|\s+$/g,"");
+				if(keycode == '13'&&searchCondition!="") {
+					
+//					mui('#pullrefresh').pullRefresh().refresh(true);
 					mui('#pullrefresh').pullRefresh().enablePullupToRefresh();
 					
 					mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 100);
@@ -222,12 +249,16 @@
 					sessionStorage.removeItem("ajaxs");
 
 					//请求搜索接口  
-					search.getFamousSpecial({
-						type:type,
-						searchCondition: searchCondition
-					});
+					search.getFamousSpecial({type:type,searchCondition:searchCondition,pageSize:10});
 				}
 			})
+			window.onload=function(){
+				if(sessionStorage.getItem("scrollY")) {
+					var scrollY = sessionStorage.getItem("scrollY");
+					mui('.mui-scroll-wrapper').scroll().scrollTo(0, scrollY, 100);
+					
+				}
+			}
 		</script>
 	</body>
 

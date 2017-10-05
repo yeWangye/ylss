@@ -106,28 +106,20 @@
 		<script type="text/javascript">
 			var fromWhere;
 			if(!localStorage.getItem("url") || window.location.search != "") {
-				var url = window.location.search;
-			
+				var url = window.location.search;	
 				var fsId = url.split("&")[0];
-				fromWhere = url.split("&")[1];
+				fsId = fsId?fsId.substring(fsId.indexOf("=") + 1, fsId.length):"";		
 
-				fsId = fsId?fsId.substring(fsId.indexOf("=") + 1, fsId.length):"";
-				
-				fromWhere = fromWhere.substring(fromWhere.indexOf("=") + 1, fromWhere.length);
-				mui(".backBtn")[0].setAttribute("href", fromWhere);
 				sessionStorage.setItem("url",url);
 			} else {
 				var url = sessionStorage.getItem("url");
-
 				var fsId = url.split("&")[0];
-				fromWhere = url.split("&")[1];
-
-				fsId = fsId?fsId.substring(fsId.indexOf("=") + 1, fsId.length):"";
-				fromWhere = fromWhere.substring(fromWhere.indexOf("=") + 1, fromWhere.length);
-				mui(".backBtn")[0].setAttribute("href", fromWhere);
+				fsId = fsId?fsId.substring(fsId.indexOf("=") + 1, fsId.length):"";			
 			}
+			
 			mui(".backBtn")[0].addEventListener("tap",function(){
 				sessionStorage.removeItem("url");
+				window.history.back(-1);
 			})
 			getSayDetail(fsId) ;
 			//点赞等接口调用

@@ -229,7 +229,9 @@
 		<script type="text/javascript" src="js/refresh.js">
 		</script>
 		<script type="text/javascript">
-			
+			mui(".backBtn")[0].addEventListener("tap",function(){
+				window.history.back(-1);
+			});
 			var pullrefresh=mui("#pullrefresh")[0];
 			var contHeight=mui(".mui-content")[0].clientHeight;
 			var bigFontHeight=mui(".bigFont")[0].clientHeight;

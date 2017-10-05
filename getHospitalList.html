@@ -32,7 +32,7 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
-			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn" href="index.html">返回</a>
+			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn">返回</a>
 
 			<h1 class="mui-title" style="line-height: 64px;color: snow;">找医院</h1>
 		</header>
@@ -91,8 +91,10 @@
 		<script src="js/search.js"></script>
 		<script type="text/javascript">
 			var pageNo = 2,
-				pageSize = 4;
-
+				pageSize = 10;
+			mui(".backBtn")[0].addEventListener("tap",function(){
+				window.history.back(-1);
+			});
 			function endPulldownToRefresh() {
 				//重置起始页
 				pageNo = 2;

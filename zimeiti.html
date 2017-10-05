@@ -50,7 +50,7 @@
 			</form>
 
 			<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
-				<div class="mui-scroll">
+				<div class="mui-scroll" id="scrollDiv">
 					<!--数据列表-->
 
 					<ul class="mui-table-view mui-table-view-chevron">
@@ -94,23 +94,20 @@
 			</div>
 
 		</div>
-		<script src="js/mui.min.js"></script>
+		<script src="js/mui.js"></script>
 		<script src="js/config.js"></script>
 		<script src="js/isLogin.js"></script>
+		<script src="js/jquery-1.10.2.js"></script>
 		<!--<script src="js/refresh.js"></script>-->
 		<script src="js/dateFormat.js"></script>
 		<script type="text/javascript">
 			var page = 2,
-				rows = 4;
+				rows = 10;
 			firstTime = true;
 			mui(".quxiao")[0].addEventListener("tap", function() {
 				mui("#keyword")[0].value = "";
 				mui("#keyword")[0].blur();
-				var history = JSON.parse(sessionStorage.getItem("history"));
-				if(history){history.title = "";}
-				pulldownRefresh() ;
-				
-				sessionStorage.setItem("history", JSON.stringify(history));
+				pulldownRefresh();
 
 			})
 
@@ -119,7 +116,7 @@
 				page = 2;
 				mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
 				mui('#pullrefresh').pullRefresh().refresh(true);
-				sessionStorage.setItem("scrollY", "0");	
+				sessionStorage.setItem("scrollY", "0");
 			}
 
 			function endPullupToRefresh(flag) {
@@ -139,7 +136,7 @@
 			}
 
 			function pullupRefresh() {
-
+				scrollDiv.removeEventListener("scrollend", function() {}, false)
 				listMedicalMedia({
 					callback: endPullupToRefresh,
 					page: page,
@@ -156,7 +153,7 @@
 					down: {
 						callback: pulldownRefresh,
 						height: 50, //可选,默认50.触发下拉刷新拖动距离,
-						auto: true, //可选,默认false.首次加载自动下拉刷新一次
+						auto: false, //可选,默认false.首次加载自动下拉刷新一次
 						contentdown: "下拉可以刷新", //可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
 						contentover: "释放立即刷新", //可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
 						contentrefresh: "正在刷新...", //可选，正在刷新状态时，下拉刷新控件上显示的标题内容
@@ -165,7 +162,7 @@
 						height: 50,
 						contentrefresh: '正在加载...',
 						callback: pullupRefresh,
-						contentnomore: "没有更多医院了",
+						contentnomore: "没有更多新闻了",
 						auto: false
 					}
 				},
@@ -200,10 +197,10 @@
 			mui(".backBtn")[0].addEventListener("tap", function(e) {
 				sessionStorage.removeItem("ajaxs");
 				sessionStorage.removeItem("scrollY");
-				
+
 				e.stopPropagation();
 				e.preventDefault();
-				window.location.href = "index.html";
+				window.history.back(-1);
 			})
 			var pullrefresh = mui("#pullrefresh")[0];
 			var contHeight = mui(".mui-content")[0].clientHeight;
@@ -211,29 +208,48 @@
 			mui('body').on('tap', 'a', function() {
 				document.location.href = this.href;
 			})
-			
-			
+
 			//记录刷新次数,自动下拉触发三次滚动时间,从第四次开始为用户输入
-			
-			document.querySelector('.mui-scroll-wrapper').addEventListener('swipe', function(e) {
+			/*var scroll = mui('.mui-scroll-wrapper').scroll();
+			document.querySelector('.mui-scroll-wrapper').addEventListener('scrollend', function(e) {
 				e.stopPropagation();
 				e.preventDefault();
 				console.log(e.detail)
-				console.log(scroll)	
+				console.log(scroll)
 				console.log(sessionStorage.getItem("scrollY"));
 				if(sessionStorage.getItem("scrollY")){
 					var scrollY=sessionStorage.getItem("scrollY");
-					/*if(e.detail.direction=="up"){
-						
-					}*/
 					sessionStorage.setItem("scrollY", eval(Number(scrollY)+e.detail.deltaY));
 				}else{
 					sessionStorage.setItem("scrollY", e.detail.deltaY);				
 				}
+				var scrollY=sessionStorage.getItem("scrollY")||0;
+				sessionStorage.setItem("scrollY", Number(scroll.y));
+				var total=scrollY+scroll.y;
+				mui('.mui-scroll')[0].style.transform="translate3d(0px, "+total+"px, 0px)";
 
+			})*/
+			var actionBegain = false;
+
+			var scrollDiv = document.getElementById('scrollDiv');
+			scrollDiv.addEventListener('scrollend', function() {
+
+				var translate3d = this.style.webkitTransform; //translate3d(0px, -147px, 0px) translateZ(0px)
+				var scrollData = translate3d.substring(12, translate3d.length - 17); //0px, -147px, 0px
+
+				var scrollTop = scrollData.split(",")[1].substring(0, scrollData.split(",")[1].length - 2) //-147
+				if(actionBegain) {
+					sessionStorage.setItem("scrollY", scrollTop);
+				}
+
+			});
+
+			document.querySelector('.mui-scroll-wrapper').addEventListener('swipe', function(e) {
+				e.stopPropagation();
+				e.preventDefault();
+				actionBegain = true;
+				document.querySelector('.mui-scroll-wrapper').removeEventListener("swipe", function() {}, true);
 			})
-
-			
 
 			function listMedicalMedia(data) {
 				var callback = data.callback;
@@ -242,24 +258,7 @@
 				var rows = data.rows;
 				var title = data.title || document.getElementById("keyword").value || "";
 
-				if(sessionStorage.getItem("ajaxs") && firstTime) {
-					var ajaxs = JSON.parse(sessionStorage.getItem("ajaxs"));
-					for(var i in ajaxs) {
-						if(ajaxs[i].history.title != "") {
-							mui("#keyword")[0].focus();
-							mui("#keyword")[0].value = ajaxs[i].history.title;
-						}
-						firstCall(ajaxs[i]);
-					}
-					mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
-					mui('#pullrefresh').pullRefresh().refresh(true);
-					firstTime = false;
-					
-					
-					return;
-					//					sessionStorage.removeItem("ajaxs");
-
-				} else if(sessionStorage.getItem("ajaxs") && flag == "up") {
+				if(sessionStorage.getItem("ajaxs") && flag == "up") {
 					var ajaxs = JSON.parse(sessionStorage.getItem("ajaxs"));
 					var ajaxLast = ajaxs[ajaxs.length - 1];
 					var pageNow = ajaxLast.history.page;
@@ -366,7 +365,7 @@
 					mui('#pullrefresh').pullRefresh().refresh(true);
 					e.preventDefault();
 					mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 100);
-					sessionStorage.setItem("scrollY", "0");	
+					sessionStorage.setItem("scrollY", "0");
 					document.getElementById("wp").innerHTML = "";
 					sessionStorage.removeItem("ajaxs");
 					//请求搜索接口  
@@ -380,12 +379,33 @@
 					});
 				}
 			})
-			window.onload=function(){
-				if(sessionStorage.getItem("scrollY")){
-					var scrollY=sessionStorage.getItem("scrollY");
+			window.onload = function() {
+				if(sessionStorage.getItem("ajaxs") && firstTime) {
+					var ajaxs = JSON.parse(sessionStorage.getItem("ajaxs"));
+					for(var i in ajaxs) {
+						if(ajaxs[i].history.title != "") {
+							mui("#keyword")[0].focus();
+							mui("#keyword")[0].value = ajaxs[i].history.title;
+						}
+						firstCall(ajaxs[i]);
+					}
+					/*mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+					mui('#pullrefresh').pullRefresh().refresh(true);*/
+					firstTime = false;
+					//					sessionStorage.removeItem("ajaxs");
+				} else {
+					pulldownRefresh();
+				}
+				console.log(mui('.mui-scroll-wrapper').scroll())
+				if(sessionStorage.getItem("scrollY")) {
+					var scrollY = sessionStorage.getItem("scrollY");
 					mui('.mui-scroll-wrapper').scroll().scrollTo(0, scrollY, 100);
-					mui('.mui-scroll-wrapper').scroll().resetPosition(true);
-			}}
+
+					//					mui('.mui-scroll')[0].style.transform = "translate3d(0px, " + scrollY + "px, 0px)";
+					//					$('.mui-scroll').scrollTop(scrollY);
+
+				}
+			}
 		</script>
 	</body>
 

@@ -145,17 +145,18 @@
 				var url = window.location.search;
 				var fromWhere = url.split("&")[0];		
 				fromWhere = fromWhere.substring(fromWhere.indexOf("=") + 1, fromWhere.length);
-				mui(".backBtn")[0].setAttribute("href", fromWhere);
+
 				sessionStorage.setItem("url",url);
 			} else {
 				var url = sessionStorage.getItem("url");
 
 				var fromWhere = url.split("&")[0];
 				fromWhere = fromWhere.substring(fromWhere.indexOf("=") + 1, fromWhere.length);
-				mui(".backBtn")[0].setAttribute("href", fromWhere);
+
 			}
 			mui(".backBtn")[0].addEventListener("tap",function(){
 				sessionStorage.removeItem("url");
+				window.history.back(-1);
 			})
 			mui.init({
 				pullRefresh: {

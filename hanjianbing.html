@@ -39,7 +39,7 @@
 	<body>
 
 		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
-			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn"  href="index.html">返回</a>
+			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn">返回</a>
 
 			<h1 class="mui-title" style="line-height: 64px;color: snow;">罕见病</h1>
 		</header>
@@ -103,6 +103,9 @@
 					mui("#keyword")[0].blur();
 					sessionStorage.removeItem("ajaxs_hanjian");
 			})
+			mui(".backBtn")[0].addEventListener("tap",function(){
+				window.history.back(-1);
+			});
 			console.log(JSON.stringify(loginInfo))
 			var pullrefresh=mui("#pullrefresh")[0];
 			var contHeight=mui(".mui-content")[0].clientHeight;

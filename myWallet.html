@@ -131,7 +131,7 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
-			<a class="mui-icon mui-icon-left-nav mui-pull-left" id="backBtn" href="index.html">返回</a>
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" id="backBtn">返回</a>
 
 			<h1 class="mui-title" style="line-height: 64px;color: white;">我的钱包</h1>
 		</header>
@@ -200,9 +200,9 @@
 		<script src="js/config.js"></script>
 		<script src="js/isLogin.js"></script>
 		<script type="text/javascript">
-			/*mui(".chongzhi")[0].addEventListener("tap",function(){
-				
-			})*/
+			mui(".backBtn")[0].addEventListener("tap",function(){
+				window.history.back(-1);
+			});
 			getIncomeDetail();
 			function getIncomeDetail() {
 				mui.ajax(config.rootUrl+"ylss/patient/getIncomeDetail.do", {

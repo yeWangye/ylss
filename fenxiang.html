@@ -56,7 +56,7 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
-			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn" href="personal_msg.html">返回</a>
+			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn">返回</a>
 			<h1 class="mui-title" style="line-height: 64px;color: snow;">邀请得红包</h1>
 		</header>
 		<div class="mui-content" style="padding-top: 64px;">
@@ -129,7 +129,7 @@
 		<script src="js/isLogin.js"></script>
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript">
-// 微信配置
+/*// 微信配置
 wx.config({
     debug: true, 
     appId: "wxa8cc134f7e226358", 
@@ -154,7 +154,10 @@ wx.ready(function(){
         imgUrl: "分享图标的url,以http或https开头", // 分享图标
         type: 'link', // 分享类型,music、video或link，不填默认为link
     });
-});
+});*/
+mui(".backBtn")[0].addEventListener("tap",function(){
+				window.history.back(-1);
+			});
 </script>
 	</body>
 

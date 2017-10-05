@@ -6,6 +6,8 @@
 		<title>医来伸手</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="full-screen" content="yes">
+		<meta name="x5-fullscreen" content="true">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<!--标准mui.css-->
@@ -40,11 +42,10 @@
 			<ul class="moduleList">
 				<li class="module">
 					<div class="imgBox">
-						<a href="hospital_template.html?title=中国名院+type=''">
+						<a href="famous_hospital.html?title=中国名院+type=">
 							<img src="images/ylss/zgmy.png" />
 							<p>中国名院</p>
 						</a>
-
 					</div>
 				</li>
 				<li class="module">
@@ -123,7 +124,7 @@
 				</li>
 				<li class="module">
 					<div class="imgBox">
-						<a href="hospital_template.html?title=眼科+type=eye">
+						<a href="famous_hospital.html?title=眼科+type=eye">
 							<img src="images/ylss/yk.png" />
 							<p>眼科</p>
 						</a>
@@ -132,7 +133,7 @@
 				</li>
 				<li class="module">
 					<div class="imgBox">
-						<a href="hospital_template.html?title=整形美容+type=plastic">
+						<a href="famous_hospital.html?title=整形美容+type=plastic">
 							<img src="images/ylss/zxmr.png" />
 							<p>整形美容</p>
 						</a>
@@ -141,7 +142,7 @@
 				</li>
 				<li class="module">
 					<div class="imgBox">
-						<a href="hospital_template.html?title=男科·妇科·产科+type=preProduct">
+						<a href="famous_hospital.html?title=男科·妇科·产科+type=preProduct">
 							<img src="images/ylss/cpch.png" />
 							<p>男科·妇科·产科</p>
 						</a>
@@ -448,9 +449,13 @@
 
 				var sliderHeight = slider[0].clientHeight;
 				mui("#map")[0].style.height = "2.5rem";
-				mui(".zk")[0].style.top = sliderHeight / 40 + "rem";
+				mui(".zk")[0].style.top = sliderHeight + 20 +"px";
 				document.getElementById("map").contentWindow.setMap(100);
-				mui.trigger(mui(".zkImg")[0], "tap");
+				if(!sessionStorage.getItem("afterLogin")){
+					mui.trigger(mui(".zkImg")[0], "tap");
+					sessionStorage.setItem("afterLogin","true");
+				}
+				
 				//				setTimeout('mui.trigger(mui(".zkImg")[0],"tap")',2000);
 			};
 		</script>

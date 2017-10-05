@@ -247,8 +247,6 @@
 				fromWhere = url.split("&")[1];
 				doctorId = doctorId.substring(doctorId.indexOf("=") + 1, doctorId.length);
 				fromWhere = fromWhere.substring(fromWhere.indexOf("=") + 1, fromWhere.length);
-
-				mui(".backBtn")[0].setAttribute("href", fromWhere);
 				localStorage.setItem("url", url);
 				localStorage.setItem("doctorId", doctorId);
 
@@ -258,14 +256,16 @@
 				fromWhere = url.split("&")[1];
 				doctorId = doctorId.substring(doctorId.indexOf("=") + 1, doctorId.length);
 				fromWhere = fromWhere.substring(fromWhere.indexOf("=") + 1, fromWhere.length);
-				mui(".backBtn")[0].setAttribute("href", fromWhere);
+
 			}
 			//清空session
 			mui(".backBtn")[0].addEventListener("tap",function(){
+				
 				sessionStorage.removeItem("hxPhone");
 				sessionStorage.removeItem("chatname");
 				sessionStorage.removeItem("receiverAvatar");
 				sessionStorage.removeItem("hosAddress");
+				window.history.back(-1);
 				
 			})
 			if(fromWhere == "roomService_doctor.html" || fromWhere == "roomService_nurse.html") {

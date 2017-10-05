@@ -12,13 +12,20 @@
 		.hospitalType {
 			background-color: #6cf;
 		}
+		#pullrefresh {
+			top: 170px;
+		}
+		
+		#pullrefresh .mui-pull-top-pocket {
+			top: 0px;
+		}
 	</style>
 	<script type="text/javascript" src="js/template.js"></script>
 
 	<body>
 
 		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
-			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn" href="index.html">返回</a>
+			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn">返回</a>
 
 			<h1 class="mui-title" style="line-height: 64px;color: snow;">中国名医</h1>
 		</header>
@@ -27,15 +34,23 @@
 			<form action="" class="input-kw-form" style="display: inline;">
 				<div class="mui-input-row mui-search" style="background: #999;">
 					<input type="search" autocomplete="off" name="baike-search" placeholder="请输入关键词" class="mui-input-clear" id="keyword" style="">
-					<button style="width: 15%;margin-top: 15px;background-color: #999;color: #6cf;">取消</button>
+					<button class="quxiao" style="width: 15%;margin-top: 15px;background-color: #999;color: #6cf;">取消</button>
 
 				</div>
 
 			</form>
 
 			<p>全国知名医生，系统默认推荐3个，如需查看更多，请搜索医生名称或疾病名称</p>
-			<div id="wp"></div>
-			<script id="doctorList" type="text/html">
+			<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<!--数据列表-->
+					<ul class="mui-table-view mui-table-view-chevron">
+						<div id="wp"></div>
+						
+					</ul>
+				</div>
+			</div>
+			<script id="listScript" type="text/html">
 				<ul id="hospitalList">
 					<%for(var i = 0; i < list.length; i++) {%>
 					<a href="doctor_detail.html?doctorId=<%:=list[i].doctorId%>&fromWhere=famous_doctor.html">
@@ -80,24 +95,127 @@
 		</div>
 		<script src="js/mui.min.js"></script>
 		<script src="js/config.js"></script>
+		<script src="js/refresh.js"></script>
 		<script src="js/isLogin.js"></script>
 		<script src="js/search.js"></script>
+		<script type="text/javascript">
+			var pageNo = 2,
+				pageSize = 3;
+			firstTime = true;
+			mui(".quxiao")[0].addEventListener("tap", function() {
+				mui("#keyword")[0].value = "";
+				mui("#keyword")[0].blur();
 
+				sessionStorage.removeItem("ajaxs");
+				searchCondition="";
+				pulldownRefresh();
+				mui('#pullrefresh').pullRefresh().disablePullupToRefresh();
+			})
+
+			function endPulldownToRefresh() {
+				//重置起始页
+				pageNo = 2;
+				mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+				mui('#pullrefresh').pullRefresh().refresh(true);
+				sessionStorage.setItem("scrollY", "0");	
+				mui('#pullrefresh').pullRefresh().disablePullupToRefresh();
+			}
+
+			function endPullupToRefresh(flag) {
+				mui('#pullrefresh').pullRefresh().endPullupToRefresh(flag); //refresh completed
+
+			}
+
+			function pulldownRefresh() {
+				search.getFamousDoctor({
+					callback: endPulldownToRefresh,
+					pageNo: 1,
+					pageSize:pageSize,
+					flag: "down",
+					searchCondition: searchCondition,
+				});
+			}
+
+			function pullupRefresh() {
+
+				search.getFamousDoctor({
+					callback: endPullupToRefresh,
+					pageNo: pageNo,
+					pageSize:pageSize,
+					flag: "up",
+					searchCondition: searchCondition,
+				});
+				pageNo++;
+			}
+			mui.init({
+				pullRefresh: {
+					container: '#pullrefresh',
+					down: {
+						callback: pulldownRefresh,
+						height: 50, //可选,默认50.触发下拉刷新拖动距离,
+						auto: true, //可选,默认false.首次加载自动下拉刷新一次
+						contentdown: "下拉可以刷新", //可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+						contentover: "释放立即刷新", //可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+						contentrefresh: "正在刷新...", //可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+					},
+					up: {
+						height: 5,
+						contentrefresh: '正在加载...',
+						callback: pullupRefresh,
+						contentnomore: "没有更多医生了",
+						auto: false
+					}
+				},
+				gestureConfig: {
+					tap: true, //默认为true
+					doubletap: true, //默认为false
+					longtap: true, //默认为false
+					swipe: true, //默认为true
+					drag: true, //默认为true
+					hold: false, //默认为false，不监听
+					release: false //默认为false，不监听
+				}
+			});
+		</script>
 		<script type="text/javascript">
 			mui.init();
+			document.querySelector('.mui-scroll-wrapper').addEventListener('swipe', function(e) {
+				e.stopPropagation();
+				e.preventDefault();
+				console.log(e.detail)
+				if(sessionStorage.getItem("scrollY")){
+					var scrollY=sessionStorage.getItem("scrollY");
+					/*if(e.detail.direction=="up"){
+						
+					}*/
+					sessionStorage.setItem("scrollY", eval(Number(scrollY)+e.detail.deltaY));
+				}else{
+					sessionStorage.setItem("scrollY", e.detail.deltaY);				
+				}
 
-			search.getFamousDoctor();
+			})
+			mui(".backBtn")[0].addEventListener("tap",function(){
+				sessionStorage.removeItem("ajaxs");
+				window.history.back(-1);
+			});
 			var keyWord = document.getElementById("keyword");
+			var searchCondition;
 			keyWord.addEventListener('keypress', function(e) {
+				e.preventDefault();
 				var keycode = e.keyCode;
-				var searchName = keyWord.value;
-				if(keycode == '13') {
-					var searchCondition = keyWord.value;
-					e.preventDefault();
-					document.getElementById('hospitalList').innerHTML = "";
+				searchCondition = keyWord.value.replace(/^\s+|\s+$/g,"");
+				if(keycode == '13'&&searchCondition!="") {
+					
+//					mui('#pullrefresh').pullRefresh().refresh(true);
+					mui('#pullrefresh').pullRefresh().enablePullupToRefresh();
+					
+					mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 100);
+					sessionStorage.setItem("scrollY", "0");	
+					document.getElementById("wp").innerHTML = "";
+					sessionStorage.removeItem("ajaxs");
 
 					//请求搜索接口  
-					search.getFamousDoctor(searchCondition);
+					search.getFamousDoctor({searchCondition:searchCondition,pageSize:10});
 				}
 			})
 		</script>

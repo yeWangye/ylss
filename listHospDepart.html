@@ -44,7 +44,7 @@
 					patientId: loginInfo.clientId,
 					phoneNo: loginInfo.phoneNo,
 					page: 1,
-					rows: 2,
+					rows: 6,
 					hoId: hoId,
 				},
 				dataType: 'json',
@@ -82,6 +82,9 @@
 
 				window.location.href = "registration.html";
 			})
+			mui(".backBtn")[0].addEventListener("tap",function(){
+				window.history.back(-1);
+			});
 		</script>
 	</body>
 

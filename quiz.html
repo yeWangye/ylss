@@ -56,7 +56,7 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav" style="background-color: #66ccff;height:64px;">
-			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn" href="index.html">返回</a>
+			<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn">返回</a>
 
 			<h1 class="mui-title" style="line-height: 64px;color: snow;">智能测试</h1>
 		</header>
@@ -81,7 +81,9 @@
 
 				nextPage();
 			}
-
+			mui(".backBtn")[0].addEventListener("tap",function(){
+				window.history.back(-1);
+			});
 			function rnd(n, m) {
 				var random = Math.floor(Math.random() * (m - n + 1) + n);
 				return random;
@@ -120,9 +122,9 @@
 			function nextPage() {
 				if(questions.length == 0) {
 					if(wrong!=0){
-						mui.alert("错误项"+wrong+"个，如有顾虑建议到医院进行相关检查","完成","我知道了",function(){window.location.href="index.html"});
+						mui.alert("错误项"+wrong+"个，如有顾虑建议到医院进行相关检查","完成","我知道了",function(){window.history.back(-1);});
 					}else{
-						mui.alert("恭喜您，您的色觉正常！","完成","知道了",function(){window.location.href="index.html"});
+						mui.alert("恭喜您，您的色觉正常！","完成","知道了",function(){window.history.back(-1);});
 						
 					}
 				} else {

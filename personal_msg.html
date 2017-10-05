@@ -113,7 +113,7 @@
 	</style>
 	<header>
 		<h4>个人中心</h4>
-		<a class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;font-size: 18px;position: absolute;top: 0.8rem;" href="index.html">返回</a>
+		<a class="mui-icon mui-icon-left-nav mui-pull-left backBtn" style="color: white;font-size: 18px;position: absolute;top: 0.8rem;">返回</a>
 		<div class="headImgBox">
 			<a><img src="" class="headImg" /></a>
 			<input type="file" name="headImg" style="visibility: hidden;" class="uploadImg"/>
@@ -124,7 +124,7 @@
 
 		</div>
 		<div class="more">
-			<a><img src="images/common/icon_more2.png" alt="" /></a>
+			<a href="tips.html"><img src="images/common/icon_more2.png" alt="" /></a>
 		</div>
 
 	</header>
@@ -220,7 +220,10 @@
 					console.log(this)
 					mui.trigger(mui(".uploadImg")[0],"focus")
 				})
-				mui.trigger(mui(".uploadImg")[0],"tap")
+				mui.trigger(mui(".uploadImg")[0],"tap");
+				mui(".backBtn")[0].addEventListener("tap",function(){
+					window.history.back(-1);
+				});
 		</script>
 
 	</body>

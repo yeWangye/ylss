@@ -26,7 +26,7 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left " style="color: snow;font-size: large;">返回</a>
+			<a class="mui-icon mui-icon-left-nav mui-pull-left " style="color: snow;font-size: large;">返回</a>
 			<h2 class="mui-title color_snow"><b>更多</b></h2>
 
 		</header>
@@ -94,6 +94,9 @@
 
 				}
 			})
+			mui(".backBtn")[0].addEventListener("tap",function(){
+				window.history.back(-1);
+			});
 		</script>
 	</body>
 
